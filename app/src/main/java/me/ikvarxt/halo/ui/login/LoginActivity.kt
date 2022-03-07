@@ -1,4 +1,4 @@
-package me.ikvarxt.halo.ui
+package me.ikvarxt.halo.ui.login
 
 import android.content.Context
 import android.content.Intent
@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.widget.Toast
 import me.ikvarxt.halo.databinding.ActivityLoginBinding
 import me.ikvarxt.halo.network.Constants
+import me.ikvarxt.halo.ui.MainActivity
 
 class LoginActivity : AppCompatActivity() {
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/mainFragment"
+        android:name="me.ikvarxt.halo.ui.MainFragment"
+        android:label="@null"
+        tools:layout="@layout/fragment_main"/>
+
+<!--    <fragment-->
+<!--        android:id="@+id/dashboard"-->
+<!--        android:name="me.ikvarxt.halo.ui.dashboard.DashboardFragment"-->
+<!--        android:label="@string/dashboard"-->
+<!--        tools:layout="@layout/fragment_dashboard"/>-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/postsList"-->
+<!--        android:name="me.ikvarxt.halo.ui.posts.PostsListFragment"-->
+<!--        android:label="@string/posts_list"-->
+<!--        tools:layout="@layout/fragment_posts_list">-->
+<!--        <action-->
+<!--            android:id="@+id/gotoPostsDetailsAction"-->
+<!--            app:destination="@id/articleFragment"/>-->
+<!--    </fragment>-->
+
+    <fragment
+        android:id="@+id/articleFragment"
+        android:name="me.ikvarxt.halo.ui.posts.article.ArticleFragment"
+        tools:layout="@layout/fragment_article">
+        <argument
+            android:name="postId"
+            app:argType="long"/>
+    </fragment>
+</navigation>

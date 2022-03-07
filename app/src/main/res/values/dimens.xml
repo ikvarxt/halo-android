@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <dimen name="bottomPadding">70dp</dimen>
+     <dimen name="postListItemThumbnailMaxWidth">100dp</dimen>
+     <dimen name="postListItemThumbnailCornerRadius">20dp</dimen>
+     <dimen name="postListItemCardMinHeight">75dp</dimen>
+</resources>

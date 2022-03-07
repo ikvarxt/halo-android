@@ -30,13 +30,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <br.tiagohm.markdownview.MarkdownView
+            <TextView
                 android:id="@+id/mainArticleText"
-                app:escapeHtml="false"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:padding="@dimen/articlePadding"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/errorText"

@@ -4,4 +4,5 @@
      <dimen name="postListItemThumbnailMaxWidth">100dp</dimen>
      <dimen name="postListItemThumbnailCornerRadius">20dp</dimen>
      <dimen name="postListItemCardMinHeight">75dp</dimen>
+     <dimen name="articlePadding">16dp</dimen>
 </resources>

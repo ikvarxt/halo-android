@@ -16,6 +16,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+//        supportFragmentManager.commit { add<MainMainFragment>(android.R.id.content) }
+
         setContentView(ActivityMainBinding.inflate(layoutInflater).root)
     }
 }

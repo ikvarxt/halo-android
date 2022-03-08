@@ -1,5 +1,6 @@
 package me.ikvarxt.halo.ui.posts.article
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.Markwon
 import me.ikvarxt.halo.databinding.FragmentArticleBinding
@@ -35,6 +37,10 @@ class ArticleFragment : Fragment() {
 
         viewModel.setPostId(args.postId)
 
+        val activity = activity as AppCompatActivity
+        activity.setSupportActionBar(binding.toolbar)
+        activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         viewModel.postDetails.observe(viewLifecycleOwner) {
             if (it.status == Status.LOADING) {
                 binding.loading.show()
@@ -44,11 +50,19 @@ class ArticleFragment : Fragment() {
             }
             when (it.status) {
                 Status.SUCCESS -> {
-                    val actionBar = (activity as AppCompatActivity).supportActionBar
-                    actionBar?.title = it.data?.title
+                    val data = it.data!!
+
+                    val actionBar = activity.supportActionBar
+                    actionBar?.title = data.title
+
+                    Glide.with(binding.headerImage.context)
+                        .asDrawable()
+                        .load(Uri.parse(data.thumbnail))
+                        .fitCenter()
+                        .into(binding.headerImage)
 
                     val markwon = Markwon.create(requireContext())
-                    it.data?.originalContent?.let { it1 ->
+                    data.originalContent.let { it1 ->
                         markwon.setMarkdown(binding.mainArticleText, it1)
                     }
                 }

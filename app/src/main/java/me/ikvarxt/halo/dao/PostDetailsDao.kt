@@ -5,15 +5,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import me.ikvarxt.halo.entites.PostItem
+import me.ikvarxt.halo.entites.PostDetails
 
 @Dao
-interface PostItemDao {
-
-    @Query( "SELECT * from post_item")
-    fun loadAllPosts(): LiveData<List<PostItem>>
+interface PostDetailsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPostItem(vararg item: PostItem)
+    fun insertPostDetails(vararg item: PostDetails)
 
+    @Query("select * from post_details where id = :id")
+    fun loadPostDetailWithId(id: Long): LiveData<PostDetails>
 }

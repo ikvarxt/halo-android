@@ -10,8 +10,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.hilt.components.SingletonComponent
 import me.ikvarxt.halo.application
+import me.ikvarxt.halo.dao.PostDetailsDao
 import me.ikvarxt.halo.dao.PostItemDao
 import me.ikvarxt.halo.database.HaloDatabase
+import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.network.Constants
 import me.ikvarxt.halo.network.ContentApiService
 import me.ikvarxt.halo.network.converters.CalendarGsonConverter
@@ -54,4 +56,8 @@ class AppModule {
     fun providePostItemDao(database: HaloDatabase): PostItemDao {
         return database.postItemDao()
     }
+
+    @Provides
+    fun providePostDetailDao(database: HaloDatabase) = database.postDetailsDao()
+
 }

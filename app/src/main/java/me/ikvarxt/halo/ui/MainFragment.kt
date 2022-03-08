@@ -35,6 +35,7 @@ class MainFragment : Fragment() {
         binding.apply {
             viewPager.apply {
                 isUserInputEnabled = false
+                offscreenPageLimit = 1
                 adapter = MainFragmentStateAdapter(activity)
                 registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {

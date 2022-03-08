@@ -23,7 +23,6 @@ import javax.inject.Singleton
 class Repository @Inject constructor(
     private val appExecutors: AppExecutors,
     private val contentApiService: ContentApiService,
-    private val database: HaloDatabase,
     private val postItemDao: PostItemDao,
     private val postDetailDao: PostDetailsDao,
 ) {
@@ -32,11 +31,7 @@ class Repository @Inject constructor(
         return object :
             NetworkBoundResource<List<PostItem>, HaloResponse<ListPostResponse>>(appExecutors) {
 
-            // currently workaround of no database implementation
-            private var res: List<PostItem> = emptyList()
-
             override fun saveCallResult(item: HaloResponse<ListPostResponse>) {
-                res = item.data.content
                 val content = item.data.content
                 postItemDao.insertPostItem(*content.toTypedArray())
             }
@@ -53,9 +48,8 @@ class Repository @Inject constructor(
 
     fun getPostDetails(postId: Long): LiveData<Resource<PostDetails>> {
         return object : NetworkBoundResource<PostDetails, HaloResponse<PostDetails>>(appExecutors) {
-            // private var res = PostDetails(0, "", "", "", 0, "")
+
             override fun saveCallResult(item: HaloResponse<PostDetails>) {
-//                res = item.data
                 postDetailDao.insertPostDetails(item.data)
             }
 

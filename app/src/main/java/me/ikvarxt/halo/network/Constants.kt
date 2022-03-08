@@ -16,5 +16,5 @@ object Constants {
         set(value) = getSp().edit().putString(ACCESS_KEY, value).apply()
         get() = getSp().getString(ACCESS_KEY, "")!!
 
-    private fun getSp() = application.getSharedPreferences("test", Context.MODE_PRIVATE)
+    fun getSp() = application.getSharedPreferences("test", Context.MODE_PRIVATE)
 }

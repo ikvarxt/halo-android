@@ -21,14 +21,14 @@ interface ContentApiService {
     fun getPostDetailsWithSlug(
         @Query("slug") slug: String,
         @Query("formatEnabled") formatEnabled: Boolean,
-        @Query("api_accesss_key") key: String = Constants.key,
+        @Query("api_accesss_key") key: String = Constants.accessKey,
     ): LiveData<ApiResponse<HaloResponse<PostDetails>>>
 
     // get a post details with post id
     @GET("${CONTENT_BASE}posts/{postId}")
     fun getPostDetailsWithId(
         @Path("postId") postId: Long,
-        @Query("api_access_key") key: String = Constants.key
+        @Query("api_access_key") key: String = Constants.accessKey
     ): LiveData<ApiResponse<HaloResponse<PostDetails>>>
 
     companion object {

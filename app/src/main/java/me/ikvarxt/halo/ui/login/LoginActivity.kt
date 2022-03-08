@@ -26,6 +26,12 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (!Constants.domain.isNullOrBlank() && !Constants.accessKey.isNullOrBlank()) {
+            checkValidation()
+            dropIntoMainActivity()
+            return
+        }
+
         binding.login.setOnClickListener {
             val domain = binding.siteAddress.text.toString()
             val key = binding.apiAccessKey.text.toString()
@@ -38,12 +44,23 @@ class LoginActivity : AppCompatActivity() {
                 ).show()
             } else {
                 Constants.domain = domain
-                Constants.key = key
+                Constants.accessKey = key
 
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
+                checkValidation()
+
+                dropIntoMainActivity()
             }
         }
+    }
+
+    private fun dropIntoMainActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
+    }
+
+    // TODO: check if the site info is validate
+    private fun checkValidation() {
+
     }
 }

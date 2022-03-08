@@ -61,7 +61,7 @@ class PostsListFragment : Fragment() {
     }
 
     private fun checkNonNull(): Boolean {
-        return if (TextUtils.isEmpty(Constants.domain) && TextUtils.isEmpty(Constants.key)) {
+        return if (TextUtils.isEmpty(Constants.domain) && TextUtils.isEmpty(Constants.accessKey)) {
             Toast.makeText(context, "Constants is null", Toast.LENGTH_SHORT).show()
             false
         } else {

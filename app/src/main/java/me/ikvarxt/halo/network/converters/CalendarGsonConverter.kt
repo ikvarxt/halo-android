@@ -12,7 +12,7 @@ class CalendarGsonConverter : JsonDeserializer<Calendar> {
         context: JsonDeserializationContext?
     ): Calendar {
         return Calendar.getInstance().apply {
-            timeInMillis = json?.asLong!!
+            timeInMillis = json?.asJsonPrimitive?.asLong!!
         }
     }
 }

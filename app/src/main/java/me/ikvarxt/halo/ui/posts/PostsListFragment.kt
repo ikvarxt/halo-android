@@ -36,15 +36,20 @@ class PostsListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        checkNonNull()
-
         adapter = PostsListAdapter()
         binding.recyclerView.adapter = adapter
 
         viewModel.postsList.observe(viewLifecycleOwner) {
             binding.loading.visibility = if (it.status == Status.LOADING) {
+                // 通过网络重新获取数据的时候会预先返回加载状态的数据库返回数据，我们可以使用这个数据预填充
+                if (it.data != null) {
+                    adapter.submitList(it.data)
+                }
                 View.VISIBLE
+                return@observe
             } else View.GONE
+
+            binding.swipeRefreshLayout.isRefreshing = false
 
             when (it.status) {
                 Status.SUCCESS -> {
@@ -57,15 +62,9 @@ class PostsListFragment : Fragment() {
                 else -> {}
             }
         }
-    }
 
-    private fun checkNonNull(): Boolean {
-        return if (TextUtils.isEmpty(Constants.domain) && TextUtils.isEmpty(Constants.accessKey)) {
-            Toast.makeText(context, "Constants is null", Toast.LENGTH_SHORT).show()
-            false
-        } else {
-            true
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            viewModel.refresh()
         }
     }
-
 }

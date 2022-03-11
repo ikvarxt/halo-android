@@ -1,8 +1,6 @@
 package me.ikvarxt.halo.ui.posts
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.entites.PostItem
@@ -15,13 +13,14 @@ class PostsListViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    val postsList: LiveData<Resource<List<PostItem>>> = repository.getPostsList()
+    private val _refreshLiveData = MutableLiveData(0)
 
-    val navigatePostId = MutableLiveData(0)
+    val postsList: LiveData<Resource<List<PostItem>>> =
+        Transformations.switchMap(_refreshLiveData) {
+            repository.getPostsList()
+        }
 
-    val postDetails = MutableLiveData<PostDetails>()
-
-    fun getPostDetailsWithId(postId: Long) {
-        postDetails.value = repository.getPostDetails(postId).value?.data!!
+    fun refresh() {
+        _refreshLiveData.value = 0
     }
 }

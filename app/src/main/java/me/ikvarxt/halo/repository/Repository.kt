@@ -27,43 +27,33 @@ class Repository @Inject constructor(
     private val postDetailDao: PostDetailsDao,
 ) {
 
-    fun getPostsList(): LiveData<Resource<List<PostItem>>> {
-        return object :
-            NetworkBoundResource<List<PostItem>, HaloResponse<ListPostResponse>>(appExecutors) {
+    // TODO: need add some control to shouldFetch
+    fun getPostsList(): LiveData<Resource<List<PostItem>>> = object :
+        NetworkBoundResource<List<PostItem>, HaloResponse<ListPostResponse>>(appExecutors) {
 
-            override fun saveCallResult(item: HaloResponse<ListPostResponse>) {
-                val content = item.data.content
-                postItemDao.insertPostItem(*content.toTypedArray())
-            }
+        override fun saveCallResult(item: HaloResponse<ListPostResponse>) {
+            val content = item.data.content
+            postItemDao.insertPostItem(*content.toTypedArray())
+        }
 
-            override fun shouldFetch(data: List<PostItem>?) = true
+        override fun shouldFetch(data: List<PostItem>?) = true
 
-            override fun loadFromDb(): LiveData<List<PostItem>> {
-                return postItemDao.loadAllPosts()
-            }
+        override fun loadFromDb() = postItemDao.loadAllPosts()
 
-            override fun createCall() = contentApiService.listPosts()
-        }.asLiveData()
-    }
+        override fun createCall() = contentApiService.listPosts()
+    }.asLiveData()
 
-    fun getPostDetails(postId: Long): LiveData<Resource<PostDetails>> {
-        return object : NetworkBoundResource<PostDetails, HaloResponse<PostDetails>>(appExecutors) {
+    fun getPostDetails(postId: Long): LiveData<Resource<PostDetails>> = object :
+        NetworkBoundResource<PostDetails, HaloResponse<PostDetails>>(appExecutors) {
 
-            override fun saveCallResult(item: HaloResponse<PostDetails>) {
-                postDetailDao.insertPostDetails(item.data)
-            }
+        override fun saveCallResult(item: HaloResponse<PostDetails>) {
+            postDetailDao.insertPostDetails(item.data)
+        }
 
-            override fun shouldFetch(data: PostDetails?): Boolean {
-                return true
-            }
+        override fun shouldFetch(data: PostDetails?) = true
 
-            override fun loadFromDb(): LiveData<PostDetails> {
-                return postDetailDao.loadPostDetailWithId(postId)
-            }
+        override fun loadFromDb() = postDetailDao.loadPostDetailWithId(postId)
 
-            override fun createCall(): LiveData<ApiResponse<HaloResponse<PostDetails>>> {
-                return contentApiService.getPostDetailsWithId(postId)
-            }
-        }.asLiveData()
-    }
+        override fun createCall() = contentApiService.getPostDetailsWithId(postId)
+    }.asLiveData()
 }

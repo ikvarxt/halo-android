@@ -47,6 +47,8 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     private fun fetchFromNetwork(dbSource: LiveData<ResultType>) {
         val apiResponse = createCall()
         // we re-attach dbSource as a new source, it will dispatch its latest value quickly
+        // 这里使用 loading 状态分发了一次数据库数据，我们通过 loading 获取的数据预填充界面
+        // 等待网络数据准备完成，再次刷新最新数据
         result.addSource(dbSource) { newData ->
             setValue(Resource.loading(newData))
         }

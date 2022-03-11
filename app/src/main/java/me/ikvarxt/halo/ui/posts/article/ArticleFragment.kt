@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.Markwon
 import me.ikvarxt.halo.databinding.FragmentArticleBinding
+import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.network.infra.Status
 
 @AndroidEntryPoint
@@ -42,8 +43,26 @@ class ArticleFragment : Fragment() {
         activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         viewModel.postDetails.observe(viewLifecycleOwner) {
+
+            fun setupContent(data: PostDetails) {
+                val actionBar = activity.supportActionBar
+                actionBar?.title = data.title
+
+                Glide.with(binding.headerImage.context)
+                    .asDrawable()
+                    .load(Uri.parse(data.thumbnail))
+                    .fitCenter()
+                    .into(binding.headerImage)
+
+                val markwon = Markwon.create(requireContext())
+                data.originalContent.let { it1 ->
+                    markwon.setMarkdown(binding.mainArticleText, it1)
+                }
+            }
+
             if (it.status == Status.LOADING) {
                 binding.loading.show()
+                if (it.data != null) setupContent(it.data)
                 return@observe
             } else {
                 binding.loading.hide()
@@ -51,20 +70,7 @@ class ArticleFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     val data = it.data!!
-
-                    val actionBar = activity.supportActionBar
-                    actionBar?.title = data.title
-
-                    Glide.with(binding.headerImage.context)
-                        .asDrawable()
-                        .load(Uri.parse(data.thumbnail))
-                        .fitCenter()
-                        .into(binding.headerImage)
-
-                    val markwon = Markwon.create(requireContext())
-                    data.originalContent.let { it1 ->
-                        markwon.setMarkdown(binding.mainArticleText, it1)
-                    }
+                    setupContent(data)
                 }
                 Status.ERROR -> {
                     binding.errorText.apply {
@@ -74,6 +80,8 @@ class ArticleFragment : Fragment() {
                 }
                 else -> {}
             }
+
+
         }
     }
 }

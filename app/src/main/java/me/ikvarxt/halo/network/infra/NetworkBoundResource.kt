@@ -61,8 +61,6 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                             // we specially request a new live data,
                             // otherwise we will get immediately last cached value,
                             // which may not be updated with latest results received from network.
-                            // no need FIXME: 2/28/22 this should always load from database
-                            //  but this is take a short route
                             result.addSource(loadFromDb()) { newData ->
                                 setValue(Resource.success(newData))
                             }

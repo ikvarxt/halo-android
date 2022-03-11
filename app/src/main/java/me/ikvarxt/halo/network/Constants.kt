@@ -8,6 +8,9 @@ object Constants {
     private const val DOMAIN = "domain"
     private const val ACCESS_KEY = "access_key"
 
+    const val ADMIN_ACCESS_KEY_HEADER_PARAM_NAME = "ADMIN-Authorization"
+    const val CONTENT_ACCESS_KEY_HEADER__PARAM_NAME = "API-Authorization"
+
     var domain: String
         set(value) = getSp().edit().putString(DOMAIN, value).apply()
         get() = getSp().getString(DOMAIN, "")!!

@@ -26,10 +26,11 @@ class LiveDataCallAdapter<R>(private val responseType: Type) :
      */
     override fun adapt(call: Call<R>): LiveData<ApiResponse<R>> {
         return object : LiveData<ApiResponse<R>>() {
-            // TODO: 2/25/22 the main propose of this AtomicBoolean
             private var started = AtomicBoolean(false)
             override fun onActive() {
                 super.onActive()
+                // compare with expect value and set to update value in the same time
+                // for concurrent support
                 if (started.compareAndSet(false, true)) {
                     // when have observer observing this livedata, we enqueue this call
                     call.enqueue(object : Callback<R> {

@@ -8,12 +8,14 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.Markwon
 import me.ikvarxt.halo.databinding.FragmentArticleBinding
 import me.ikvarxt.halo.entites.PostDetails
+import me.ikvarxt.halo.network.infra.Resource
 import me.ikvarxt.halo.network.infra.Status
 
 @AndroidEntryPoint
@@ -22,6 +24,7 @@ class ArticleFragment : Fragment() {
     private lateinit var binding: FragmentArticleBinding
     private val args by navArgs<ArticleFragmentArgs>()
     private val viewModel by viewModels<ArticleViewModel>()
+    private val markwon by lazy { Markwon.create(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,45 +46,53 @@ class ArticleFragment : Fragment() {
         activity.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         viewModel.postDetails.observe(viewLifecycleOwner) {
+            loadContentData(it)
+        }
 
-            fun setupContent(data: PostDetails) {
-                val actionBar = activity.supportActionBar
-                actionBar?.title = data.title
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+    }
 
+    private fun loadContentData(resource: Resource<PostDetails>) {
+        fun setupContent(data: PostDetails) {
+            binding.toolbarLayout.title = data.title
+
+            val thumbnail = data.thumbnail
+            if (thumbnail != null && thumbnail.isNotBlank()) {
+                binding.headerImage.visibility = View.VISIBLE
                 Glide.with(binding.headerImage.context)
                     .asDrawable()
-                    .load(Uri.parse(data.thumbnail))
-                    .fitCenter()
+                    .load(Uri.parse(thumbnail))
+                    .centerCrop()
                     .into(binding.headerImage)
-
-                val markwon = Markwon.create(requireContext())
-                data.originalContent.let { it1 ->
-                    markwon.setMarkdown(binding.mainArticleText, it1)
-                }
-            }
-
-            if (it.status == Status.LOADING) {
-                binding.loading.show()
-                if (it.data != null) setupContent(it.data)
-                return@observe
             } else {
-                binding.loading.hide()
-            }
-            when (it.status) {
-                Status.SUCCESS -> {
-                    val data = it.data!!
-                    setupContent(data)
-                }
-                Status.ERROR -> {
-                    binding.errorText.apply {
-                        text = it.message
-                        visibility = View.VISIBLE
-                    }
-                }
-                else -> {}
             }
 
+            data.originalContent.let { it1 ->
+                markwon.setMarkdown(binding.mainArticleText, it1)
+            }
+        }
 
+        if (resource.status == Status.LOADING) {
+            binding.loading.show()
+            if (resource.data != null) setupContent(resource.data)
+            return
+        } else {
+            binding.loading.hide()
+        }
+        when (resource.status) {
+            Status.SUCCESS -> {
+                val data = resource.data!!
+                setupContent(data)
+            }
+            Status.ERROR -> {
+                binding.errorText.apply {
+                    text = resource.message
+                    visibility = View.VISIBLE
+                }
+            }
+            else -> {}
         }
     }
 }

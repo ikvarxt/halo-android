@@ -1,13 +1,9 @@
 package me.ikvarxt.halo.ui
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
-import androidx.navigation.fragment.NavHostFragment
+import androidx.core.view.WindowCompat
 import dagger.hilt.android.AndroidEntryPoint
-import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.ActivityMainBinding
 
 @AndroidEntryPoint
@@ -19,5 +15,8 @@ class MainActivity : AppCompatActivity() {
 //        supportFragmentManager.commit { add<MainMainFragment>(android.R.id.content) }
 
         setContentView(ActivityMainBinding.inflate(layoutInflater).root)
+
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 }

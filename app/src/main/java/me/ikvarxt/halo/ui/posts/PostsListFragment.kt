@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import me.ikvarxt.halo.databinding.FragmentPostsListBinding
-import me.ikvarxt.halo.network.Constants
 import me.ikvarxt.halo.network.infra.Status
 
 private const val TAG = "PostsListsFragment"

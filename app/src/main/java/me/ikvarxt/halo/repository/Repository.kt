@@ -1,19 +1,14 @@
 package me.ikvarxt.halo.repository
 
-import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import me.ikvarxt.halo.AppExecutors
 import me.ikvarxt.halo.dao.PostDetailsDao
 import me.ikvarxt.halo.dao.PostItemDao
-import me.ikvarxt.halo.database.HaloDatabase
 import me.ikvarxt.halo.entites.HaloResponse
 import me.ikvarxt.halo.entites.ListPostResponse
 import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.entites.PostItem
-import me.ikvarxt.halo.network.ContentApiService
-import me.ikvarxt.halo.network.infra.ApiResponse
-import me.ikvarxt.halo.network.infra.ApiSuccessResponse
+import me.ikvarxt.halo.network.PostApiService
 import me.ikvarxt.halo.network.infra.NetworkBoundResource
 import me.ikvarxt.halo.network.infra.Resource
 import javax.inject.Inject
@@ -22,7 +17,7 @@ import javax.inject.Singleton
 @Singleton
 class Repository @Inject constructor(
     private val appExecutors: AppExecutors,
-    private val contentApiService: ContentApiService,
+    private val apiService: PostApiService,
     private val postItemDao: PostItemDao,
     private val postDetailDao: PostDetailsDao,
 ) {
@@ -40,7 +35,7 @@ class Repository @Inject constructor(
 
         override fun loadFromDb() = postItemDao.loadAllPosts()
 
-        override fun createCall() = contentApiService.listPosts()
+        override fun createCall() = apiService.listPosts()
     }.asLiveData()
 
     fun getPostDetails(postId: Long): LiveData<Resource<PostDetails>> = object :
@@ -54,6 +49,6 @@ class Repository @Inject constructor(
 
         override fun loadFromDb() = postDetailDao.loadPostDetailWithId(postId)
 
-        override fun createCall() = contentApiService.getPostDetailsWithId(postId)
+        override fun createCall() = apiService.getPostDetailsWithId(postId)
     }.asLiveData()
 }

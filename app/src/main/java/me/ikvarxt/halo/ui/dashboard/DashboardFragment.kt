@@ -7,13 +7,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import me.ikvarxt.halo.R
+import dagger.hilt.android.AndroidEntryPoint
+import me.ikvarxt.halo.account.AccountManager
+import me.ikvarxt.halo.database.HaloDatabase
 import me.ikvarxt.halo.databinding.FragmentDashboardBinding
-import me.ikvarxt.halo.network.Constants
+import me.ikvarxt.halo.network.AdminApiService
 import me.ikvarxt.halo.ui.login.LoginActivity
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DashboardFragment : Fragment() {
+
+    @Inject
+    lateinit var accountManager: AccountManager
+
+    @Inject
+    lateinit var database: HaloDatabase
+
+    @Inject
+    lateinit var adminApiService: AdminApiService
 
     private lateinit var binding: FragmentDashboardBinding
 
@@ -31,12 +43,16 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.logout.setOnClickListener {
-            Constants.getSp().edit()
-                .clear().apply()
-            val intent = Intent(activity, LoginActivity::class.java)
-            startActivity(intent)
-            activity?.finish()
-//            Toast.makeText(this, "domain and access key data has been cleared", Toast.LENGTH_SHORT)
+            accountManager.logout(adminApiService).observe(viewLifecycleOwner) {
+                if (it) {
+                    val intent = Intent(activity, LoginActivity::class.java)
+                    startActivity(intent)
+                    activity?.finish()
+                } else {
+                    Toast.makeText(context, "something went wrong when logout", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
         }
     }
 }

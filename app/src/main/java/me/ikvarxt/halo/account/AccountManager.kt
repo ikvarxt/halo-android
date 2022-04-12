@@ -59,16 +59,16 @@ class AccountManager @Inject constructor(val database: HaloDatabase) {
         fun callLogin() {
             val call = adminApiService.login(requestBody)
 
-            call.enqueue(object : Callback<HaloResponse<LoginToken>> {
+            val callback = object : Callback<LoginToken> {
                 override fun onResponse(
-                    call: Call<HaloResponse<LoginToken>>,
-                    response: Response<HaloResponse<LoginToken>>
+                    call: Call<LoginToken>,
+                    response: Response<LoginToken>
                 ) {
                     try {
-                        val body = response.body() as HaloResponse<LoginToken>
-                        accessKey = body.data.accessToken
-                        refreshAccessKey = body.data.refreshToken
-                        expiredIn = body.data.expiredIn
+                        val body = response.body() as LoginToken
+                        accessKey = body.accessToken
+                        refreshAccessKey = body.refreshToken
+                        expiredIn = body.expiredIn
                         getSp().edit().putLong(ACCESS_CREATE_TIME, System.currentTimeMillis())
                             .apply()
                         resLiveData.postValue(true)
@@ -79,12 +79,14 @@ class AccountManager @Inject constructor(val database: HaloDatabase) {
                     }
                 }
 
-                override fun onFailure(call: Call<HaloResponse<LoginToken>>, t: Throwable) {
+                override fun onFailure(call: Call<LoginToken>, t: Throwable) {
                     Log.e(TAG, "onFailure: login", t)
                     t.printStackTrace()
                     resLiveData.postValue(false)
                 }
-            })
+            }
+
+            call.enqueue(callback)
         }
 
 //        val precheckCall = adminApiService.loginPrecheck(body = requestBody)

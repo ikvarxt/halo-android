@@ -24,10 +24,10 @@ class Repository @Inject constructor(
 
     // TODO: need add some control to shouldFetch
     fun getPostsList(): LiveData<Resource<List<PostItem>>> = object :
-        NetworkBoundResource<List<PostItem>, HaloResponse<ListPostResponse>>(appExecutors) {
+        NetworkBoundResource<List<PostItem>, ListPostResponse>(appExecutors) {
 
-        override fun saveCallResult(item: HaloResponse<ListPostResponse>) {
-            val content = item.data.content
+        override fun saveCallResult(item: ListPostResponse) {
+            val content = item.content
             postItemDao.insertPostItem(*content.toTypedArray())
         }
 
@@ -39,10 +39,10 @@ class Repository @Inject constructor(
     }.asLiveData()
 
     fun getPostDetails(postId: Long): LiveData<Resource<PostDetails>> = object :
-        NetworkBoundResource<PostDetails, HaloResponse<PostDetails>>(appExecutors) {
+        NetworkBoundResource<PostDetails, PostDetails>(appExecutors) {
 
-        override fun saveCallResult(item: HaloResponse<PostDetails>) {
-            postDetailDao.insertPostDetails(item.data)
+        override fun saveCallResult(item: PostDetails) {
+            postDetailDao.insertPostDetails(item)
         }
 
         override fun shouldFetch(data: PostDetails?) = true

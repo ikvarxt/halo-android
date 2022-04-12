@@ -26,7 +26,7 @@ class LiveDataCallAdapterFactory : Factory() {
         if (getRawType(returnType) != LiveData::class.java) {
             return null
         }
-        // retrive wrapped type inside livedata
+        // retrieve wrapped type inside livedata
         val observableType = getParameterUpperBound(0, returnType as ParameterizedType)
         // get the raw type of ApiResponse inside livedata, at least in this case
         /**

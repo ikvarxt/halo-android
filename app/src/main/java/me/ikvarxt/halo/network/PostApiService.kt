@@ -13,18 +13,18 @@ interface PostApiService {
 
     // list posts
     @GET("posts")
-    fun listPosts(): LiveData<ApiResponse<HaloResponse<ListPostResponse>>>
+    fun listPosts(): LiveData<ApiResponse<ListPostResponse>>
 
     // get a post details with slug path
     @GET("posts/slug")
     fun getPostDetailsWithSlug(
         @Query("slug") slug: String,
         @Query("formatEnabled") formatEnabled: Boolean,
-    ): LiveData<ApiResponse<HaloResponse<PostDetails>>>
+    ): LiveData<ApiResponse<PostDetails>>
 
     // get a post details with post id
     @GET("posts/{postId}")
     fun getPostDetailsWithId(
         @Path("postId") postId: Long,
-    ): LiveData<ApiResponse<HaloResponse<PostDetails>>>
+    ): LiveData<ApiResponse<PostDetails>>
 }

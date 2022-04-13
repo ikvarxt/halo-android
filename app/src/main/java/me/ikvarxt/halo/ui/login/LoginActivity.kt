@@ -2,10 +2,10 @@ package me.ikvarxt.halo.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import dagger.hilt.android.AndroidEntryPoint
 import me.ikvarxt.halo.account.AccountManager
@@ -24,18 +24,18 @@ class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var accountManager: AccountManager
 
-    @Inject
-    lateinit var apiService: AdminApiService
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        if (accountManager.checkValidation()) {
+        if (accountManager.hasActiveAccount()) {
             dropIntoMainActivity()
             return
         }
+
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        if (!accountManager.accessKeyValidation()) refreshTokenAndCheck()
 
         binding.siteAddress.apply {
             addTextChangedListener {
@@ -56,26 +56,47 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
-        binding.login.setOnClickListener {
-            val domain = binding.siteAddress.text.toString()
-            val username = binding.username.text.toString()
-            val password = binding.password.text.toString()
+        binding.login.setOnClickListener { loginButtonClick() }
+    }
 
-            if (domain.isBlank() && username.isBlank() && password.isBlank()) {
-                Toast.makeText(
-                    this,
-                    "Something wrong",
-                    Toast.LENGTH_SHORT
-                ).show()
+    private fun loginButtonClick() {
+        binding.login.isEnabled = false
+
+        val domain = binding.siteAddress.text.toString()
+        val username = binding.username.text.toString()
+        val password = binding.password.text.toString()
+
+        if (domain.isBlank() && username.isBlank() && password.isBlank()) {
+            Toast.makeText(
+                this,
+                "Something wrong",
+                Toast.LENGTH_SHORT
+            ).show()
+        } else {
+            viewModel.login(domain, username, password).observe(this) {
+                if (it) {
+                    dropIntoMainActivity()
+                } else {
+                    binding.login.isEnabled = true
+                    Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    private fun refreshTokenAndCheck() {
+        binding.apply {
+            loginFormGroup.isVisible = false
+            loginProgress.show()
+        }
+        viewModel.refreshToken().observe(this) { isSuccess ->
+            if (isSuccess) {
+                dropIntoMainActivity()
+                return@observe
             } else {
-                accountManager.saveDomain(domain)
-
-                accountManager.login(apiService, username, password).observe(this) {
-                    if (it) {
-                        dropIntoMainActivity()
-                    } else {
-                        Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
-                    }
+                binding.apply {
+                    loginProgress.hide()
+                    loginFormGroup.isVisible = true
                 }
             }
         }

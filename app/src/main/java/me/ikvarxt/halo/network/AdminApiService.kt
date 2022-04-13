@@ -25,12 +25,12 @@ interface AdminApiService {
     @POST("login/precheck")
     fun loginPrecheck(
         @Body body: LoginRequestBody
-    ): Call<HaloResponse<NeedMFACode>>
+    ): Call<NeedMFACode>
 
     @POST("refresh/{refreshToken}")
     fun refreshToken(
         @Path("refreshToken") refreshToken: String,
-    ): LiveData<ApiResponse<HaloResponse<LoginToken>>>
+    ): Call<LoginToken>
 
     @POST("logout")
     fun logout(): Call<Unit>

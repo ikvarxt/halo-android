@@ -5,29 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import me.ikvarxt.halo.account.AccountManager
-import me.ikvarxt.halo.database.HaloDatabase
 import me.ikvarxt.halo.databinding.FragmentDashboardBinding
-import me.ikvarxt.halo.network.AdminApiService
+import me.ikvarxt.halo.extentions.showToast
 import me.ikvarxt.halo.ui.login.LoginActivity
-import javax.inject.Inject
+import me.ikvarxt.halo.ui.login.LoginViewModel
 
 @AndroidEntryPoint
 class DashboardFragment : Fragment() {
 
-    @Inject
-    lateinit var accountManager: AccountManager
-
-    @Inject
-    lateinit var database: HaloDatabase
-
-    @Inject
-    lateinit var adminApiService: AdminApiService
-
     private lateinit var binding: FragmentDashboardBinding
+
+    private val loginViewModel by viewModels<LoginViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,14 +34,12 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.logout.setOnClickListener {
-            accountManager.logout(adminApiService).observe(viewLifecycleOwner) {
+            loginViewModel.logout().observe(viewLifecycleOwner) {
                 if (it) {
-                    val intent = Intent(activity, LoginActivity::class.java)
-                    startActivity(intent)
-                    activity?.finish()
+                    startActivity(Intent(requireContext(),LoginActivity::class.java))
+                    requireActivity().finish()
                 } else {
-                    Toast.makeText(context, "something went wrong when logout", Toast.LENGTH_SHORT)
-                        .show()
+                    requireContext().showToast("logout failed")
                 }
             }
         }

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.annotation.MainThread
 import androidx.annotation.WorkerThread
-import me.ikvarxt.halo.AppExecutors
+import kotlinx.coroutines.*
 
 
 /**
@@ -17,9 +17,11 @@ import me.ikvarxt.halo.AppExecutors
  * @param <RequestType>
 </RequestType></ResultType> */
 abstract class NetworkBoundResource<ResultType, RequestType>
-@MainThread constructor(private val appExecutors: AppExecutors) {
+@MainThread constructor() {
 
     private val result = MediatorLiveData<Resource<ResultType>>()
+
+    private val ioScope = CoroutineScope(Dispatchers.IO)
 
     init {
         result.value = Resource.loading(null)
@@ -57,12 +59,12 @@ abstract class NetworkBoundResource<ResultType, RequestType>
             result.removeSource(dbSource)
             when (response) {
                 is ApiSuccessResponse -> {
-                    appExecutors.diskIO().execute {
+                    ioScope.launch {
                         saveCallResult(processResponse(response))
-                        appExecutors.mainThread().execute {
-                            // we specially request a new live data,
-                            // otherwise we will get immediately last cached value,
-                            // which may not be updated with latest results received from network.
+                        // we specially request a new live data,
+                        // otherwise we will get immediately last cached value,
+                        // which may not be updated with latest results received from network.
+                        withContext(Dispatchers.Main) {
                             result.addSource(loadFromDb()) { newData ->
                                 setValue(Resource.success(newData))
                             }
@@ -70,7 +72,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
                     }
                 }
                 is ApiEmptyResponse -> {
-                    appExecutors.mainThread().execute {
+                    ioScope.launch(Dispatchers.Main) {
                         // reload from disk whatever we had
                         result.addSource(loadFromDb()) { newData ->
                             setValue(Resource.success(newData))
@@ -95,7 +97,7 @@ abstract class NetworkBoundResource<ResultType, RequestType>
     protected open fun processResponse(response: ApiSuccessResponse<RequestType>) = response.body
 
     @WorkerThread
-    protected abstract fun saveCallResult(item: RequestType)
+    protected abstract suspend fun saveCallResult(item: RequestType)
 
     @MainThread
     protected abstract fun shouldFetch(data: ResultType?): Boolean

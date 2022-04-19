@@ -1,7 +1,6 @@
 package me.ikvarxt.halo.repository
 
 import androidx.lifecycle.LiveData
-import me.ikvarxt.halo.AppExecutors
 import me.ikvarxt.halo.dao.PostDetailsDao
 import me.ikvarxt.halo.dao.PostItemDao
 import me.ikvarxt.halo.entites.HaloResponse
@@ -16,7 +15,6 @@ import javax.inject.Singleton
 
 @Singleton
 class Repository @Inject constructor(
-    private val appExecutors: AppExecutors,
     private val apiService: PostApiService,
     private val postItemDao: PostItemDao,
     private val postDetailDao: PostDetailsDao,
@@ -41,7 +39,7 @@ class Repository @Inject constructor(
     fun getPostDetails(postId: Long): LiveData<Resource<PostDetails>> = object :
         NetworkBoundResource<PostDetails, PostDetails>(appExecutors) {
 
-        override fun saveCallResult(item: PostDetails) {
+        override suspend fun saveCallResult(item: PostDetails) {
             postDetailDao.insertPostDetails(item)
         }
 

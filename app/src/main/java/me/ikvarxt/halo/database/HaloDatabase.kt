@@ -8,7 +8,7 @@ import me.ikvarxt.halo.dao.PostItemDao
 import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.entites.PostItem
 
-@Database(entities = [PostItem::class, PostDetails::class], version = 1)
+@Database(entities = [PostItem::class, PostDetails::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class HaloDatabase : RoomDatabase() {
 

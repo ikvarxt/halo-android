@@ -84,5 +84,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.13.1'
     kapt 'com.github.bumptech.glide:compiler:4.13.1'
     // markdown support by noties
-    implementation 'io.noties.markwon:core:4.6.2'
+    def markwonVersion = '4.6.2'
+    implementation "io.noties.markwon:core:$markwonVersion"
+    implementation "io.noties.markwon:editor:$markwonVersion"
+    // implementation "io.noties.markwon:ext-tables:$markwonVersion"
 }

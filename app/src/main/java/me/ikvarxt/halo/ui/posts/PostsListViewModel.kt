@@ -12,20 +12,19 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostsListViewModel @Inject constructor(
-    private val repository: Repository,
     private val postsRepository: PostsRepository
 ) : ViewModel() {
 
-    private val _refreshLiveData = MutableLiveData(0)
+//    private val _refreshLiveData = MutableLiveData(0)
 
 //    val postsList: LiveData<Resource<List<PostItem>>> =
 //        Transformations.switchMap(_refreshLiveData) {
 //            repository.getPostsList()
 //        }
 
-    fun refresh() {
-        _refreshLiveData.value = 0
-    }
+//    fun refresh() {
+//        _refreshLiveData.value = 0
+//    }
 
     val pagingPostsData = postsRepository.listPosts()
 }

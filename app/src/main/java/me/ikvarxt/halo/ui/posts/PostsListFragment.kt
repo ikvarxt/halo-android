@@ -1,20 +1,17 @@
 package me.ikvarxt.halo.ui.posts
 
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.ikvarxt.halo.databinding.FragmentPostsListBinding
-import me.ikvarxt.halo.network.infra.Status
 
 private const val TAG = "PostsListsFragment"
 
@@ -72,7 +69,14 @@ class PostsListFragment : Fragment() {
         }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.refresh()
+            adapter.refresh()
+        }
+
+        lifecycleScope.launchWhenCreated {
+            adapter.loadStateFlow.collectLatest { loadStates ->
+                binding.swipeRefreshLayout.isRefreshing =
+                    loadStates.mediator?.refresh is LoadState.Loading
+            }
         }
     }
 }

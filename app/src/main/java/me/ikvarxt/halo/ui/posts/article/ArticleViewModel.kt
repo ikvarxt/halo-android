@@ -15,13 +15,13 @@ class ArticleViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    private val postId = MutableLiveData<Long>()
+    private val postId = MutableLiveData<Int>()
 
     val postDetails: LiveData<Resource<PostDetails>> = Transformations.switchMap(postId) {
         repository.getPostDetails(it)
     }
 
-    fun setPostId(id: Long) {
+    fun setPostId(id: Int) {
         postId.value = id
     }
 }

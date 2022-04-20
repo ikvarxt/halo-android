@@ -33,6 +33,6 @@
         tools:layout="@layout/fragment_article">
         <argument
             android:name="postId"
-            app:argType="long"/>
+            app:argType="integer"/>
     </fragment>
 </navigation>

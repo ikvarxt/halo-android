@@ -1,9 +1,7 @@
 package me.ikvarxt.halo.network
 
 import androidx.lifecycle.LiveData
-import me.ikvarxt.halo.entites.HaloResponse
-import me.ikvarxt.halo.entites.ListPostResponse
-import me.ikvarxt.halo.entites.PostDetails
+import me.ikvarxt.halo.entites.*
 import me.ikvarxt.halo.network.infra.ApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -13,7 +11,16 @@ interface PostApiService {
 
     // list posts
     @GET("posts")
-    fun listPosts(): LiveData<ApiResponse<ListPostResponse>>
+    suspend fun listPosts(
+        @Query("categoryId") categoryId: Int? = null,
+        @Query("keyword") keyword: String? = null,
+        @Query("page") page: Int? = null,
+        @Query("size") size: Int? = null,
+        @Query("sort") sorts: Array<String>? = null,
+        @Query("status") status: PostStatus? = null,
+        @Query("statuses") statuses: Array<String>? = null,
+        @Query("more") more: Boolean? = null
+    ): PagesResponse<PostItem>
 
     // get a post details with slug path
     @GET("posts/slug")
@@ -25,6 +32,6 @@ interface PostApiService {
     // get a post details with post id
     @GET("posts/{postId}")
     fun getPostDetailsWithId(
-        @Path("postId") postId: Long,
+        @Path("postId") postId: Int,
     ): LiveData<ApiResponse<PostDetails>>
 }

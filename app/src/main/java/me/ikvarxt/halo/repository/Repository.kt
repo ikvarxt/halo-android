@@ -3,10 +3,7 @@ package me.ikvarxt.halo.repository
 import androidx.lifecycle.LiveData
 import me.ikvarxt.halo.dao.PostDetailsDao
 import me.ikvarxt.halo.dao.PostItemDao
-import me.ikvarxt.halo.entites.HaloResponse
-import me.ikvarxt.halo.entites.ListPostResponse
-import me.ikvarxt.halo.entites.PostDetails
-import me.ikvarxt.halo.entites.PostItem
+import me.ikvarxt.halo.entites.*
 import me.ikvarxt.halo.network.PostApiService
 import me.ikvarxt.halo.network.infra.NetworkBoundResource
 import me.ikvarxt.halo.network.infra.Resource
@@ -21,23 +18,25 @@ class Repository @Inject constructor(
 ) {
 
     // TODO: need add some control to shouldFetch
-    fun getPostsList(): LiveData<Resource<List<PostItem>>> = object :
-        NetworkBoundResource<List<PostItem>, ListPostResponse>(appExecutors) {
+//    fun getPostsList(): LiveData<Resource<List<PostItem>>> = object :
+//        NetworkBoundResource<List<PostItem>, PagesResponse<PostItem>>() {
+//
+//        override suspend fun saveCallResult(item: PagesResponse<PostItem>) {
+//            val content = item.content
+//            if (item.hasContent && content != null) {
+//                postItemDao.insertPostItem(content)
+//            }
+//        }
+//
+//        override fun shouldFetch(data: List<PostItem>?) = true
+//
+//        override fun loadFromDb() = postItemDao.loadAllPosts()
+//
+//        override fun createCall() = apiService.listPosts()
+//    }.asLiveData()
 
-        override fun saveCallResult(item: ListPostResponse) {
-            val content = item.content
-            postItemDao.insertPostItem(*content.toTypedArray())
-        }
-
-        override fun shouldFetch(data: List<PostItem>?) = true
-
-        override fun loadFromDb() = postItemDao.loadAllPosts()
-
-        override fun createCall() = apiService.listPosts()
-    }.asLiveData()
-
-    fun getPostDetails(postId: Long): LiveData<Resource<PostDetails>> = object :
-        NetworkBoundResource<PostDetails, PostDetails>(appExecutors) {
+    fun getPostDetails(postId: Int): LiveData<Resource<PostDetails>> = object :
+        NetworkBoundResource<PostDetails, PostDetails>() {
 
         override suspend fun saveCallResult(item: PostDetails) {
             postDetailDao.insertPostDetails(item)

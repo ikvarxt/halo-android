@@ -14,5 +14,5 @@ interface PostDetailsDao {
     fun insertPostDetails(vararg item: PostDetails)
 
     @Query("select * from post_details where id = :id")
-    fun loadPostDetailWithId(id: Long): LiveData<PostDetails>
+    fun loadPostDetailWithId(id: Int): LiveData<PostDetails>
 }

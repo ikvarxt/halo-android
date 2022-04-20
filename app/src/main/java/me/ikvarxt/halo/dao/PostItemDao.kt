@@ -1,10 +1,8 @@
 package me.ikvarxt.halo.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.paging.PagingSource
+import androidx.room.*
 import me.ikvarxt.halo.entites.PostItem
 
 @Dao
@@ -14,6 +12,11 @@ interface PostItemDao {
     fun loadAllPosts(): LiveData<List<PostItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertPostItem(vararg item: PostItem)
+    suspend fun insertPostItem(items: List<PostItem>)
 
+    @Query("DELETE FROM post_item")
+    suspend fun clearAll()
+
+    @Query("SELECT * FROM post_item")
+    fun pagingSource(): PagingSource<Int, PostItem>
 }

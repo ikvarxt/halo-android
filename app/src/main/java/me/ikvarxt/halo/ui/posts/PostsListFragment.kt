@@ -7,10 +7,12 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostsListBinding
 
 private const val TAG = "PostsListsFragment"
@@ -77,6 +79,10 @@ class PostsListFragment : Fragment() {
                 binding.swipeRefreshLayout.isRefreshing =
                     loadStates.mediator?.refresh is LoadState.Loading
             }
+        }
+
+        binding.addFab.setOnClickListener {
+            findNavController().navigate(R.id.addPostFragment)
         }
     }
 }

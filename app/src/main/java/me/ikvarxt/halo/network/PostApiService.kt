@@ -2,10 +2,9 @@ package me.ikvarxt.halo.network
 
 import androidx.lifecycle.LiveData
 import me.ikvarxt.halo.entites.*
+import me.ikvarxt.halo.entites.network.CreatePostBody
 import me.ikvarxt.halo.network.infra.ApiResponse
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface PostApiService {
 
@@ -34,4 +33,8 @@ interface PostApiService {
     fun getPostDetailsWithId(
         @Path("postId") postId: Int,
     ): LiveData<ApiResponse<PostDetails>>
+
+    // create a post
+    @POST("posts")
+    suspend fun createPost(@Body post: CreatePostBody): PostItem
 }

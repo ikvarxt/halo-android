@@ -11,21 +11,21 @@
         android:label="@null"
         tools:layout="@layout/fragment_main"/>
 
-<!--    <fragment-->
-<!--        android:id="@+id/dashboard"-->
-<!--        android:name="me.ikvarxt.halo.ui.dashboard.DashboardFragment"-->
-<!--        android:label="@string/dashboard"-->
-<!--        tools:layout="@layout/fragment_dashboard"/>-->
+    <!--    <fragment-->
+    <!--        android:id="@+id/dashboard"-->
+    <!--        android:name="me.ikvarxt.halo.ui.dashboard.DashboardFragment"-->
+    <!--        android:label="@string/dashboard"-->
+    <!--        tools:layout="@layout/fragment_dashboard"/>-->
 
-<!--    <fragment-->
-<!--        android:id="@+id/postsList"-->
-<!--        android:name="me.ikvarxt.halo.ui.posts.PostsListFragment"-->
-<!--        android:label="@string/posts_list"-->
-<!--        tools:layout="@layout/fragment_posts_list">-->
-<!--        <action-->
-<!--            android:id="@+id/gotoPostsDetailsAction"-->
-<!--            app:destination="@id/articleFragment"/>-->
-<!--    </fragment>-->
+    <!--    <fragment-->
+    <!--        android:id="@+id/postsList"-->
+    <!--        android:name="me.ikvarxt.halo.ui.posts.PostsListFragment"-->
+    <!--        android:label="@string/posts_list"-->
+    <!--        tools:layout="@layout/fragment_posts_list">-->
+    <!--        <action-->
+    <!--            android:id="@+id/gotoPostsDetailsAction"-->
+    <!--            app:destination="@id/articleFragment"/>-->
+    <!--    </fragment>-->
 
     <fragment
         android:id="@+id/articleFragment"
@@ -33,6 +33,11 @@
         tools:layout="@layout/fragment_article">
         <argument
             android:name="postId"
-            app:argType="integer"/>
+            app:argType="integer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/addPostFragment"
+        android:name="me.ikvarxt.halo.ui.posts.create.CreatePostFragment"
+        tools:layout="@layout/fragment_create_post" />
 </navigation>

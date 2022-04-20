@@ -3,5 +3,10 @@
 
     <string name="dashboard">Dashboard</string>
     <string name="posts_list">Posts</string>
+    <string name="add">Add</string>
+    <string name="content_desc_add_post">Add a new post</string>
+    <string name="post_title_hint">Title</string>
+    <string name="hint_post_content">Write something down…</string>
+    <string name="content_desc_post_publish">Publish this article</string>
 
 </resources>

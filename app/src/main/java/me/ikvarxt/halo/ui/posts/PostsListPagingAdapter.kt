@@ -3,8 +3,8 @@ package me.ikvarxt.halo.ui.posts
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +14,9 @@ import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.ItemMainPostCardBinding
 import me.ikvarxt.halo.entites.PostItem
 
-class PostsListPagingAdapter : PagingDataAdapter<PostItem, PostsListPagingAdapter.ViewHolder>(
+class PostsListPagingAdapter(
+    private val listener: Listener
+) : PagingDataAdapter<PostItem, PostsListPagingAdapter.ViewHolder>(
     PostsListAdapter.CALLBACK
 ) {
 
@@ -25,7 +27,7 @@ class PostsListPagingAdapter : PagingDataAdapter<PostItem, PostsListPagingAdapte
             binding.post = item
             if (item.thumbnail.isNotBlank()) {
                 // TODO: add placeholder to this imageview
-                binding.thumbnail.visibility = View.VISIBLE
+                binding.thumbnail.isVisible = true
                 Glide.with(binding.root.context)
                     .asBitmap()
                     .load(Uri.parse(item.thumbnail))
@@ -40,6 +42,10 @@ class PostsListPagingAdapter : PagingDataAdapter<PostItem, PostsListPagingAdapte
                     putInt("postId", item.id)
                 })
             }
+            binding.root.setOnLongClickListener {
+                listener.deletePostPermanently(item)
+                true
+            }
             binding.executePendingBindings()
         }
     }
@@ -52,5 +58,9 @@ class PostsListPagingAdapter : PagingDataAdapter<PostItem, PostsListPagingAdapte
         return ViewHolder(
             ItemMainPostCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         )
+    }
+
+    interface Listener {
+        fun deletePostPermanently(item: PostItem)
     }
 }

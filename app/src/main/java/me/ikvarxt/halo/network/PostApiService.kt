@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import me.ikvarxt.halo.entites.*
 import me.ikvarxt.halo.entites.network.CreatePostBody
 import me.ikvarxt.halo.network.infra.ApiResponse
+import retrofit2.Response
 import retrofit2.http.*
 
 interface PostApiService {
@@ -37,4 +38,21 @@ interface PostApiService {
     // create a post
     @POST("posts")
     suspend fun createPost(@Body post: CreatePostBody): PostItem
+
+    // update status of a post
+    @POST("posts/{postId}/status/{status}")
+    suspend fun updateStatusOfPost(
+        @Path("postId") postId: Int,
+        @Path("status") status: PostStatus
+    ): PostItem
+
+    // delete a post permanently
+    @DELETE("posts/{postId}")
+    suspend fun deletePostPermanently(@Path("postId") postId: Int): Response<Unit>
+
+    // delete posts in batch
+    @DELETE("posts")
+    suspend fun deletePostsPermanentlyInBatch(
+        @Body postIds: IntArray
+    ): List<PostItem>
 }

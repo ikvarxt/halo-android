@@ -1,13 +1,12 @@
 package me.ikvarxt.halo.ui.posts
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import me.ikvarxt.halo.entites.PostDetails
-import me.ikvarxt.halo.entites.PostItem
-import me.ikvarxt.halo.network.infra.Resource
-import me.ikvarxt.halo.repository.GetPostsPagingSource
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import me.ikvarxt.halo.repository.PostsRepository
-import me.ikvarxt.halo.repository.Repository
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,4 +26,27 @@ class PostsListViewModel @Inject constructor(
 //    }
 
     val pagingPostsData = postsRepository.listPosts()
+
+    /**
+     * indicates that there is a background operation currently in progress or not
+     */
+    private val _operationInProgress = MutableStateFlow(false)
+    val operationInProgress: StateFlow<Boolean> = _operationInProgress
+
+    /**
+     * trigger paging adapter refresh flow.
+     * Learned that emit a StateFlow of Unit can never trigger collect
+     */
+    private val _refreshAdapter = MutableStateFlow(Any())
+    val refreshAdapter: StateFlow<Any> = _refreshAdapter
+
+    fun deletePostPermanently(postId: Int) {
+        viewModelScope.launch {
+            _operationInProgress.emit(true)
+            // TODO: need deal with the operation's status of success and failure
+            val response = postsRepository.deletePostPermanently(postId)
+            _operationInProgress.emit(false)
+            _refreshAdapter.emit(Any())
+        }
+    }
 }

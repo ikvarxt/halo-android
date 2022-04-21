@@ -34,4 +34,7 @@ class PostsRepository @Inject constructor(
             }
         }
     }
+
+    suspend fun deletePostPermanently(postId: Int) = service.deletePostPermanently(postId)
+
 }

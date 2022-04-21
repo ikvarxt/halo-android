@@ -4,25 +4,42 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostsListBinding
+import me.ikvarxt.halo.entites.PostItem
 
 private const val TAG = "PostsListsFragment"
 
 @AndroidEntryPoint
-class PostsListFragment : Fragment() {
+class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
 
     private lateinit var binding: FragmentPostsListBinding
     private lateinit var adapter: PostsListPagingAdapter
     private val viewModel by viewModels<PostsListViewModel>()
+
+    private val operationInProgressLoading by lazy {
+        val context = requireContext()
+        // TODO: this loading view never shows, figure it out
+        val loading = ContentLoadingProgressBar(context)
+        MaterialAlertDialogBuilder(context)
+            .setView(loading)
+            .setTitle("Operation is in progress")
+            .create().apply {
+                setOnDismissListener { loading.hide() }
+                setOnShowListener { loading.show() }
+                setCanceledOnTouchOutside(false)
+            }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +55,7 @@ class PostsListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
 //        adapter = PostsListAdapter()
-        adapter = PostsListPagingAdapter()
+        adapter = PostsListPagingAdapter(this)
         binding.recyclerView.adapter = adapter
 
 //        viewModel.postsList.observe(viewLifecycleOwner) {
@@ -81,8 +98,31 @@ class PostsListFragment : Fragment() {
             }
         }
 
+        lifecycleScope.launchWhenCreated {
+            viewModel.operationInProgress.collectLatest {
+                when (it) {
+                    true -> operationInProgressLoading.show()
+                    false -> operationInProgressLoading.dismiss()
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            viewModel.refreshAdapter.collectLatest { adapter.refresh() }
+        }
+
         binding.addFab.setOnClickListener {
             findNavController().navigate(R.id.addPostFragment)
         }
+    }
+
+    override fun deletePostPermanently(item: PostItem) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage("Are you want to permanently delete this post?")
+            .setPositiveButton("Delete") { _, _ ->
+                viewModel.deletePostPermanently(item.id)
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 }

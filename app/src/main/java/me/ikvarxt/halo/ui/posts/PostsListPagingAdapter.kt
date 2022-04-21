@@ -36,6 +36,8 @@ class PostsListPagingAdapter(
                     .centerCrop()
                     .placeholder(R.drawable.ic_baseline_dashboard_24)
                     .into(binding.thumbnail)
+            } else {
+                binding.thumbnail.isVisible = false
             }
             binding.root.setOnClickListener {
                 itemView.findNavController().navigate(R.id.articleFragment, Bundle().apply {

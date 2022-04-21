@@ -9,6 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.editor.MarkwonEditor
 import io.noties.markwon.editor.MarkwonEditorTextWatcher
@@ -20,11 +21,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class CreatePostFragment : Fragment() {
 
-    private lateinit var binding: FragmentCreatePostBinding
-    private val viewModel by viewModels<CreatePostViewModel>()
-
     @Inject
     lateinit var editor: MarkwonEditor
+
+    private lateinit var binding: FragmentCreatePostBinding
+    private val viewModel by viewModels<CreatePostViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +34,6 @@ class CreatePostFragment : Fragment() {
     ): View = FragmentCreatePostBinding.inflate(inflater, container, false).also {
         binding = it
     }.root
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -75,5 +75,6 @@ class CreatePostFragment : Fragment() {
         val activity = requireActivity() as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
     }
 }

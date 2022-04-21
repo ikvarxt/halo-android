@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -17,14 +18,17 @@ import me.ikvarxt.halo.databinding.FragmentArticleBinding
 import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.network.infra.Resource
 import me.ikvarxt.halo.network.infra.Status
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class ArticleFragment : Fragment() {
 
+    @Inject
+    lateinit var markwon: Markwon
+
     private lateinit var binding: FragmentArticleBinding
     private val args by navArgs<ArticleFragmentArgs>()
     private val viewModel by viewModels<ArticleViewModel>()
-    private val markwon by lazy { Markwon.create(requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,7 +64,7 @@ class ArticleFragment : Fragment() {
 
             val thumbnail = data.thumbnail
             if (thumbnail != null && thumbnail.isNotBlank()) {
-                binding.headerImage.visibility = View.VISIBLE
+                binding.headerImage.isVisible = true
                 Glide.with(binding.headerImage.context)
                     .asDrawable()
                     .load(Uri.parse(thumbnail))
@@ -69,8 +73,8 @@ class ArticleFragment : Fragment() {
             } else {
             }
 
-            data.originalContent.let { it1 ->
-                markwon.setMarkdown(binding.mainArticleText, it1)
+            data.originalContent.let { content ->
+                markwon.setMarkdown(binding.mainArticleText, content)
             }
         }
 

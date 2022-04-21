@@ -8,5 +8,6 @@
     <string name="post_title_hint">Title</string>
     <string name="hint_post_content">Write something down…</string>
     <string name="content_desc_post_publish">Publish this article</string>
+    <string name="operation_in_progress">Operation in Progress…</string>
 
 </resources>

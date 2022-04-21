@@ -28,15 +28,9 @@ class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
     private val viewModel by viewModels<PostsListViewModel>()
 
     private val operationInProgressLoading by lazy {
-        val context = requireContext()
-        // TODO: this loading view never shows, figure it out
-        val loading = ContentLoadingProgressBar(context)
-        MaterialAlertDialogBuilder(context)
-            .setView(loading)
-            .setTitle("Operation is in progress")
+        MaterialAlertDialogBuilder(requireContext())
+            .setView(R.layout.view_content_loading)
             .create().apply {
-                setOnDismissListener { loading.hide() }
-                setOnShowListener { loading.show() }
                 setCanceledOnTouchOutside(false)
             }
     }

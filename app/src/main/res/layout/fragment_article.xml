@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:fitsSystemWindows="true"
-                android:padding="@dimen/articlePadding">
+                android:padding="@dimen/layout_edge_padding">
 
                 <TextView
                     android:id="@+id/mainArticleText"

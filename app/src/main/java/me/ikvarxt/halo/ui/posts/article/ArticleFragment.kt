@@ -73,7 +73,7 @@ class ArticleFragment : Fragment() {
             } else {
             }
 
-            data.originalContent.let { content ->
+            data.originalContent?.let { content ->
                 markwon.setMarkdown(binding.mainArticleText, content)
             }
         }

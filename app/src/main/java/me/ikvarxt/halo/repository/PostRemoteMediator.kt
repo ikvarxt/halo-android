@@ -58,20 +58,20 @@ class PostRemoteMediator(
                 }
             }
 
-            val response =
-                apiService.listPosts(categoryId, keyword, page, size, sorts, status, statuses, more)
+//            val response =
+//                apiService.listPosts(categoryId, keyword, page, size, sorts, status, statuses, more)
+//
+//            database.withTransaction {
+//                if (loadType == LoadType.REFRESH) {
+//                    dao.clearAll()
+//                }
+//
+//                response.content?.let {
+//                    dao.insertPostItem(it)
+//                }
+//            }
 
-            database.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    dao.clearAll()
-                }
-
-                response.content?.let {
-                    dao.insertPostItem(it)
-                }
-            }
-
-            MediatorResult.Success(endOfPaginationReached = !response.hasNext)
+            MediatorResult.Success(endOfPaginationReached = false)
         } catch (e: IOException) {
             MediatorResult.Error(e)
         } catch (e: HttpException) {

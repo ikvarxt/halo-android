@@ -1,10 +1,11 @@
 package me.ikvarxt.halo.repository
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.network.PostApiService
+import me.ikvarxt.halo.network.infra.NetworkError
+import me.ikvarxt.halo.network.infra.NetworkResult
 
 class GetPostsPagingSource(
     private val service: PostApiService,
@@ -21,15 +22,20 @@ class GetPostsPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, PostItem> {
         return try {
             val nextPageIndex = params.key ?: 0
-            val response = service.listPosts(size = pageSize, page = nextPageIndex)
-            LoadResult.Page(
-                data = response.content!!,
-                prevKey = null, // if (response.hasPrevious) response.page - 1 else null,
-                nextKey = if (response.hasNext) response.page + 1 else null
-            )
+            when (val result = service.listPosts(size = pageSize, page = nextPageIndex)) {
+                is NetworkResult.Success -> {
+                    val response = result.data
+                    LoadResult.Page(
+                        data = response.content!!,
+                        prevKey = null, // if (response.hasPrevious) response.page - 1 else null,
+                        nextKey = if (response.hasNext) response.page + 1 else null
+                    )
+                }
+                is NetworkResult.Failure -> throw Exception(result.msg)
+                is NetworkResult.NetworkError -> throw NetworkError()
+            }
         } catch (e: Exception) {
             LoadResult.Error(e)
         }
     }
-
 }

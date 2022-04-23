@@ -15,6 +15,7 @@ import io.noties.markwon.editor.MarkwonEditor
 import io.noties.markwon.editor.MarkwonEditorTextWatcher
 import me.ikvarxt.halo.databinding.FragmentCreatePostBinding
 import me.ikvarxt.halo.extentions.showToast
+import me.ikvarxt.halo.network.infra.NetworkResult
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
@@ -61,12 +62,19 @@ class CreatePostFragment : Fragment() {
             }
         }
 
-        viewModel.result.observe(viewLifecycleOwner) {
-            val msg = if (it.isSuccess) {
-                "Publish success"
-            } else {
-                it.exceptionOrNull().toString()
+        viewModel.result.observe(viewLifecycleOwner) {result->
+            val msg= when (result) {
+                is NetworkResult.Success -> {
+                    "Post ${result.data.id} published success"
+                }
+                is NetworkResult.Failure -> {
+                    "error occurred: code ${result.code}, ${result.msg}"
+                }
+                is NetworkResult.NetworkError -> {
+                    "Network Error"
+                }
             }
+
             requireContext().showToast(msg)
         }
     }

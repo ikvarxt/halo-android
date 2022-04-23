@@ -1,10 +1,13 @@
 package me.ikvarxt.halo.network
 
 import androidx.lifecycle.LiveData
-import me.ikvarxt.halo.entites.*
+import me.ikvarxt.halo.entites.PagesResponse
+import me.ikvarxt.halo.entites.PostDetails
+import me.ikvarxt.halo.entites.PostItem
+import me.ikvarxt.halo.entites.PostStatus
 import me.ikvarxt.halo.entites.network.CreatePostBody
 import me.ikvarxt.halo.network.infra.ApiResponse
-import retrofit2.Response
+import me.ikvarxt.halo.network.infra.NetworkResult
 import retrofit2.http.*
 
 interface PostApiService {
@@ -20,7 +23,7 @@ interface PostApiService {
         @Query("status") status: PostStatus? = null,
         @Query("statuses") statuses: Array<String>? = null,
         @Query("more") more: Boolean? = null
-    ): PagesResponse<PostItem>
+    ): NetworkResult<PagesResponse<PostItem>>
 
     // get a post details with slug path
     @GET("posts/slug")
@@ -37,7 +40,7 @@ interface PostApiService {
 
     // create a post
     @POST("posts")
-    suspend fun createPost(@Body post: CreatePostBody): PostItem
+    suspend fun createPost(@Body post: CreatePostBody): NetworkResult<PostItem>
 
     // update status of a post
     @POST("posts/{postId}/status/{status}")
@@ -48,7 +51,7 @@ interface PostApiService {
 
     // delete a post permanently
     @DELETE("posts/{postId}")
-    suspend fun deletePostPermanently(@Path("postId") postId: Int): Response<Unit>
+    suspend fun deletePostPermanently(@Path("postId") postId: Int): NetworkResult<Unit>
 
     // delete posts in batch
     @DELETE("posts")

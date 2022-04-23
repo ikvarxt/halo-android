@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.flow
 import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.entites.network.CreatePostBody
 import me.ikvarxt.halo.network.PostApiService
+import me.ikvarxt.halo.network.infra.NetworkResult
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -23,17 +24,12 @@ class PostsRepository @Inject constructor(
     fun createPost(
         title: String,
         content: String,
-    ): Flow<Result<PostItem>> {
-        return flow {
-            try {
-                val body = CreatePostBody(title, content)
-                val response = service.createPost(body)
-                emit(Result.success(response))
-            } catch (e: Exception) {
-                emit(Result.failure(e))
-            }
-        }
+    ): Flow<NetworkResult<PostItem>> = flow {
+        val body = CreatePostBody(title, content)
+        val response = service.createPost(body)
+        emit(response)
     }
+
 
     suspend fun deletePostPermanently(postId: Int) = service.deletePostPermanently(postId)
 

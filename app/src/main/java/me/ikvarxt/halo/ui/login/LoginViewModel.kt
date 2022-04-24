@@ -3,19 +3,18 @@ package me.ikvarxt.halo.ui.login
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.ikvarxt.halo.account.AccountManager
 import me.ikvarxt.halo.database.HaloDatabase
 import me.ikvarxt.halo.entites.network.LoginRequestBody
-import me.ikvarxt.halo.entites.network.LoginToken
-import me.ikvarxt.halo.entites.network.NeedMFACode
 import me.ikvarxt.halo.network.AdminApiService
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import me.ikvarxt.halo.network.infra.NetworkResult
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,115 +23,112 @@ class LoginViewModel @Inject constructor(
     private val apiService: AdminApiService,
     private val database: HaloDatabase,
 ) : ViewModel() {
+    private val _errorOccurred = MutableStateFlow("")
+    val errorOccurred: StateFlow<String> = _errorOccurred.asStateFlow()
+
+    private val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
+
+    private val _refreshTokenState = MutableStateFlow(RefreshTokenUiState(false, false))
+    val refreshTokenState = _refreshTokenState.asStateFlow()
+
+    private val _dropToMainScreen = MutableStateFlow(false)
+    val dropToMainScreen = _dropToMainScreen.asStateFlow()
+
+    private val _loginState = MutableStateFlow(LoginUiState(false, false, null))
+    val loginState = _loginState.asStateFlow()
 
     fun login(
         domain: String,
         username: String,
         password: String,
         authcode: String? = null
-    ): LiveData<Boolean> {
+    ) {
         // TODO: domain validation
-        accountManager.saveDomain(domain)
+        viewModelScope.launch {
+            _loading.emit(true)
+            _loginState.emit(LoginUiState(true, false, null))
 
-        val resLiveData = MutableLiveData<Boolean>()
-        val requestBody = LoginRequestBody(username, password, authcode)
+            accountManager.saveDomain(domain)
 
-        val call = apiService.login(requestBody)
+            val requestBody = LoginRequestBody(username, password, authcode)
 
-        val callback = object : Callback<LoginToken> {
-            override fun onResponse(call: Call<LoginToken>, response: Response<LoginToken>) {
-                try {
-                    val body = response.body() as LoginToken
-                    accountManager.saveLoginToken(body)
-                    resLiveData.postValue(true)
-                } catch (e: Exception) {
-                    response.errorBody()?.let { e.addSuppressed(Exception(it.string())) }
-                    e.printStackTrace()
-                    resLiveData.postValue(false)
+            val result = apiService.login(requestBody)
+            _loading.emit(false)
+
+            when (result) {
+                is NetworkResult.Success -> {
+                    accountManager.saveLoginToken(result.data)
+                    _loginState.emit(LoginUiState(false, true, null))
+                }
+                is NetworkResult.Failure -> with(result) {
+                    _loginState.emit(LoginUiState(false, false, msg))
                 }
             }
-
-            override fun onFailure(call: Call<LoginToken>, t: Throwable) {
-                t.printStackTrace()
-                resLiveData.postValue(false)
-            }
         }
-        call.enqueue(callback)
-
-        return resLiveData
     }
 
     fun precheck(username: String, password: String, authcode: String?): LiveData<Boolean> {
         val resLiveData = MutableLiveData<Boolean>()
 
-        val requestBody = LoginRequestBody(username, password, authcode)
-        val precheckCall = apiService.loginPrecheck(body = requestBody)
-        val callback = object : Callback<NeedMFACode> {
-            override fun onResponse(call: Call<NeedMFACode>, response: Response<NeedMFACode>) {
-                try {
-                    val needMFACode = (response.body() as NeedMFACode).needMFACode
-                    resLiveData.postValue(needMFACode)
-                } catch (e: Exception) {
-                    response.errorBody()?.let { e.addSuppressed(Exception(it.string())) }
-                    onFailure(call, e)
-                }
-            }
+        viewModelScope.launch {
+            val requestBody = LoginRequestBody(username, password, authcode)
+            val precheckResult = apiService.loginPrecheck(body = requestBody)
 
-            override fun onFailure(call: Call<NeedMFACode>, t: Throwable) {
-                t.printStackTrace()
-                resLiveData.postValue(false)
+            when (precheckResult) {
+                is NetworkResult.Success -> {
+                    resLiveData.value = precheckResult.data.needMFACode
+                }
+                is NetworkResult.Failure -> resLiveData.value = false
             }
         }
-        precheckCall.enqueue(callback)
 
         return resLiveData
     }
 
-    fun logout(): LiveData<Boolean> {
-        val res = MutableLiveData<Boolean>()
-        CoroutineScope(Dispatchers.IO).launch {
+    fun logout() {
+        viewModelScope.launch(Dispatchers.IO) {
             accountManager.logout()
             database.clearAllTables()
-//            apiService.logout().enqueue(object : Callback<Unit> {
-//                override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
-//                    res.postValue(response.isSuccessful)
-//                }
-//
-//                override fun onFailure(call: Call<Unit>, t: Throwable) {
-//                    res.postValue(false)
-//                }
-//            })
-            res.postValue(true)
+            apiService.logout()
         }
-        return res
     }
 
-    fun refreshToken(): LiveData<Boolean> {
-        val res = MutableLiveData<Boolean>()
+    fun refreshToken() {
+        viewModelScope.launch {
+            _refreshTokenState.emit(RefreshTokenUiState(true, false))
+            if (!accountManager.hasActiveAccount() && accountManager.refreshAccessKey != null) {
+                val result = apiService.refreshToken(accountManager.refreshAccessKey!!)
 
-        if (!accountManager.hasActiveAccount() && accountManager.refreshAccessKey != null) {
-            val call = apiService.refreshToken(accountManager.refreshAccessKey!!)
-
-            val callback = object : Callback<LoginToken> {
-                override fun onResponse(call: Call<LoginToken>, response: Response<LoginToken>) {
-                    if (response.isSuccessful) {
-                        val token = response.body() as LoginToken
-                        accountManager.saveLoginToken(token)
-                        res.postValue(accountManager.accessKeyValidation())
-                    } else {
-                        res.postValue(false)
+                when (result) {
+                    is NetworkResult.Success -> {
+                        accountManager.saveLoginToken(result.data)
+                        if (accountManager.accessKeyValidation()) {
+                            _refreshTokenState.emit(RefreshTokenUiState(false, true))
+                            return@launch
+                        } else {
+                            _errorOccurred.emit("token check failed")
+                        }
                     }
-                }
-
-                override fun onFailure(call: Call<LoginToken>, t: Throwable) {
-                    t.printStackTrace()
-                    res.postValue(false)
+                    is NetworkResult.Failure -> error(result.msg, result.code)
                 }
             }
-            call.enqueue(callback)
-        } else {
-            res.postValue(false)
+            _refreshTokenState.emit(RefreshTokenUiState(false, false))
         }
-        return res
+    }
+
+    private suspend fun error(msg: String?, code: Int) {
+        _errorOccurred.emit("Error: code $code $msg")
     }
 }
+
+data class LoginUiState(
+    val isButtonClicked: Boolean,
+    val isLoginSuccess: Boolean,
+    val errorMsg: String?
+)
+
+data class RefreshTokenUiState(
+    val isRefreshing: Boolean,
+    val isSuccess: Boolean
+)

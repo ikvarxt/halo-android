@@ -9,5 +9,9 @@
     <string name="hint_post_content">Write something down…</string>
     <string name="content_desc_post_publish">Publish this article</string>
     <string name="operation_in_progress">Operation in Progress…</string>
+    <string name="site_address">Site Address</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
 
 </resources>

@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:hint="Site Address"
+        android:hint="@string/site_address"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -29,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:hint="Username"
+        android:hint="@string/username"
         app:layout_constraintTop_toBottomOf="@id/siteAddressLayout">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:hint="Password"
+        android:hint="@string/password"
         app:layout_constraintTop_toBottomOf="@id/usernameLayout"
         app:passwordToggleEnabled="true">
 
@@ -61,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Login"
+        android:text="@string/login"
         app:layout_constraintTop_toBottomOf="@id/passwordLayout" />
 
     <androidx.constraintlayout.widget.Group
@@ -73,8 +73,12 @@
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/loginProgress"
         style="?android:attr/progressBarStyleLarge"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

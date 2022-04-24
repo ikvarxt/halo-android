@@ -2,15 +2,17 @@ package me.ikvarxt.halo.ui.login
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import me.ikvarxt.halo.account.AccountManager
 import me.ikvarxt.halo.databinding.ActivityLoginBinding
-import me.ikvarxt.halo.network.AdminApiService
+import me.ikvarxt.halo.extentions.showToast
 import me.ikvarxt.halo.ui.MainActivity
 import okhttp3.HttpUrl
 import javax.inject.Inject
@@ -18,11 +20,11 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityLoginBinding
-    private val viewModel by viewModels<LoginViewModel>()
-
     @Inject
     lateinit var accountManager: AccountManager
+
+    private lateinit var binding: ActivityLoginBinding
+    private val viewModel by viewModels<LoginViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,70 +37,76 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        if (!accountManager.accessKeyValidation()) refreshTokenAndCheck()
+        if (!accountManager.accessKeyValidation()) viewModel.refreshToken()
 
-        binding.siteAddress.apply {
-            addTextChangedListener {
-                val input = it.toString()
-                if (input.isNotBlank()) {
-                    try {
-                        HttpUrl.parse(input)!!.host()
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                        error = "Please input correct https address"
-                    }
-                    if (input.startsWith("http://")) {
-                        error = "Please input https:// schema"
-                    }
-                } else {
-                    error = "Site Address can not be empty"
+        binding.siteAddress.doAfterTextChanged {
+            val input = it.toString()
+            val editText = binding.siteAddress
+            if (input.isNotBlank()) {
+                try {
+                    HttpUrl.parse(input)!!.host()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    editText.error = "Please input correct https address"
                 }
+                if (input.startsWith("http://")) {
+                    editText.error = "Please input https:// schema"
+                }
+            } else {
+                editText.error = "Site Address can not be empty"
             }
         }
 
         binding.login.setOnClickListener { loginButtonClick() }
+
+        lifecycleScope.launchWhenCreated {
+            launch {
+                viewModel.dropToMainScreen.collectLatest {
+                    if (it) dropIntoMainActivity()
+                }
+            }
+            launch {
+                viewModel.errorOccurred.collectLatest {
+                    if (it.isNotBlank() && it.isNotEmpty()) showToast(it)
+                }
+            }
+            launch {
+                viewModel.loading.collectLatest {
+                    loading(it)
+                }
+            }
+            launch {
+                viewModel.refreshTokenState.collectLatest {
+                    when (it.isSuccess) {
+                        true -> dropIntoMainActivity()
+                        false -> {}
+                    }
+                    loading(it.isRefreshing)
+                }
+            }
+            launch {
+                viewModel.loginState.collectLatest {
+                    if (it.isLoginSuccess) {
+                        dropIntoMainActivity()
+                        return@collectLatest
+                    } else {
+                        it.errorMsg?.let { it1 -> showToast(it1) }
+                    }
+                    binding.login.isEnabled = !it.isButtonClicked
+                }
+            }
+        }
     }
 
     private fun loginButtonClick() {
-        binding.login.isEnabled = false
-
         val domain = binding.siteAddress.text.toString()
         val username = binding.username.text.toString()
         val password = binding.password.text.toString()
 
         if (domain.isBlank() && username.isBlank() && password.isBlank()) {
-            Toast.makeText(
-                this,
-                "Something wrong",
-                Toast.LENGTH_SHORT
-            ).show()
+            showToast("Three field must NOT be empty!")
         } else {
-            viewModel.login(domain, username, password).observe(this) {
-                if (it) {
-                    dropIntoMainActivity()
-                } else {
-                    binding.login.isEnabled = true
-                    Toast.makeText(this, "Login Failed", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-    private fun refreshTokenAndCheck() {
-        binding.apply {
-            loginFormGroup.isVisible = false
-            loginProgress.show()
-        }
-        viewModel.refreshToken().observe(this) { isSuccess ->
-            if (isSuccess) {
-                dropIntoMainActivity()
-                return@observe
-            } else {
-                binding.apply {
-                    loginProgress.hide()
-                    loginFormGroup.isVisible = true
-                }
-            }
+            viewModel.login(domain, username, password)
         }
     }
 
@@ -106,5 +114,12 @@ class LoginActivity : AppCompatActivity() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    private fun loading(isLoading: Boolean) {
+        with(binding) {
+            loginProgress.isVisible = isLoading
+            loginFormGroup.isVisible = !isLoading
+        }
     }
 }

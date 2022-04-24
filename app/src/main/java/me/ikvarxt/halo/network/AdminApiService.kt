@@ -3,7 +3,7 @@ package me.ikvarxt.halo.network
 import me.ikvarxt.halo.entites.network.LoginRequestBody
 import me.ikvarxt.halo.entites.network.LoginToken
 import me.ikvarxt.halo.entites.network.NeedMFACode
-import retrofit2.Call
+import me.ikvarxt.halo.network.infra.NetworkResult
 import retrofit2.http.Body
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -14,20 +14,20 @@ import retrofit2.http.Path
 interface AdminApiService {
 
     @POST("login")
-    fun login(
+    suspend fun login(
         @Body body: LoginRequestBody
-    ): Call<LoginToken>
+    ): NetworkResult<LoginToken>
 
     @POST("login/precheck")
-    fun loginPrecheck(
+    suspend fun loginPrecheck(
         @Body body: LoginRequestBody
-    ): Call<NeedMFACode>
+    ): NetworkResult<NeedMFACode>
 
     @POST("refresh/{refreshToken}")
-    fun refreshToken(
+    suspend fun refreshToken(
         @Path("refreshToken") refreshToken: String,
-    ): Call<LoginToken>
+    ): NetworkResult<LoginToken>
 
     @POST("logout")
-    fun logout(): Call<Unit>
+    suspend fun logout(): NetworkResult<Unit>
 }

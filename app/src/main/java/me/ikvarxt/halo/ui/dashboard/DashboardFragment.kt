@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import me.ikvarxt.halo.databinding.FragmentDashboardBinding
-import me.ikvarxt.halo.extentions.showToast
 import me.ikvarxt.halo.ui.login.LoginActivity
 import me.ikvarxt.halo.ui.login.LoginViewModel
 
@@ -34,14 +33,13 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.logout.setOnClickListener {
-            loginViewModel.logout().observe(viewLifecycleOwner) {
-                if (it) {
-                    startActivity(Intent(requireContext(),LoginActivity::class.java))
-                    requireActivity().finish()
-                } else {
-                    requireContext().showToast("logout failed")
-                }
-            }
+            loginViewModel.logout()
+            it.postDelayed({
+                val activity = requireActivity()
+                startActivity(Intent(activity, LoginActivity::class.java))
+                activity.finish()
+            }, 500)
+
         }
     }
 }

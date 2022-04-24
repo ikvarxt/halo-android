@@ -59,7 +59,7 @@ private class ResultCall<T>(proxy: Call<T>) : CallDelegate<T, NetworkResult<T>>(
 
             override fun onFailure(call: Call<T>, t: Throwable) {
                 val result: NetworkResult<T> = if (t is IOException) {
-                    NetworkResult.NetworkError(t)
+                    NetworkResult.Failure(-1, "Network Error", t)
                 } else {
                     NetworkResult.Failure(-1, null, t)
                 }

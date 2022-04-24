@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.network.PostApiService
-import me.ikvarxt.halo.network.infra.NetworkError
 import me.ikvarxt.halo.network.infra.NetworkResult
 
 class GetPostsPagingSource(
@@ -32,7 +31,6 @@ class GetPostsPagingSource(
                     )
                 }
                 is NetworkResult.Failure -> throw Exception(result.msg)
-                is NetworkResult.NetworkError -> throw NetworkError()
             }
         } catch (e: Exception) {
             LoadResult.Error(e)

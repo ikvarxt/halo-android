@@ -26,8 +26,8 @@ class PostsRepository @Inject constructor(
         content: String,
     ): Flow<NetworkResult<PostItem>> = flow {
         val body = CreatePostBody(title, content)
-        val response = service.createPost(body)
-        emit(response)
+        val result = service.createPost(body)
+        emit(result)
     }
 
 

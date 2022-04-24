@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
- import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.editor.MarkwonEditor
 import io.noties.markwon.editor.MarkwonEditorTextWatcher
@@ -62,16 +62,13 @@ class CreatePostFragment : Fragment() {
             }
         }
 
-        viewModel.result.observe(viewLifecycleOwner) {result->
-            val msg= when (result) {
+        viewModel.result.observe(viewLifecycleOwner) { result ->
+            val msg = when (result) {
                 is NetworkResult.Success -> {
                     "Post ${result.data.id} published success"
                 }
                 is NetworkResult.Failure -> {
                     "error occurred: code ${result.code}, ${result.msg}"
-                }
-                is NetworkResult.NetworkError -> {
-                    "Network Error"
                 }
             }
 

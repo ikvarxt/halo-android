@@ -88,9 +88,9 @@ class LoginViewModel @Inject constructor(
 
     fun logout() {
         viewModelScope.launch(Dispatchers.IO) {
-            accountManager.logout()
             database.clearAllTables()
             apiService.logout()
+            accountManager.logout()
         }
     }
 

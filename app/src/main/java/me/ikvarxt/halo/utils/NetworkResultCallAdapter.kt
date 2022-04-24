@@ -47,15 +47,13 @@ private class ResultCall<T>(proxy: Call<T>) : CallDelegate<T, NetworkResult<T>>(
         proxy.enqueue(object : Callback<T> {
             override fun onResponse(call: Call<T>, response: Response<T>) {
                 val code = response.code()
-                val result = if (code in 200 until 300) {
-                    val body = response.body()
-                    val successResult: NetworkResult<T> = NetworkResult.Success(body!!, code)
-                    successResult
+                val result = if (response.isSuccessful) {
+                    val body = response.body()!! as T
+                    NetworkResult.Success(body, code)
                 } else {
-                    NetworkResult.Failure(code, response.errorBody().toString())
-
+                    val errorBody = response.errorBody()!!
+                    NetworkResult.Failure(code, errorBody.string(), null)
                 }
-
                 callback.onResponse(this@ResultCall, Response.success(result))
             }
 
@@ -63,7 +61,7 @@ private class ResultCall<T>(proxy: Call<T>) : CallDelegate<T, NetworkResult<T>>(
                 val result: NetworkResult<T> = if (t is IOException) {
                     NetworkResult.NetworkError(t)
                 } else {
-                    NetworkResult.Failure(0, null, t)
+                    NetworkResult.Failure(-1, null, t)
                 }
 
                 callback.onResponse(this@ResultCall, Response.success(result))

@@ -61,6 +61,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:fitsSystemWindows="true"
+        app:fabAlignmentMode="end"
         app:menu="@menu/main_bottom_nav" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -69,6 +70,5 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/content_desc_post_publish"
         android:src="@drawable/ic_baseline_send_24"
-        app:layout_anchor="@id/bottomBar"
-        app:layout_anchorGravity="end" />
+        app:layout_anchor="@id/bottomBar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

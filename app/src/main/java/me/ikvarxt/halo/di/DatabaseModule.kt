@@ -23,12 +23,9 @@ class DatabaseModule {
     }
 
     @Provides
-    @Singleton
     fun providePostItemDao(database: HaloDatabase): PostItemDao = database.postItemDao()
 
-
     @Provides
-    @Singleton
     fun providePostDetailDao(database: HaloDatabase) = database.postDetailsDao()
 
 }

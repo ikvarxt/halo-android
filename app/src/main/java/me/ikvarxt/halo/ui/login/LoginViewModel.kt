@@ -26,9 +26,6 @@ class LoginViewModel @Inject constructor(
     private val _errorOccurred = MutableStateFlow("")
     val errorOccurred: StateFlow<String> = _errorOccurred.asStateFlow()
 
-    private val _loading = MutableStateFlow(false)
-    val loading = _loading.asStateFlow()
-
     private val _refreshTokenState = MutableStateFlow(RefreshTokenUiState(false, false))
     val refreshTokenState = _refreshTokenState.asStateFlow()
 
@@ -46,7 +43,6 @@ class LoginViewModel @Inject constructor(
     ) {
         // TODO: domain validation
         viewModelScope.launch {
-            _loading.emit(true)
             _loginState.emit(LoginUiState(true, false, null))
 
             accountManager.saveDomain(domain)
@@ -54,7 +50,6 @@ class LoginViewModel @Inject constructor(
             val requestBody = LoginRequestBody(username, password, authcode)
 
             val result = apiService.login(requestBody)
-            _loading.emit(false)
 
             when (result) {
                 is NetworkResult.Success -> {

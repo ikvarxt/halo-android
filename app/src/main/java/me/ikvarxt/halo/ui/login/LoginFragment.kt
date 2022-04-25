@@ -83,11 +83,6 @@ class LoginFragment : Fragment() {
                 }
             }
             launch {
-                viewModel.loading.collectLatest {
-                    loading(it)
-                }
-            }
-            launch {
                 viewModel.refreshTokenState.collectLatest {
                     when (it.isSuccess) {
                         true -> dropIntoMainActivity()
@@ -105,6 +100,7 @@ class LoginFragment : Fragment() {
                         it.errorMsg?.let { it1 -> showToast(it1) }
                     }
                     binding.login.isEnabled = !it.isButtonClicked
+                    loading(it.isButtonClicked)
                 }
             }
         }

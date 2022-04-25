@@ -40,25 +40,21 @@ class CreatePostFragment : Fragment() {
 
         setupToolbar(binding.toolbar)
 
-        binding.apply {
-            contentInput.addTextChangedListener(
-                MarkwonEditorTextWatcher.withPreRender(
-                    editor,
-                    Executors.newCachedThreadPool(),
-                    contentInput
-                )
-            )
+        with(binding.contentEdit) {
+            val executors = Executors.newCachedThreadPool()
+            val textWatcher = MarkwonEditorTextWatcher.withPreRender(editor, executors, this)
+            binding.contentEdit.addTextChangedListener(textWatcher)
         }
 
-        binding.postTitleInput.addTextChangedListener {
+        binding.postTitleEdit.addTextChangedListener {
             viewModel.title = it.toString()
         }
 
         binding.publishFab.setOnClickListener {
             if (viewModel.title.isBlank()) {
-                it.context.showToast("title can not be empty")
+                showToast("title can not be empty")
             } else {
-                viewModel.publishPost(binding.contentInput.text.toString())
+                viewModel.publishPost(binding.contentEdit.text.toString())
             }
         }
 
@@ -71,8 +67,7 @@ class CreatePostFragment : Fragment() {
                     "error occurred: code ${result.code}, ${result.msg}"
                 }
             }
-
-            requireContext().showToast(msg)
+            showToast(msg)
         }
     }
 
@@ -80,6 +75,7 @@ class CreatePostFragment : Fragment() {
         val activity = requireActivity() as AppCompatActivity
         activity.setSupportActionBar(toolbar)
         activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        toolbar.title = null
         toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
     }
 }

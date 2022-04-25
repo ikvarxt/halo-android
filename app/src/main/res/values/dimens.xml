@@ -6,4 +6,5 @@
     <dimen name="postListItemCardMinHeight">75dp</dimen>
     <dimen name="articleImageHeight">250dp</dimen>
     <dimen name="layout_edge_padding">16dp</dimen>
+    <dimen name="writing_content_padding_bottom">250dp</dimen>
 </resources>

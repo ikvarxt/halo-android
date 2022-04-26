@@ -8,16 +8,18 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/app_bar_margin"
+        android:clipToPadding="false"
+        app:layout_fitsSystemWindowsInsets="top">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="@dimen/app_bar_margin"
             android:paddingBottom="@dimen/scroll_bottom_padding_with_bottom_nav_and_fab"
-            app:fitsSystemWindowsInsets="top|bottom"
+            app:fitsSystemWindowsInsets="bottom"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:itemCount="7"
             tools:listitem="@layout/item_main_post_card" />

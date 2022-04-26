@@ -20,6 +20,8 @@ class AttachmentsRepository @Inject constructor(
         PageAttachmentsPagingSource(apiService, pageSize)
     }.flow
 
+    suspend fun deleteAttachmentPermanently(id: Int) = apiService.permanentlyDeleteAttachment(id)
+
 }
 
 class PageAttachmentsPagingSource(

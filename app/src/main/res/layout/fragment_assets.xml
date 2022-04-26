@@ -5,16 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="@dimen/app_bar_margin"
-        android:paddingBottom="@dimen/bottom_nav_view_margin"
-        app:fitsSystemWindowsInsets="top|bottom"
-        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
-        app:spanCount="2"
-        tools:itemCount="20"
-        tools:listitem="@layout/item_attachment" />
+        android:layout_marginTop="@dimen/app_bar_margin"
+        app:layout_fitsSystemWindowsInsets="top">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingBottom="@dimen/bottom_nav_view_margin"
+            app:fitsSystemWindowsInsets="bottom"
+            app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+            app:spanCount="2"
+            tools:itemCount="20"
+            tools:listitem="@layout/item_attachment" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/screen_edge_interval"
+        android:layout_marginBottom="@dimen/bottom_nav_view_margin_with_gap"
+        android:contentDescription="Uploading attachment"
+        android:src="@drawable/ic_baseline_cloud_upload_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_fitsSystemWindowsInsets="bottom" />
 </androidx.constraintlayout.widget.ConstraintLayout>

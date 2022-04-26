@@ -15,4 +15,7 @@ interface AttachmentApiService {
         @Query("page") page: Int,
         @Query("size") pageSize: Int = DEFAULT_IMAGE_PAGE_SIZE
     ): NetworkResult<PagesResponse<Attachment>>
+
+    @DELETE("attachments/{id}")
+    suspend fun permanentlyDeleteAttachment(@Path("id") id: Int): NetworkResult<Attachment>
 }

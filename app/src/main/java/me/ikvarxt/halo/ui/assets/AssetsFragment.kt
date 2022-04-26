@@ -18,7 +18,7 @@ import me.ikvarxt.halo.databinding.ItemAttachmentBinding
 import me.ikvarxt.halo.entites.Attachment
 
 @AndroidEntryPoint
-class AssetsFragment : Fragment() {
+class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
 
     private lateinit var binding: FragmentAssetsBinding
     private val viewModel by viewModels<AssetsViewModel>()
@@ -34,9 +34,13 @@ class AssetsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = AssetsListAdapter()
+        val adapter = AssetsListAdapter(this)
 
         binding.recyclerView.adapter = adapter
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            adapter.refresh()
+        }
 
         lifecycleScope.launchWhenCreated {
             launch {
@@ -44,12 +48,37 @@ class AssetsFragment : Fragment() {
                     adapter.submitData(it)
                 }
             }
+            launch {
+                adapter.loadStateFlow.collectLatest { loadStates ->
+                    binding.swipeRefreshLayout.isRefreshing =
+                        loadStates.mediator?.refresh is LoadState.Loading
+                }
+            }
         }
+    }
+
+    override fun delete(attachment: Attachment) {
+        val context = requireContext()
+        val imageView = ImageView(context)
+        Glide.with(context)
+            .load(attachment.path)
+            .into(imageView)
+
+        val positiveAction = DialogInterface.OnClickListener { dialog, which ->
+            viewModel.deletePermanently(attachment)
+        }
+        MaterialAlertDialogBuilder(context)
+            .setTitle("Are you sure to delete this attachment")
+            .setView(imageView)
+            .setPositiveButton("Delete", positiveAction)
+            .show()
     }
 
 }
 
-class AssetsListAdapter : PagingDataAdapter<Attachment, AssetsListAdapter.ViewHolder>(CALLBACK) {
+class AssetsListAdapter(
+    private val listener: Listener
+) : PagingDataAdapter<Attachment, AssetsListAdapter.ViewHolder>(CALLBACK) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         getItem(position)?.let { holder.bind(it) }
@@ -66,8 +95,16 @@ class AssetsListAdapter : PagingDataAdapter<Attachment, AssetsListAdapter.ViewHo
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(item: Attachment) {
             itemBinding.attachment = item
+            itemBinding.root.setOnLongClickListener {
+                listener.delete(item)
+                true
+            }
             itemBinding.executePendingBindings()
         }
+    }
+
+    interface Listener {
+        fun delete(attachment: Attachment)
     }
 
     companion object {

@@ -20,6 +20,19 @@ class AssetsViewModel @Inject constructor(
 
     val attachments = repository.getAttachments()
 
+    fun publish(uri: Uri) {
+        viewModelScope.launch {
+            val path = uri.path
+            // FIXME: can't get file, lack some permissions
+            val file = File(path)
+            val requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file)
+            val part: MultipartBody.Part =
+                MultipartBody.Part.createFormData("file", file.name, requestBody)
+
+            val result = repository.uploadAttachment(part)
+        }
+    }
+
     fun deletePermanently(attachment: Attachment) {
         viewModelScope.launch {
             repository.deleteAttachmentPermanently(attachment.id)

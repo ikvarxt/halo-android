@@ -1,15 +1,22 @@
 package me.ikvarxt.halo.ui.assets
 
+import android.content.DialogInterface
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -22,6 +29,12 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
 
     private lateinit var binding: FragmentAssetsBinding
     private val viewModel by viewModels<AssetsViewModel>()
+
+    private var contentCallback: ((Uri) -> Unit)? = null
+    private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
+        if (it != null) contentCallback?.invoke(it)
+        contentCallback = null
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -55,6 +68,26 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
                 }
             }
         }
+
+        binding.fab.setOnClickListener {
+            getContent("image/*") {
+                val imageView = ImageView(requireContext())
+                imageView.setImageURI(it)
+                val positiveAction = DialogInterface.OnClickListener { dialog, which ->
+                    viewModel.publish(it)
+                }
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Image")
+                    .setView(imageView)
+                    .setPositiveButton("upload", positiveAction)
+                    .show()
+            }
+        }
+    }
+
+    private fun getContent(type: String, callback: (Uri) -> Unit) {
+        contentCallback = callback
+        getContent.launch(type)
     }
 
     override fun delete(attachment: Attachment) {

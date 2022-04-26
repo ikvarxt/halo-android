@@ -6,6 +6,7 @@ import me.ikvarxt.halo.entites.Attachment
 import me.ikvarxt.halo.network.AttachmentApiService
 import me.ikvarxt.halo.network.DEFAULT_IMAGE_PAGE_SIZE
 import me.ikvarxt.halo.network.infra.NetworkResult
+import okhttp3.MultipartBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -20,8 +21,9 @@ class AttachmentsRepository @Inject constructor(
         PageAttachmentsPagingSource(apiService, pageSize)
     }.flow
 
-    suspend fun deleteAttachmentPermanently(id: Int) = apiService.permanentlyDeleteAttachment(id)
+    suspend fun uploadAttachment(body: MultipartBody.Part) = apiService.uploadAttachment(body)
 
+    suspend fun deleteAttachmentPermanently(id: Int) = apiService.permanentlyDeleteAttachment(id)
 }
 
 class PageAttachmentsPagingSource(

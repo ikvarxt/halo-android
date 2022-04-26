@@ -22,5 +22,6 @@
         <item name="android:windowLightNavigationBar">true</item>
 
         <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Surface</item>
+        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
     </style>
 </resources>

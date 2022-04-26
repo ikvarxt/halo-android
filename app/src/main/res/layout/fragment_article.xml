@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
+    android:paddingTop="@dimen/app_bar_margin">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -63,13 +63,13 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:fitsSystemWindows="true"
-                android:padding="@dimen/layout_edge_padding">
+                android:padding="@dimen/screen_edge_interval">
 
                 <TextView
                     android:id="@+id/mainArticleText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fitsSystemWindows="true"
+                    app:fitsSystemWindowsInsets="bottom"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

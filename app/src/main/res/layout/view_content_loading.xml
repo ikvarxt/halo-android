@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    android:padding="@dimen/layout_edge_padding">
+    android:padding="@dimen/screen_edge_interval">
 
     <androidx.core.widget.ContentLoadingProgressBar
         style="?android:attr/progressBarStyleLarge"

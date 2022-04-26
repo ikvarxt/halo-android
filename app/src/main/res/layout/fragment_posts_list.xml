@@ -1,61 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swipeRefreshLayout"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingTop="@dimen/app_bar_margin"
+            android:paddingBottom="@dimen/scroll_bottom_padding_with_bottom_nav_and_fab"
+            app:fitsSystemWindowsInsets="top|bottom"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="7"
+            tools:listitem="@layout/item_main_post_card" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="7"
-                tools:listitem="@layout/item_main_post_card" />
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.core.widget.ContentLoadingProgressBar
-                android:id="@+id/loading"
-                style="?android:attr/progressBarStyleLarge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <me.ikvarxt.halo.ui.components.AutoGoneTextView
-                android:id="@+id/errorText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:visibility="gone"
-                app:drawableTopCompat="@drawable/ic_baseline_error_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:text="this is a error occurred" />
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <me.ikvarxt.halo.ui.components.AutoGoneTextView
+            android:id="@+id/errorText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:drawableTopCompat="@drawable/ic_baseline_error_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="this is a error occurred" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/addFab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/layout_edge_padding"
+        android:layout_marginEnd="@dimen/screen_edge_interval"
+        android:layout_marginBottom="@dimen/bottom_nav_view_margin_with_gap"
         android:contentDescription="@string/content_desc_add_post"
         android:text="@string/add"
+        app:extendMotionSpec="@id/recyclerView"
         app:icon="@drawable/ic_baseline_add_24"
-        app:layout_anchorGravity="end|bottom" />
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_fitsSystemWindowsInsets="bottom" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+

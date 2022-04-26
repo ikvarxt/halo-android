@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="bottomPadding">70dp</dimen>
     <dimen name="postListItemThumbnailMaxWidth">100dp</dimen>
     <dimen name="postListItemThumbnailCornerRadius">20dp</dimen>
     <dimen name="postListItemCardMinHeight">75dp</dimen>
     <dimen name="articleImageHeight">250dp</dimen>
-    <dimen name="layout_edge_padding">16dp</dimen>
     <dimen name="writing_content_padding_bottom">250dp</dimen>
+
+    <dimen name="screen_edge_interval">16dp</dimen>
+    <dimen name="app_bar_margin">56dp</dimen>
+    <dimen name="bottom_nav_view_margin">56dp</dimen>
+    <!-- as for 56 + 16 -->
+    <dimen name="bottom_nav_view_margin_with_gap">72dp</dimen>
+    <!-- bottomNavHeight: 56 + fabHeight: 56 + 2 * fabMargin: 16 -->
+    <dimen name="scroll_bottom_padding_with_bottom_nav_and_fab">144dp</dimen>
 </resources>

@@ -1,13 +1,13 @@
 package me.ikvarxt.halo.ui.login
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
+import me.ikvarxt.halo.entites.BaseActivity
 
 @AndroidEntryPoint
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

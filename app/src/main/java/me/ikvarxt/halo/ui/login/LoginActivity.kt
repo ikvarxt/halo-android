@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
-import me.ikvarxt.halo.entites.BaseActivity
+import me.ikvarxt.halo.arch.BaseActivity
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity() {

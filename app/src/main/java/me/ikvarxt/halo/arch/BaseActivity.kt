@@ -1,4 +1,4 @@
-package me.ikvarxt.halo.entites
+package me.ikvarxt.halo.arch
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

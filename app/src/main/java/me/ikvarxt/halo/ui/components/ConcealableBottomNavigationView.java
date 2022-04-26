@@ -1,4 +1,4 @@
-package me.ikvarxt.halo.ui.widget;
+package me.ikvarxt.halo.ui.components;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;

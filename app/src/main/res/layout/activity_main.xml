@@ -28,7 +28,7 @@
         app:defaultNavHost="true"
         app:navGraph="@navigation/main" />
 
-    <me.ikvarxt.halo.ui.widget.ConcealableBottomNavigationView
+    <me.ikvarxt.halo.ui.components.ConcealableBottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

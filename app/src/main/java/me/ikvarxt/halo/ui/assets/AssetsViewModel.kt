@@ -24,7 +24,7 @@ class AssetsViewModel @Inject constructor(
 
     val attachments = repository.getAttachments()
 
-    fun publish(uri: Uri) {
+    fun publish(uri: Uri, fileName: String? = null) {
         viewModelScope.launch {
             val cacheDir = File(application.cacheDir, "upload_image")
             cacheDir.deleteRecursively()
@@ -40,8 +40,15 @@ class AssetsViewModel @Inject constructor(
 
             val file = File(uri.path)
             val requestBody = RequestBody.create(MediaType.parse("image/*"), imageFile)
+
+            val name = if (fileName.isNullOrEmpty() || fileName.isNullOrBlank()) {
+                file.name
+            } else {
+                fileName
+            }
+
             val part: MultipartBody.Part =
-                MultipartBody.Part.createFormData("file", file.name, requestBody)
+                MultipartBody.Part.createFormData("file", name, requestBody)
 
             val result = repository.uploadAttachment(part)
         }

@@ -20,6 +20,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import me.ikvarxt.halo.databinding.DialogUploadImageBinding
 import me.ikvarxt.halo.databinding.FragmentAssetsBinding
 import me.ikvarxt.halo.databinding.ItemAttachmentBinding
 import me.ikvarxt.halo.entites.Attachment
@@ -70,16 +71,20 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
         }
 
         binding.fab.setOnClickListener {
-            getContent("image/*") {
-                val imageView = ImageView(requireContext())
-                imageView.setImageURI(it)
-                val positiveAction = DialogInterface.OnClickListener { dialog, which ->
-                    viewModel.publish(it)
+            getContent("image/*") { uri ->
+                val context = requireContext()
+                val inflater = LayoutInflater.from(context)
+                val dialogViewBinding =
+                    DialogUploadImageBinding.inflate(inflater, null, false).apply {
+                        fileUri = uri
+                    }
+                val positiveAction = DialogInterface.OnClickListener { _, _ ->
+                    val text = dialogViewBinding.imageNameEdit.text
+                    viewModel.publish(uri, text.toString())
                 }
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Image")
-                    .setView(imageView)
-                    .setPositiveButton("upload", positiveAction)
+                MaterialAlertDialogBuilder(context)
+                    .setView(dialogViewBinding.root)
+                    .setPositiveButton("Upload", positiveAction)
                     .show()
             }
         }
@@ -97,7 +102,7 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
             .load(attachment.path)
             .into(imageView)
 
-        val positiveAction = DialogInterface.OnClickListener { dialog, which ->
+        val positiveAction = DialogInterface.OnClickListener { _, _ ->
             viewModel.deletePermanently(attachment)
         }
         MaterialAlertDialogBuilder(context)

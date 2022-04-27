@@ -1,5 +1,6 @@
 package me.ikvarxt.halo.ui.assets
 
+import android.app.Application
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,10 +12,13 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.io.InputStream
+import java.io.OutputStream
 import javax.inject.Inject
 
 @HiltViewModel
 class AssetsViewModel @Inject constructor(
+    private val application: Application,
     private val repository: AttachmentsRepository
 ) : ViewModel() {
 
@@ -22,10 +26,20 @@ class AssetsViewModel @Inject constructor(
 
     fun publish(uri: Uri) {
         viewModelScope.launch {
-            val path = uri.path
-            // FIXME: can't get file, lack some permissions
-            val file = File(path)
-            val requestBody = RequestBody.create(MediaType.parse("multipart/from-data"), file)
+            val cacheDir = File(application.cacheDir, "upload_image")
+            cacheDir.deleteRecursively()
+            cacheDir.mkdirs()
+
+            val imageFile = File(cacheDir, "upload").also {
+                try {
+                    application.contentResolver.openInputStream(uri)!!.writeTo(it)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+            val file = File(uri.path)
+            val requestBody = RequestBody.create(MediaType.parse("image/*"), imageFile)
             val part: MultipartBody.Part =
                 MultipartBody.Part.createFormData("file", file.name, requestBody)
 
@@ -38,4 +52,20 @@ class AssetsViewModel @Inject constructor(
             repository.deleteAttachmentPermanently(attachment.id)
         }
     }
+
+    inline fun <In : InputStream, Out : OutputStream> withStreams(
+        inStream: In,
+        outStream: Out,
+        withBoth: (In, Out) -> Unit
+    ) {
+        inStream.use { reader ->
+            outStream.use { writer ->
+                withBoth(reader, writer)
+            }
+        }
+    }
+
+    fun InputStream.copyAndClose(out: OutputStream) = withStreams(this, out) { i, o -> i.copyTo(o) }
+
+    fun InputStream.writeTo(file: File) = copyAndClose(file.outputStream())
 }

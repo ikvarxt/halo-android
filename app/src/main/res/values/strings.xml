@@ -15,5 +15,6 @@
     <string name="login">Login</string>
     <string name="input_title_here">Input title here</string>
     <string name="assets">Assets</string>
+    <string name="upload_attachment">Upload attachment</string>
 
 </resources>

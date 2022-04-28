@@ -10,7 +10,6 @@ import android.widget.ImageView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
@@ -24,6 +23,7 @@ import me.ikvarxt.halo.databinding.DialogUploadImageBinding
 import me.ikvarxt.halo.databinding.FragmentAssetsBinding
 import me.ikvarxt.halo.databinding.ItemAttachmentBinding
 import me.ikvarxt.halo.entites.Attachment
+import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
 
 @AndroidEntryPoint
 class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
@@ -56,7 +56,7 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
             adapter.refresh()
         }
 
-        lifecycleScope.launchWhenCreated {
+        launchAndRepeatWithViewLifecycle {
             launch {
                 viewModel.attachments.collectLatest {
                     adapter.submitData(it)
@@ -69,11 +69,12 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
                 }
             }
             launch {
-                viewModel.refreshState.collect {
+                viewModel.refreshState.collectLatest {
                     if (it) adapter.refresh()
                 }
             }
         }
+
 
         binding.fab.setOnClickListener {
             getContent("image/*") { uri ->

@@ -13,4 +13,6 @@
     <dimen name="bottom_nav_view_margin_with_gap">72dp</dimen>
     <!-- bottomNavHeight: 56 + fabHeight: 56 + 2 * fabMargin: 16 -->
     <dimen name="scroll_bottom_padding_with_bottom_nav_and_fab">144dp</dimen>
+
+    <dimen name="comment_list_avatar_size">24dp</dimen>
 </resources>

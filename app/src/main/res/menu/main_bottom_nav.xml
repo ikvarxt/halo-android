@@ -12,6 +12,11 @@
         android:title="@string/assets" />
 
     <item
+        android:id="@id/commentsFragment"
+        android:icon="@drawable/ic_baseline_comment_24"
+        android:title="Comments" />
+
+    <item
         android:id="@id/dashboardFragment"
         android:icon="@drawable/ic_baseline_dashboard_24"
         android:title="@string/dashboard" />

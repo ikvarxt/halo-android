@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="commentItem"
+            type="me.ikvarxt.halo.entites.PostComment" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        app:cardElevation="0dp"
+        app:cardUseCompatPadding="true"
+        app:contentPadding="8dp"
+        app:strokeColor="?attr/colorPrimaryVariant"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/commentContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:text="@{commentItem.content}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="snathoeusha.u hoehu.rh.h r.h rho.rshu sraohurshaosnhusnaoehusnhasouh saoh suaoh sn.husnao hesnuh snaohesnu haosneuh snaoehu s naoesnu hsnaoehsnhoaesu hsaoehus hoesu haoes hsoaehu Shaoesu hsnaoethu " />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/authorAvatar"
+                imageUrl="@{commentItem.avatar.substring(2)}"
+                android:layout_width="@dimen/comment_list_avatar_size"
+                android:layout_height="@dimen/comment_list_avatar_size"
+                android:layout_marginTop="8dp"
+                android:contentDescription="Comment author's avatar"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/commentToTag"
+                app:shapeAppearance="@style/CircleImageShape" />
+
+            <TextView
+                android:id="@+id/authorName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{commentItem.author}"
+                app:layout_constraintBottom_toBottomOf="@id/authorAvatar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/authorAvatar"
+                app:layout_constraintTop_toTopOf="@id/authorAvatar"
+                tools:text="ikvarxt" />
+
+            <TextView
+                android:id="@+id/commentToTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Comment to:"
+                app:layout_constraintEnd_toStartOf="@id/postTitle"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/commentContent" />
+
+            <TextView
+                android:id="@+id/postTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@{commentItem.post.title}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                app:layout_constraintBaseline_toBaselineOf="@id/commentToTag"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/commentToTag"
+                tools:text="some post titlea snteusnah es  aoeu aoe uoaeu " />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/replyButton"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="reply"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/authorAvatar" />
+
+            <ImageButton
+                android:id="@+id/optionsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_more_vert_24"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/replyButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/authorAvatar"
+                app:layout_constraintTop_toTopOf="@id/replyButton" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

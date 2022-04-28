@@ -23,6 +23,12 @@
         tools:layout="@layout/fragment_assets" />
 
     <fragment
+        android:id="@+id/commentsFragment"
+        android:name="me.ikvarxt.halo.ui.comment.CommentsFragment"
+        android:label="Comments"
+        tools:layout="@layout/fragment_comment" />
+
+    <fragment
         android:id="@+id/dashboardFragment"
         android:name="me.ikvarxt.halo.ui.dashboard.DashboardFragment"
         android:label="@string/dashboard"
@@ -59,4 +65,10 @@
         android:id="@+id/action_assetsFragment"
         app:destination="@id/assetsFragment"
         app:popUpTo="@id/postsListFragment" />
+
+    <action
+        android:id="@+id/action_commentsFragment"
+        app:destination="@id/commentsFragment"
+        app:popUpTo="@id/postsListFragment" />
+
 </navigation>

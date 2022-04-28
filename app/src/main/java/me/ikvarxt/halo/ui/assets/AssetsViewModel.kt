@@ -5,6 +5,8 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import me.ikvarxt.halo.entites.Attachment
 import me.ikvarxt.halo.repository.AttachmentsRepository
@@ -21,6 +23,9 @@ class AssetsViewModel @Inject constructor(
     private val application: Application,
     private val repository: AttachmentsRepository
 ) : ViewModel() {
+
+    private val _refreshState = MutableStateFlow(false)
+    val refreshState = _refreshState.asStateFlow()
 
     val attachments = repository.getAttachments()
 
@@ -51,12 +56,16 @@ class AssetsViewModel @Inject constructor(
                 MultipartBody.Part.createFormData("file", name, requestBody)
 
             val result = repository.uploadAttachment(part)
+
+            _refreshState.emit(true)
         }
     }
 
     fun deletePermanently(attachment: Attachment) {
         viewModelScope.launch {
             repository.deleteAttachmentPermanently(attachment.id)
+
+            _refreshState.emit(true)
         }
     }
 

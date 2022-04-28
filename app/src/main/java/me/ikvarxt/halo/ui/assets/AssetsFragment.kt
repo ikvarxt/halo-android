@@ -68,6 +68,11 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
                         loadStates.mediator?.refresh is LoadState.Loading
                 }
             }
+            launch {
+                viewModel.refreshState.collect {
+                    if (it) adapter.refresh()
+                }
+            }
         }
 
         binding.fab.setOnClickListener {

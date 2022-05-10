@@ -6,6 +6,7 @@
     <dimen name="articleImageHeight">250dp</dimen>
     <dimen name="writing_content_padding_bottom">250dp</dimen>
 
+    <!-- insets -->
     <dimen name="screen_edge_interval">16dp</dimen>
     <dimen name="app_bar_margin">56dp</dimen>
     <dimen name="bottom_nav_view_margin">56dp</dimen>
@@ -14,5 +15,13 @@
     <!-- bottomNavHeight: 56 + fabHeight: 56 + 2 * fabMargin: 16 -->
     <dimen name="scroll_bottom_padding_with_bottom_nav_and_fab">144dp</dimen>
 
+    <!-- image size -->
     <dimen name="comment_list_avatar_size">24dp</dimen>
+    <dimen name="dashboard_avatar_size">80dp</dimen>
+
+    <!-- gaps -->
+    <dimen name="small_gap">4dp</dimen>
+    <dimen name="medium_gap">8dp</dimen>
+    <dimen name="big_gap">16dp</dimen>
+    <dimen name="large_gap">32dp</dimen>
 </resources>

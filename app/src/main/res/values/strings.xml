@@ -17,5 +17,7 @@
     <string name="assets">Assets</string>
     <string name="upload_attachment">Upload attachment</string>
     <string name="comments">Comments</string>
+    <string name="log_out">Log out</string>
+    <string name="description">Description</string>
 
 </resources>

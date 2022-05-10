@@ -51,10 +51,15 @@ class MainActivity : BaseActivity() {
                     item.isChecked = true
                 }
             }
+            if (isRootFragment) {
+                binding.toolbar.title = destination.label
+            }
         }
 
-        binding.bottomNav.setOnItemSelectedListener {
-            getPage(it.itemId)?.let { navController.navigate(it) }
+        supportActionBar?.title = navController.currentDestination?.label
+
+        binding.bottomNav.setOnItemSelectedListener { menuItem ->
+            getPage(menuItem.itemId)?.let { navController.navigate(it) }
             true
         }
         binding.bottomNav.setOnItemReselectedListener { /* do nothing */ }

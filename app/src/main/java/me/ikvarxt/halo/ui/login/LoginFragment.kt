@@ -114,7 +114,8 @@ class LoginFragment : Fragment() {
         if (domain.isBlank() && username.isBlank() && password.isBlank()) {
             showToast("Three field must NOT be empty!")
         } else {
-            viewModel.login(domain, username, password)
+            val host = HttpUrl.parse(domain)!!.host()
+            viewModel.login(host, username, password)
         }
     }
 

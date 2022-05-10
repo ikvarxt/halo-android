@@ -36,13 +36,14 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/authorAvatar"
+                error="@{@drawable/ic_baseline_person_24}"
                 imageUrl="@{commentItem.avatar.substring(2)}"
                 android:layout_width="@dimen/comment_list_avatar_size"
                 android:layout_height="@dimen/comment_list_avatar_size"
                 android:layout_marginTop="8dp"
                 android:contentDescription="Comment author's avatar"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/ic_launcher"
+                android:src="@drawable/ic_baseline_person_24"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/commentToTag"
                 app:shapeAppearance="@style/CircleImageShape" />

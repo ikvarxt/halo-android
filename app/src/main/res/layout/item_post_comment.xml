@@ -40,7 +40,7 @@
                 imageUrl="@{commentItem.avatar.substring(2)}"
                 android:layout_width="@dimen/comment_list_avatar_size"
                 android:layout_height="@dimen/comment_list_avatar_size"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/medium_gap"
                 android:contentDescription="Comment author's avatar"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_person_24"
@@ -52,7 +52,7 @@
                 android:id="@+id/authorName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/medium_gap"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{commentItem.author}"
@@ -64,10 +64,19 @@
                 tools:text="ikvarxt" />
 
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/medium_gap"
+                android:text="@{commentItem.status}"
+                app:layout_constraintBaseline_toBaselineOf="@id/authorName"
+                app:layout_constraintStart_toEndOf="@id/authorName"
+                tools:text="Status" />
+
+            <TextView
                 android:id="@+id/commentToTag"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/medium_gap"
                 android:text="Comment to:"
                 app:layout_constraintEnd_toStartOf="@id/postTitle"
                 app:layout_constraintHorizontal_bias="0"
@@ -79,7 +88,7 @@
                 android:id="@+id/postTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="@dimen/medium_gap"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:text="@{commentItem.post.title}"

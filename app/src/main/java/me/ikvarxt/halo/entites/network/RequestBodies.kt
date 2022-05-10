@@ -31,3 +31,13 @@ data class CreatePostBody(
     val tagIds: IntArray? = null,
     val password: String? = null,
 )
+
+data class CreatePostComment(
+    val author: String,
+    val content: String,
+    val postId: Int,
+    val parentId: Int? = null,
+    val email: String? = null,
+    val authorUrl: String? = null,
+    val allowNotification: Boolean? = null
+)

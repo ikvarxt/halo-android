@@ -16,7 +16,10 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _infoLiveData = MutableLiveData<UserProfile>()
-    val info: LiveData<UserProfile> = _infoLiveData
+    val infoLiveData: LiveData<UserProfile> = _infoLiveData
+
+    val info: UserProfile?
+        get() = _infoLiveData.value
 
     init {
         viewModelScope.launch {

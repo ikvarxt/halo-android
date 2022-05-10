@@ -35,7 +35,7 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        parentViewModel.info.observe(viewLifecycleOwner) { profile ->
+        parentViewModel.infoLiveData.observe(viewLifecycleOwner) { profile ->
             binding.profile = profile
             binding.executePendingBindings()
         }

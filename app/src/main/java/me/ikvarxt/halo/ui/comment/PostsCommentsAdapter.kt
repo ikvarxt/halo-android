@@ -8,7 +8,9 @@ import androidx.recyclerview.widget.RecyclerView
 import me.ikvarxt.halo.databinding.ItemPostCommentBinding
 import me.ikvarxt.halo.entites.PostComment
 
-class PostsCommentsAdapter :
+class PostsCommentsAdapter(
+    private val listener: Listener
+) :
     PagingDataAdapter<PostComment, PostsCommentsAdapter.ViewHolder>(CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -18,18 +20,17 @@ class PostsCommentsAdapter :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it) }
+        val item = getItem(position) ?: return
+
+        holder.binding.apply {
+            commentItem = item
+            replyButton.setOnClickListener { listener.replyTo(item) }
+        }
     }
 
     class ViewHolder(
-        private val binding: ItemPostCommentBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: PostComment) {
-            binding.commentItem = item
-
-            binding.executePendingBindings()
-        }
-    }
+        val binding: ItemPostCommentBinding
+    ) : RecyclerView.ViewHolder(binding.root)
 
     companion object {
         private val CALLBACK = object : DiffUtil.ItemCallback<PostComment>() {
@@ -39,5 +40,9 @@ class PostsCommentsAdapter :
             override fun areItemsTheSame(oldItem: PostComment, newItem: PostComment): Boolean =
                 oldItem.id == newItem.id
         }
+    }
+
+    interface Listener {
+        fun replyTo(commentItem: PostComment)
     }
 }

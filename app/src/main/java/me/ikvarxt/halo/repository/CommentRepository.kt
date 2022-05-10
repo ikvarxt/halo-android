@@ -3,6 +3,8 @@ package me.ikvarxt.halo.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import me.ikvarxt.halo.entites.PostComment
+import me.ikvarxt.halo.entites.UserProfile
+import me.ikvarxt.halo.entites.network.CreatePostComment
 import me.ikvarxt.halo.network.CommentApiService
 import me.ikvarxt.halo.network.infra.NetworkResult
 import javax.inject.Inject
@@ -18,6 +20,22 @@ class CommentRepository @Inject constructor(
     ) {
         PagePostCommentsPagingSource(commentApiService, pageSize)
     }.flow
+
+    suspend fun createComment(comment: PostComment, info: UserProfile, content: String): String? {
+        val requestBody = CreatePostComment(
+            author = info.nickname,
+            content = content,
+            postId = comment.post.id,
+            parentId = comment.parentId,
+            email = info.email,
+            null
+        )
+        val result = commentApiService.createPostComment(requestBody)
+        return when (result) {
+            is NetworkResult.Success -> "Reply Success"
+            is NetworkResult.Failure -> result.msg
+        }
+    }
 }
 
 class PagePostCommentsPagingSource(

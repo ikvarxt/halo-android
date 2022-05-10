@@ -1,7 +1,7 @@
 package me.ikvarxt.halo.network
 
-import me.ikvarxt.halo.entites.PagesResponse
 import me.ikvarxt.halo.entites.PostComment
+import me.ikvarxt.halo.entites.network.PagesResponse
 import me.ikvarxt.halo.network.infra.NetworkResult
 import retrofit2.http.GET
 import retrofit2.http.Query

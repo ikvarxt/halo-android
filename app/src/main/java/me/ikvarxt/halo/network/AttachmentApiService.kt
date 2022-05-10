@@ -1,7 +1,7 @@
 package me.ikvarxt.halo.network
 
 import me.ikvarxt.halo.entites.Attachment
-import me.ikvarxt.halo.entites.PagesResponse
+import me.ikvarxt.halo.entites.network.PagesResponse
 import me.ikvarxt.halo.network.infra.NetworkResult
 import okhttp3.MultipartBody
 import retrofit2.http.*

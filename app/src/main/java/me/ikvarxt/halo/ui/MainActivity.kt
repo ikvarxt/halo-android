@@ -1,6 +1,7 @@
 package me.ikvarxt.halo.ui
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.core.view.forEach
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -18,6 +19,7 @@ class MainActivity : BaseActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
+    private val viewModel by viewModels<MainViewModel>()
 
     private var isRootFragment = false
 

@@ -8,10 +8,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import me.ikvarxt.halo.account.AccountManager
 import me.ikvarxt.halo.extentions.create
-import me.ikvarxt.halo.network.AdminApiService
-import me.ikvarxt.halo.network.AttachmentApiService
-import me.ikvarxt.halo.network.CommentApiService
-import me.ikvarxt.halo.network.PostApiService
+import me.ikvarxt.halo.network.*
 import me.ikvarxt.halo.network.converters.CalendarGsonConverter
 import me.ikvarxt.halo.network.okhttp.AdminApiHeadersInterceptor
 import me.ikvarxt.halo.utils.NetworkResultCallAdapterFactory
@@ -74,4 +71,8 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideCommentApiService(retrofit: Retrofit): CommentApiService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideUserApiService(retrofit: Retrofit): UserApiService = retrofit.create()
 }

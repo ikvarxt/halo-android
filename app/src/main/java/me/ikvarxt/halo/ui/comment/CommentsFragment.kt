@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,7 +50,18 @@ class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener {
                     adapter.submitData(it)
                 }
             }
+            launch {
+                adapter.loadStateFlow.collectLatest { loadStates ->
+                    binding.swipeRefreshLayout.isRefreshing =
+                        loadStates.mediator?.refresh is LoadState.Loading
+                }
+            }
         }
+
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            adapter.refresh()
+        }
+
         viewModel.message.observe(viewLifecycleOwner) { msg ->
             showToast(msg)
         }

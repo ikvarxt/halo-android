@@ -10,8 +10,7 @@ import me.ikvarxt.halo.entites.PostComment
 
 class PostsCommentsAdapter(
     private val listener: Listener
-) :
-    PagingDataAdapter<PostComment, PostsCommentsAdapter.ViewHolder>(CALLBACK) {
+) : PagingDataAdapter<PostComment, PostsCommentsAdapter.ViewHolder>(CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)

@@ -111,6 +111,7 @@ class LoginFragment : Fragment() {
         val username = binding.username.text.toString()
         val password = binding.password.text.toString()
 
+        // FIXME: extract this check as a function; domain checks empty
         if (domain.isBlank() && username.isBlank() && password.isBlank()) {
             showToast("Three field must NOT be empty!")
         } else {

@@ -31,7 +31,6 @@ class PostsCommentsAdapter :
         }
     }
 
-
     companion object {
         private val CALLBACK = object : DiffUtil.ItemCallback<PostComment>() {
             override fun areContentsTheSame(oldItem: PostComment, newItem: PostComment): Boolean =

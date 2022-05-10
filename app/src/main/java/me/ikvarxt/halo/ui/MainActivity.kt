@@ -36,8 +36,8 @@ class MainActivity : BaseActivity() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             isRootFragment = when (destination.id) {
                 R.id.postsListFragment,
-                R.id.assetsFragment,
                 R.id.commentsFragment,
+                R.id.assetsFragment,
                 R.id.dashboardFragment -> true
                 else -> false
             }
@@ -60,8 +60,8 @@ class MainActivity : BaseActivity() {
 
     private fun getPage(destinationId: Int): NavDirections? = when (destinationId) {
         R.id.postsListFragment -> MainDirections.actionPostsListFragment()
-        R.id.assetsFragment -> MainDirections.actionAssetsFragment()
         R.id.commentsFragment -> MainDirections.actionCommentsFragment()
+        R.id.assetsFragment -> MainDirections.actionAssetsFragment()
         R.id.dashboardFragment -> MainDirections.actionDashboardFragment()
         else -> null
     }

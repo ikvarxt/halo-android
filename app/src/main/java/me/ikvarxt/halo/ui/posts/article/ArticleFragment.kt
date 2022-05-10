@@ -14,10 +14,11 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.Markwon
+import kotlinx.coroutines.flow.collectLatest
 import me.ikvarxt.halo.databinding.FragmentArticleBinding
 import me.ikvarxt.halo.entites.PostDetails
-import me.ikvarxt.halo.network.infra.Resource
-import me.ikvarxt.halo.network.infra.Status
+import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
+import me.ikvarxt.halo.network.infra.NetworkResult
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -53,12 +54,25 @@ class ArticleFragment : Fragment() {
             loadContentData(it)
         }
 
+        launchAndRepeatWithViewLifecycle {
+            viewModel.loading.collectLatest {
+                when (it) {
+                    true -> {
+                        binding.loading.show()
+                    }
+                    false -> {
+                        binding.loading.hide()
+                    }
+                }
+            }
+        }
+
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()
         }
     }
 
-    private fun loadContentData(resource: Resource<PostDetails>) {
+    private fun loadContentData(result: NetworkResult<PostDetails>) {
         fun setupContent(data: PostDetails) {
             binding.toolbarLayout.title = data.title
 
@@ -70,7 +84,6 @@ class ArticleFragment : Fragment() {
                     .load(Uri.parse(thumbnail))
                     .centerCrop()
                     .into(binding.headerImage)
-            } else {
             }
 
             data.originalContent?.let { content ->
@@ -78,25 +91,17 @@ class ArticleFragment : Fragment() {
             }
         }
 
-        if (resource.status == Status.LOADING) {
-            binding.loading.show()
-            if (resource.data != null) setupContent(resource.data)
-            return
-        } else {
-            binding.loading.hide()
-        }
-        when (resource.status) {
-            Status.SUCCESS -> {
-                val data = resource.data!!
+        when (result) {
+            is NetworkResult.Success -> {
+                val data = result.data
                 setupContent(data)
             }
-            Status.ERROR -> {
+            is NetworkResult.Failure -> {
                 binding.errorText.apply {
-                    text = resource.message
+                    text = result.msg
                     visibility = View.VISIBLE
                 }
             }
-            else -> {}
         }
     }
 }

@@ -1,12 +1,10 @@
 package me.ikvarxt.halo.network
 
-import androidx.lifecycle.LiveData
 import me.ikvarxt.halo.entites.PagesResponse
 import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.entites.PostStatus
 import me.ikvarxt.halo.entites.network.CreatePostBody
-import me.ikvarxt.halo.network.infra.ApiResponse
 import me.ikvarxt.halo.network.infra.NetworkResult
 import retrofit2.http.*
 
@@ -30,13 +28,13 @@ interface PostApiService {
     fun getPostDetailsWithSlug(
         @Query("slug") slug: String,
         @Query("formatEnabled") formatEnabled: Boolean,
-    ): LiveData<ApiResponse<PostDetails>>
+    ): NetworkResult<PostDetails>
 
     // get a post details with post id
     @GET("posts/{postId}")
-    fun getPostDetailsWithId(
+    suspend fun getPostDetailsWithId(
         @Path("postId") postId: Int,
-    ): LiveData<ApiResponse<PostDetails>>
+    ): NetworkResult<PostDetails>
 
     // create a post
     @POST("posts")

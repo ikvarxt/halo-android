@@ -2,26 +2,39 @@ package me.ikvarxt.halo.ui.posts.article
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import me.ikvarxt.halo.entites.PostDetails
-import me.ikvarxt.halo.network.infra.Resource
-import me.ikvarxt.halo.repository.Repository
+import me.ikvarxt.halo.network.infra.NetworkResult
+import me.ikvarxt.halo.repository.PostsRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class ArticleViewModel @Inject constructor(
-    private val repository: Repository
+    private val repository: PostsRepository,
 ) : ViewModel() {
 
-    private val postId = MutableLiveData<Int>()
+    private var postId = 0
+    private val _loading = MutableStateFlow(false)
+    val loading = _loading.asStateFlow()
 
-    val postDetails: LiveData<Resource<PostDetails>> = Transformations.switchMap(postId) {
-        repository.getPostDetails(it)
-    }
+    private val _postDetails = MutableLiveData<NetworkResult<PostDetails>>()
+    val postDetails: LiveData<NetworkResult<PostDetails>> = _postDetails
 
     fun setPostId(id: Int) {
-        postId.value = id
+        postId = id
+        reloadPost()
+    }
+
+    private fun reloadPost() {
+        viewModelScope.launch {
+            _loading.emit(true)
+            _postDetails.value = repository.getPostDetailsWithPostId(postId)
+            _loading.emit(false)
+        }
     }
 }

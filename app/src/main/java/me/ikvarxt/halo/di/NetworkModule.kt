@@ -14,6 +14,7 @@ import me.ikvarxt.halo.network.CommentApiService
 import me.ikvarxt.halo.network.PostApiService
 import me.ikvarxt.halo.network.converters.CalendarGsonConverter
 import me.ikvarxt.halo.network.okhttp.AdminApiHeadersInterceptor
+import me.ikvarxt.halo.utils.LiveDataCallAdapterFactory
 import me.ikvarxt.halo.utils.NetworkResultCallAdapterFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -55,6 +56,7 @@ class NetworkModule {
         Retrofit.Builder()
             .baseUrl("https://$PLACEHOLDER_DOMAIN/$ADMIN_API_END_POINT")
             .client(client)
+            .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .addCallAdapterFactory(NetworkResultCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

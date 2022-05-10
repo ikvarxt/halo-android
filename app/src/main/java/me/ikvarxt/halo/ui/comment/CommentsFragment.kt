@@ -80,4 +80,19 @@ class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener {
             .setView(binding.root)
             .show()
     }
+
+    override fun delete(commentItem: PostComment) {
+        val context = requireContext()
+
+        fun positiveClick() {
+            viewModel.delete(commentItem)
+        }
+
+        MaterialAlertDialogBuilder(context)
+            .setTitle("Are you sure to delete this comment?")
+            .setPositiveButton("Delete") { _, _ ->
+                positiveClick()
+            }
+            .show()
+    }
 }

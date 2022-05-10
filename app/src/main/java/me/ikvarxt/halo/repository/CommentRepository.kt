@@ -12,13 +12,13 @@ import javax.inject.Singleton
 
 @Singleton
 class CommentRepository @Inject constructor(
-    private val commentApiService: CommentApiService
+    private val service: CommentApiService
 ) {
 
     fun pagesPostComments(pageSize: Int = 20) = Pager(
         PagingConfig(pageSize)
     ) {
-        PagePostCommentsPagingSource(commentApiService, pageSize)
+        PagePostCommentsPagingSource(service, pageSize)
     }.flow
 
     suspend fun createComment(comment: PostComment, info: UserProfile, content: String): String? {
@@ -30,11 +30,15 @@ class CommentRepository @Inject constructor(
             email = info.email,
             null
         )
-        val result = commentApiService.createPostComment(requestBody)
+        val result = service.createPostComment(requestBody)
         return when (result) {
             is NetworkResult.Success -> "Reply Success"
             is NetworkResult.Failure -> result.msg
         }
+    }
+
+    suspend fun deletePostComment(comment: PostComment) {
+        service.deletePostCommentsRecursively(comment.id)
     }
 }
 

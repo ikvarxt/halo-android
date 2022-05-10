@@ -25,6 +25,7 @@ class PostsCommentsAdapter(
         holder.binding.apply {
             commentItem = item
             replyButton.setOnClickListener { listener.replyTo(item) }
+            deleteButton.setOnClickListener { listener.delete(item) }
         }
     }
 
@@ -44,5 +45,6 @@ class PostsCommentsAdapter(
 
     interface Listener {
         fun replyTo(commentItem: PostComment)
+        fun delete(commentItem: PostComment)
     }
 }

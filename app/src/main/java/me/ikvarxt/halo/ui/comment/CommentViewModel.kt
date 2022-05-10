@@ -28,4 +28,10 @@ class CommentViewModel @Inject constructor(
         }
     }
 
+    fun delete(commentItem: PostComment) {
+        viewModelScope.launch {
+            repository.deletePostComment(commentItem)
+        }
+    }
+
 }

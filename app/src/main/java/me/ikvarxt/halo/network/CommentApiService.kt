@@ -4,10 +4,7 @@ import me.ikvarxt.halo.entites.PostComment
 import me.ikvarxt.halo.entites.network.CreatePostComment
 import me.ikvarxt.halo.entites.network.PagesResponse
 import me.ikvarxt.halo.network.infra.NetworkResult
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface CommentApiService {
 
@@ -20,6 +17,11 @@ interface CommentApiService {
     @POST("posts/comments")
     suspend fun createPostComment(
         @Body body: CreatePostComment
+    ): NetworkResult<PostComment>
+
+    @DELETE("posts/comments/{commentId}")
+    suspend fun deletePostCommentsRecursively(
+        @Path("commentId") commentId: Int
     ): NetworkResult<PostComment>
 
 }

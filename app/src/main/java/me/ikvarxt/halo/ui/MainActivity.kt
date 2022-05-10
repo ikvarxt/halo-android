@@ -2,6 +2,7 @@ package me.ikvarxt.halo.ui
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.forEach
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
@@ -21,6 +22,9 @@ class MainActivity : BaseActivity() {
     private lateinit var navController: NavController
     private val viewModel by viewModels<MainViewModel>()
 
+    val toolbar: Toolbar
+        get() = binding.toolbar
+
     private var isRootFragment = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +39,7 @@ class MainActivity : BaseActivity() {
             supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
         navController = navHostFragment.navController
 
-        navController.addOnDestinationChangedListener { _, destination, _ ->
+        navController.addOnDestinationChangedListener { navController, destination, _ ->
             isRootFragment = when (destination.id) {
                 R.id.postsListFragment,
                 R.id.commentsFragment,
@@ -53,6 +57,10 @@ class MainActivity : BaseActivity() {
             }
             if (isRootFragment) {
                 binding.toolbar.title = destination.label
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            }
+            binding.toolbar.setNavigationOnClickListener {
+                navController.navigateUp()
             }
         }
 

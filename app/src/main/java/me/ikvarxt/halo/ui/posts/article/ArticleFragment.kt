@@ -40,9 +40,6 @@ class ArticleFragment : Fragment() {
 
         viewModel.setPostId(args.postId)
 
-        val activity = activity as MainActivity
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         viewModel.postDetails.observe(viewLifecycleOwner) {
             loadContentData(it)
         }

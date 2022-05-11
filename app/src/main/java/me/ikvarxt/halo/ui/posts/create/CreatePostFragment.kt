@@ -4,12 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.editor.MarkwonEditor
 import io.noties.markwon.editor.MarkwonEditorTextWatcher
@@ -37,8 +34,6 @@ class CreatePostFragment : Fragment() {
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        setupToolbar(binding.toolbar)
 
         with(binding.contentEdit) {
             val executors = Executors.newCachedThreadPool()
@@ -69,13 +64,5 @@ class CreatePostFragment : Fragment() {
             }
             showToast(msg)
         }
-    }
-
-    private fun setupToolbar(toolbar: Toolbar) {
-        val activity = requireActivity() as AppCompatActivity
-        activity.setSupportActionBar(toolbar)
-        activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        toolbar.title = null
-        toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
     }
 }

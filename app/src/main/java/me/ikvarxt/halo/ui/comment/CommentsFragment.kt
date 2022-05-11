@@ -18,10 +18,11 @@ import me.ikvarxt.halo.databinding.FragmentCommentBinding
 import me.ikvarxt.halo.entites.PostComment
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
 import me.ikvarxt.halo.extentions.showToast
+import me.ikvarxt.halo.ui.MainActivity
 import me.ikvarxt.halo.ui.MainViewModel
 
 @AndroidEntryPoint
-class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener {
+class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener, MainActivity.RefreshListener {
 
     private lateinit var binding: FragmentCommentBinding
     private lateinit var adapter: PostsCommentsAdapter
@@ -106,5 +107,9 @@ class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener {
                 positiveClick()
             }
             .show()
+    }
+
+    override fun refresh() {
+        adapter.refresh()
     }
 }

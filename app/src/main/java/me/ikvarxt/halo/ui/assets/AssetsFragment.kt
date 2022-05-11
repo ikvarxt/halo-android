@@ -24,12 +24,14 @@ import me.ikvarxt.halo.databinding.FragmentAssetsBinding
 import me.ikvarxt.halo.databinding.ItemAttachmentBinding
 import me.ikvarxt.halo.entites.Attachment
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
+import me.ikvarxt.halo.ui.MainActivity
 
 @AndroidEntryPoint
-class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
+class AssetsFragment : Fragment(), AssetsListAdapter.Listener, MainActivity.RefreshListener {
 
     private lateinit var binding: FragmentAssetsBinding
     private val viewModel by viewModels<AssetsViewModel>()
+    private lateinit var adapter: AssetsListAdapter
 
     private var contentCallback: ((Uri) -> Unit)? = null
     private val getContent = registerForActivityResult(ActivityResultContracts.GetContent()) {
@@ -48,7 +50,7 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val adapter = AssetsListAdapter(this)
+        adapter = AssetsListAdapter(this)
 
         binding.recyclerView.adapter = adapter
 
@@ -118,6 +120,9 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
             .show()
     }
 
+    override fun refresh() {
+        adapter.refresh()
+    }
 }
 
 class AssetsListAdapter(

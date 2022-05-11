@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -17,11 +16,13 @@ import kotlinx.coroutines.launch
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostsListBinding
 import me.ikvarxt.halo.entites.PostItem
+import me.ikvarxt.halo.ui.MainActivity
 
 private const val TAG = "PostsListsFragment"
 
 @AndroidEntryPoint
-class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
+class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener,
+    MainActivity.RefreshListener {
 
     private lateinit var binding: FragmentPostsListBinding
     private lateinit var adapter: PostsListPagingAdapter
@@ -118,5 +119,12 @@ class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
             }
             .setNegativeButton("Cancel", null)
             .show()
+    }
+
+    override fun refresh() {
+        binding.swipeRefreshLayout.post {
+            binding.swipeRefreshLayout.isRefreshing = true
+            adapter.refresh()
+        }
     }
 }

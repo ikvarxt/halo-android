@@ -71,7 +71,10 @@ class MainActivity : BaseActivity() {
             getPage(menuItem.itemId)?.let { navController.navigate(it) }
             true
         }
-        binding.bottomNav.setOnItemReselectedListener { /* do nothing */ }
+        binding.bottomNav.setOnItemReselectedListener { /* do nothing */menuItem ->
+            val fragment = navHostFragment.childFragmentManager.primaryNavigationFragment
+            (fragment as? RefreshListener)?.refresh()
+        }
     }
 
     private fun getPage(destinationId: Int): NavDirections? = when (destinationId) {
@@ -90,5 +93,9 @@ class MainActivity : BaseActivity() {
         } else {
             bottomView.isGone = hide
         }
+    }
+
+    interface RefreshListener {
+        fun refresh()
     }
 }

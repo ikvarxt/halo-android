@@ -26,14 +26,14 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/avatarImage"
-                style="@style/CircleImageShape"
                 error="@{@drawable/ic_baseline_error_24}"
                 imageUrl="@{profile.avatarUrl}"
                 android:layout_width="@dimen/dashboard_avatar_size"
                 android:layout_height="@dimen/dashboard_avatar_size"
                 android:src="@mipmap/ic_launcher"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/CircleImageShape" />
 
             <TextView
                 android:id="@+id/nickname"

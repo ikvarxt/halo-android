@@ -35,11 +35,11 @@
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/authorAvatar"
                 error="@{@drawable/ic_baseline_person_24}"
-                imageUrl="@{commentItem.avatar.substring(2)}"
+                imageUrl="@{commentItem.avatarUrl}"
                 android:layout_width="@dimen/comment_list_avatar_size"
                 android:layout_height="@dimen/comment_list_avatar_size"
                 android:layout_marginTop="@dimen/medium_gap"
-                android:contentDescription="Comment author's avatar"
+                android:contentDescription="@string/comment_author_avatar"
                 android:scaleType="centerCrop"
                 android:src="@drawable/ic_baseline_person_24"
                 app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/medium_gap"
-                android:text="Comment to:"
+                android:text="@string/comment_to"
                 app:layout_constraintEnd_toStartOf="@id/postTitle"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -101,7 +101,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="reply"
+                android:text="@string/reply"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/authorAvatar" />
@@ -111,7 +111,7 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="delete"
+                android:text="@string/delete"
                 app:layout_constraintEnd_toStartOf="@id/replyButton"
                 app:layout_constraintTop_toTopOf="@id/replyButton" />
 
@@ -124,7 +124,8 @@
                 app:layout_constraintBottom_toBottomOf="@id/replyButton"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/authorAvatar"
-                app:layout_constraintTop_toTopOf="@id/replyButton" />
+                app:layout_constraintTop_toTopOf="@id/replyButton"
+                tools:ignore="ContentDescription" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>

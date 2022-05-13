@@ -19,5 +19,9 @@
     <string name="comments">Comments</string>
     <string name="log_out">Log out</string>
     <string name="description">Description</string>
+    <string name="comment_author_avatar">Comment author\'s avatar</string>
+    <string name="reply">Reply</string>
+    <string name="delete">Delete</string>
+    <string name="comment_to">Comment to:</string>
 
 </resources>

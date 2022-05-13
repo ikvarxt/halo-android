@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="@dimen/app_bar_margin"
-    app:fitsSystemWindowsInsets="top">
+    app:fitsSystemWindowsInsets="top"
+    tools:context=".ui.posts.create.CreatePostFragment">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"

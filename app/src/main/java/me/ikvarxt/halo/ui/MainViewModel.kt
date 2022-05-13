@@ -1,5 +1,6 @@
 package me.ikvarxt.halo.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,8 @@ import kotlinx.coroutines.launch
 import me.ikvarxt.halo.entites.UserProfile
 import me.ikvarxt.halo.repository.UserInfoRepository
 import javax.inject.Inject
+
+private const val TAG = "MainViewModel"
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -24,6 +27,7 @@ class MainViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             infoRepository.getUserProfile()?.let { _infoLiveData.value = it }
+            Log.i(TAG, "profile get: $info")
         }
     }
 }

@@ -39,6 +39,9 @@ class MainActivity : BaseActivity() {
             supportFragmentManager.findFragmentById(R.id.container) as NavHostFragment
         navController = navHostFragment.navController
 
+        // TODO: current workaround for trigger ViewModel instantiation
+        viewModel.info
+
         navController.addOnDestinationChangedListener { navController, destination, _ ->
             isRootFragment = when (destination.id) {
                 R.id.postsListFragment,

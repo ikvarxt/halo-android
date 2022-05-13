@@ -27,7 +27,7 @@
                 android:id="@+id/avatarImage"
                 style="@style/CircleImageShape"
                 error="@{@drawable/ic_baseline_error_24}"
-                imageUrl="@{profile.avatar}"
+                imageUrl="@{profile.avatarUrl}"
                 android:layout_width="@dimen/dashboard_avatar_size"
                 android:layout_height="@dimen/dashboard_avatar_size"
                 android:src="@mipmap/ic_launcher"

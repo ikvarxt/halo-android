@@ -15,10 +15,10 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideMarkwon(application: Application) = Markwon.create(application)
+    fun provideMarkwon(application: Application): Markwon = Markwon.create(application)
 
     @Singleton
     @Provides
-    fun provideMarkwonEditor(markwon: Markwon) = MarkwonEditor.create(markwon)
+    fun provideMarkwonEditor(markwon: Markwon): MarkwonEditor = MarkwonEditor.create(markwon)
 
 }

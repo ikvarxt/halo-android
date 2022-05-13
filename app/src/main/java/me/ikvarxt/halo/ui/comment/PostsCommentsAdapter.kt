@@ -5,11 +5,13 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import io.noties.markwon.Markwon
 import me.ikvarxt.halo.databinding.ItemPostCommentBinding
 import me.ikvarxt.halo.entites.PostComment
 
 class PostsCommentsAdapter(
-    private val listener: Listener
+    private val listener: Listener,
+    private val markwon: Markwon
 ) : PagingDataAdapter<PostComment, PostsCommentsAdapter.ViewHolder>(CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,6 +25,9 @@ class PostsCommentsAdapter(
 
         holder.binding.apply {
             commentItem = item
+
+            markwon.setMarkdown(commentContent, item.content)
+
             replyButton.setOnClickListener { listener.replyTo(item) }
             deleteButton.setOnClickListener { listener.delete(item) }
         }

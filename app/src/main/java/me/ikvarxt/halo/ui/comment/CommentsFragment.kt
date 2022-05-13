@@ -11,17 +11,27 @@ import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import io.noties.markwon.Markwon
+import io.noties.markwon.editor.MarkwonEditor
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import me.ikvarxt.halo.databinding.DialogReplyToCommentBinding
 import me.ikvarxt.halo.databinding.FragmentCommentBinding
 import me.ikvarxt.halo.entites.PostComment
+import me.ikvarxt.halo.extentions.editWithMarkdown
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
 import me.ikvarxt.halo.extentions.showToast
 import me.ikvarxt.halo.ui.MainViewModel
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener {
+
+    @Inject
+    lateinit var markwon: Markwon
+
+    @Inject
+    lateinit var editor: MarkwonEditor
 
     private lateinit var binding: FragmentCommentBinding
     private lateinit var adapter: PostsCommentsAdapter
@@ -39,7 +49,7 @@ class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = PostsCommentsAdapter(this)
+        adapter = PostsCommentsAdapter(this, markwon)
 
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
@@ -83,6 +93,8 @@ class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener {
                 showToast("Can not get user profile")
             }
         }
+
+        binding.editText.editWithMarkdown(editor)
 
         MaterialAlertDialogBuilder(context)
             .setTitle("reply to ${commentItem.author}")

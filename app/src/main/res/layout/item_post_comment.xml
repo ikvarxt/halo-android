@@ -27,8 +27,6 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:maxLines="4"
-                android:text="@{commentItem.content}"
-                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

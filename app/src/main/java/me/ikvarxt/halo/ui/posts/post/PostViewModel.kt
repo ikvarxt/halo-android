@@ -1,4 +1,4 @@
-package me.ikvarxt.halo.ui.posts.article
+package me.ikvarxt.halo.ui.posts.post
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,7 +14,7 @@ import me.ikvarxt.halo.repository.PostsRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class ArticleViewModel @Inject constructor(
+class PostViewModel @Inject constructor(
     private val repository: PostsRepository,
 ) : ViewModel() {
 

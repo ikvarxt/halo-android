@@ -1,11 +1,8 @@
 package me.ikvarxt.halo.ui.posts
 
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
@@ -17,7 +14,6 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.ItemMainPostCardBinding
 import me.ikvarxt.halo.entites.PostItem
-import me.ikvarxt.halo.ui.posts.article.ArticleFragmentArgs
 
 class PostsListAdapter : ListAdapter<PostItem, PostsListAdapter.ViewHolder>(CALLBACK) {
 
@@ -49,7 +45,7 @@ class PostsListAdapter : ListAdapter<PostItem, PostsListAdapter.ViewHolder>(CALL
                     .into(binding.thumbnail)
             }
             binding.root.setOnClickListener {
-                itemView.findNavController().navigate(R.id.articleFragment, Bundle().apply {
+                itemView.findNavController().navigate(R.id.postFragment, Bundle().apply {
                     putInt("postId", item.id)
                 })
             }

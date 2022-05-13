@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/app_bar_margin"
     app:fitsSystemWindowsInsets="top"
-    tools:context=".ui.posts.article.ArticleFragment">
+    tools:context=".ui.posts.post.PostFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"

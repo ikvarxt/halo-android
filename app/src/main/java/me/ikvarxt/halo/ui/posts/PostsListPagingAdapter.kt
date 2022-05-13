@@ -40,7 +40,7 @@ class PostsListPagingAdapter(
                 binding.thumbnail.isVisible = false
             }
             binding.root.setOnClickListener {
-                itemView.findNavController().navigate(R.id.articleFragment, Bundle().apply {
+                itemView.findNavController().navigate(R.id.postFragment, Bundle().apply {
                     putInt("postId", item.id)
                 })
             }

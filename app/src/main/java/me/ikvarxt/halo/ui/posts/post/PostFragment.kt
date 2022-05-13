@@ -1,4 +1,4 @@
-package me.ikvarxt.halo.ui.posts.article
+package me.ikvarxt.halo.ui.posts.post
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,7 @@ import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.Markwon
 import kotlinx.coroutines.flow.collectLatest
-import me.ikvarxt.halo.databinding.FragmentArticleBinding
+import me.ikvarxt.halo.databinding.FragmentPostBinding
 import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
 import me.ikvarxt.halo.network.infra.NetworkResult
@@ -18,20 +18,20 @@ import me.ikvarxt.halo.ui.MainActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ArticleFragment : Fragment() {
+class PostFragment : Fragment() {
 
     @Inject
     lateinit var markwon: Markwon
 
-    private lateinit var binding: FragmentArticleBinding
-    private val args by navArgs<ArticleFragmentArgs>()
-    private val viewModel by viewModels<ArticleViewModel>()
+    private lateinit var binding: FragmentPostBinding
+    private val args by navArgs<PostFragmentArgs>()
+    private val viewModel by viewModels<PostViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = FragmentArticleBinding.inflate(inflater, container, false).also {
+    ): View = FragmentPostBinding.inflate(inflater, container, false).also {
         binding = it
     }.root
 

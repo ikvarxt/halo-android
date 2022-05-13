@@ -13,7 +13,7 @@
 
         <action
             android:id="@+id/gotoPostsDetailsAction"
-            app:destination="@id/articleFragment" />
+            app:destination="@id/postFragment" />
     </fragment>
 
     <fragment
@@ -35,9 +35,9 @@
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/articleFragment"
-        android:name="me.ikvarxt.halo.ui.posts.article.ArticleFragment"
-        tools:layout="@layout/fragment_article">
+        android:id="@+id/postFragment"
+        android:name="me.ikvarxt.halo.ui.posts.post.PostFragment"
+        tools:layout="@layout/fragment_post">
 
         <argument
             android:name="postId"
@@ -51,7 +51,7 @@
         tools:layout="@layout/fragment_create_post" />
 
     <action
-        android:id="@+id/action_PostsListFragment"
+        android:id="@+id/action_postsListFragment"
         app:destination="@id/postsListFragment"
         app:popUpTo="@id/postsListFragment"
         app:popUpToInclusive="true" />

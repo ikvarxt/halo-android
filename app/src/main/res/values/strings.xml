@@ -23,5 +23,6 @@
     <string name="reply">Reply</string>
     <string name="delete">Delete</string>
     <string name="comment_to">Comment to:</string>
+    <string name="show_comments">Show Comments</string>
 
 </resources>

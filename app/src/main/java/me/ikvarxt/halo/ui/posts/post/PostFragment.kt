@@ -1,20 +1,20 @@
 package me.ikvarxt.halo.ui.posts.post
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.Markwon
 import kotlinx.coroutines.flow.collectLatest
+import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostBinding
 import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
 import me.ikvarxt.halo.network.infra.NetworkResult
 import me.ikvarxt.halo.ui.MainActivity
+import me.ikvarxt.halo.ui.posts.post.comment.PostCommentPanel
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,6 +37,7 @@ class PostFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setHasOptionsMenu(true)
 
         viewModel.setPostId(args.postId)
 
@@ -81,5 +82,19 @@ class PostFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.post_options_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.showComment -> {
+                PostCommentPanel.newInstance(args.postId)
+                    .show(childFragmentManager, PostCommentPanel.TAG)
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

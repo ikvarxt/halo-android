@@ -30,6 +30,7 @@ class PostsCommentsAdapter(
 
             replyButton.setOnClickListener { listener.replyTo(item) }
             deleteButton.setOnClickListener { listener.delete(item) }
+            root.setOnClickListener { listener.goToPostComment(item) }
         }
     }
 
@@ -50,5 +51,6 @@ class PostsCommentsAdapter(
     interface Listener {
         fun replyTo(commentItem: PostComment)
         fun delete(commentItem: PostComment)
+        fun goToPostComment(commentItem: PostComment)
     }
 }

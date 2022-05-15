@@ -13,6 +13,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.ItemMainPostCardBinding
 import me.ikvarxt.halo.entites.PostItem
+import me.ikvarxt.halo.ui.posts.post.PostFragment
 
 class PostsListPagingAdapter(
     private val listener: Listener
@@ -42,6 +43,7 @@ class PostsListPagingAdapter(
             binding.root.setOnClickListener {
                 itemView.findNavController().navigate(R.id.postFragment, Bundle().apply {
                     putInt("postId", item.id)
+                    putInt("highlightId", PostFragment.NO_HIGHLIGHT_ID)
                 })
             }
             binding.root.setOnLongClickListener {

@@ -1,5 +1,6 @@
 package me.ikvarxt.halo.entites
 
+import androidx.room.Ignore
 import java.util.*
 
 data class PostComment(
@@ -17,4 +18,7 @@ data class PostComment(
 ) {
     val avatarUrl: String
         get() = "https:$avatar"
+
+    @Ignore
+    var isHighlight: Boolean = false
 }

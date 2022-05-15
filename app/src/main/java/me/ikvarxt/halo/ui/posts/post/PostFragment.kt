@@ -57,6 +57,10 @@ class PostFragment : Fragment() {
                 }
             }
         }
+
+        if (args.highlightId != NO_HIGHLIGHT_ID) {
+            showCommentList(args.highlightId)
+        }
     }
 
     private fun loadContentData(result: NetworkResult<PostDetails>) {
@@ -91,10 +95,18 @@ class PostFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.showComment -> {
-                PostCommentPanel.newInstance(args.postId)
-                    .show(childFragmentManager, PostCommentPanel.TAG)
+                showCommentList()
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun showCommentList(highlightId: Int? = null) {
+        PostCommentPanel.newInstance(args.postId, highlightId)
+            .show(childFragmentManager, PostCommentPanel.TAG)
+    }
+
+    companion object {
+        const val NO_HIGHLIGHT_ID = -1
     }
 }

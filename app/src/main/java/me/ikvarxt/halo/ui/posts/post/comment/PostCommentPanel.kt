@@ -22,6 +22,10 @@ class PostCommentPanel : BottomSheetDialogFragment() {
         arguments?.getInt(POST_ID_TAG) ?: 0
     }
 
+    private val highlightId by lazy {
+        arguments?.getInt(HIGHLIGHT_ID) ?: -1
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -37,10 +41,19 @@ class PostCommentPanel : BottomSheetDialogFragment() {
 
         launchAndRepeatWithViewLifecycle {
             viewModel.getCommentList(postId).collectLatest { list ->
-                // TODO: current done, add loading sometime
+                // TODO: current solving; add loading state later
                 binding.emptyLayout.isVisible = list.isEmpty()
                 if (list.isNotEmpty()) {
+                    val highlight = list.firstOrNull { it.id == highlightId }
+
+                    highlight?.let { it.isHighlight = true }
+
                     adapter.submitList(list)
+
+                    if (highlight != null) {
+                        // FIXME: doesn't work
+                        binding.recyclerView.smoothScrollToPosition(list.indexOf(highlight))
+                    }
                 }
             }
         }
@@ -53,11 +66,13 @@ class PostCommentPanel : BottomSheetDialogFragment() {
         const val TAG = "PostCommentPanel"
 
         const val POST_ID_TAG = "post_id"
+        const val HIGHLIGHT_ID = "highlight_id"
 
-        fun newInstance(postId: Int): PostCommentPanel {
+        fun newInstance(postId: Int, checkId: Int?): PostCommentPanel {
             return PostCommentPanel().apply {
                 arguments = Bundle().apply {
                     putInt(POST_ID_TAG, postId)
+                    checkId?.let { putInt(HIGHLIGHT_ID, it) }
                 }
             }
         }

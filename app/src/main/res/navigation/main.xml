@@ -26,7 +26,12 @@
         android:id="@+id/commentsFragment"
         android:name="me.ikvarxt.halo.ui.comment.CommentsFragment"
         android:label="Comments"
-        tools:layout="@layout/fragment_comment" />
+        tools:layout="@layout/fragment_comment">
+
+        <action
+            android:id="@+id/gotoPostCommentList"
+            app:destination="@id/postFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/dashboardFragment"
@@ -41,6 +46,10 @@
 
         <argument
             android:name="postId"
+            app:argType="integer" />
+
+        <argument
+            android:name="highlightId"
             app:argType="integer" />
     </fragment>
 

@@ -5,11 +5,17 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.ItemPostCommentPanelListBinding
 import me.ikvarxt.halo.entites.PostComment
 
 class PostCommentPanelAdapter :
     ListAdapter<PostComment, PostCommentPanelAdapter.ViewHolder>(CALLBACK) {
+
+    /**
+     * store the highlight position of comment item in the adapter
+     */
+    private var highlightPosition: Int? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -21,12 +27,27 @@ class PostCommentPanelAdapter :
         val item = getItem(position)
 
         if (item != null) {
-            holder.binding.commentContent.text = item.content
+            val binding = holder.binding
+            binding.commentContent.text = item.content
+
+            if (item.isHighlight) {
+                highlightPosition = holder.bindingAdapterPosition
+                val context = binding.root.context
+
+                val color =
+                    context.resources.getColor(R.color.purple_500, context.theme)
+                binding.commentContent.setTextColor(color)
+            }
         }
     }
 
     class ViewHolder(val binding: ItemPostCommentPanelListBinding) :
         RecyclerView.ViewHolder(binding.root)
+
+    fun disableHighlight() = highlightPosition?.let {
+        getItem(it).isHighlight = false
+        notifyItemChanged(it)
+    }
 
     companion object {
 

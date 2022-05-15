@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -15,6 +16,7 @@ import io.noties.markwon.Markwon
 import io.noties.markwon.editor.MarkwonEditor
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.DialogReplyToCommentBinding
 import me.ikvarxt.halo.databinding.FragmentCommentBinding
 import me.ikvarxt.halo.entites.PostComment
@@ -117,5 +119,12 @@ class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener {
                 positiveClick()
             }
             .show()
+    }
+
+    override fun goToPostComment(commentItem: PostComment) {
+        binding.root.findNavController().navigate(R.id.postFragment, Bundle().apply {
+            putInt("postId", commentItem.post.id)
+            putInt("highlightId", commentItem.id)
+        })
     }
 }

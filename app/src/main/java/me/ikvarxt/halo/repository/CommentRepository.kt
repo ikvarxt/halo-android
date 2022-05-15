@@ -3,6 +3,7 @@ package me.ikvarxt.halo.repository
 import android.util.Log
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import me.ikvarxt.halo.entites.PostComment
 import me.ikvarxt.halo.entites.UserProfile
@@ -43,21 +44,22 @@ class CommentRepository @Inject constructor(
         service.deletePostCommentsRecursively(comment.id)
     }
 
-    fun getCommentsOfPostWithListView(postId: Int) = flow<List<PostComment>> {
-        when (val result = service.getCommentOfPostWithListView(postId)) {
-            is NetworkResult.Success -> {
-                val pages = result.data
-                if (pages.hasContent) {
-                    pages.content?.let { emit(it) }
+    fun getCommentsOfPostWithListView(postId: Int): Flow<List<PostComment>> {
+        return flow {
+            when (val result = service.getCommentOfPostWithListView(postId)) {
+                is NetworkResult.Success -> {
+                    val pages = result.data
+                    if (pages.hasContent) {
+                        pages.content?.let { emit(it) }
+                    }
                 }
-            }
-            is NetworkResult.Failure -> {
-                Log.d("commentrepo", "getCommentsOfPostWithListView: error")
-                emit(emptyList())
+                is NetworkResult.Failure -> {
+                    Log.d("commentrepo", "getCommentsOfPostWithListView: error")
+                    emit(emptyList())
+                }
             }
         }
     }
-
 }
 
 class PagePostCommentsPagingSource(

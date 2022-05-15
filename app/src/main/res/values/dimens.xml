@@ -24,4 +24,5 @@
     <dimen name="medium_gap">8dp</dimen>
     <dimen name="big_gap">16dp</dimen>
     <dimen name="large_gap">32dp</dimen>
+    <dimen name="very_large_gap">64dp</dimen>
 </resources>

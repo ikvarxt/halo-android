@@ -8,11 +8,18 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
+import io.noties.markwon.Markwon
 import kotlinx.coroutines.flow.collectLatest
 import me.ikvarxt.halo.databinding.SheetPostCommentPanelBinding
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PostCommentPanel : BottomSheetDialogFragment() {
+
+    @Inject
+    lateinit var markwon: Markwon
 
     private lateinit var binding: SheetPostCommentPanelBinding
     private val viewModel by activityViewModels<CommentPanelViewModel>()
@@ -37,23 +44,19 @@ class PostCommentPanel : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = PostCommentPanelAdapter()
+        adapter = PostCommentPanelAdapter(markwon)
 
         launchAndRepeatWithViewLifecycle {
-            viewModel.getCommentList(postId).collectLatest { list ->
+            viewModel.getCommentList(postId, highlightId).collectLatest { list ->
                 // TODO: current solving; add loading state later
                 binding.emptyLayout.isVisible = list.isEmpty()
                 if (list.isNotEmpty()) {
-                    val highlight = list.firstOrNull { it.id == highlightId }
-
-                    highlight?.let { it.isHighlight = true }
-
                     adapter.submitList(list)
 
-                    if (highlight != null) {
-                        // FIXME: doesn't work
-                        binding.recyclerView.smoothScrollToPosition(list.indexOf(highlight))
-                    }
+//                    if (highlight != null) {
+//                        // FIXME: doesn't work
+//                        binding.recyclerView.smoothScrollToPosition(list.indexOf(highlight))
+//                    }
                 }
             }
         }

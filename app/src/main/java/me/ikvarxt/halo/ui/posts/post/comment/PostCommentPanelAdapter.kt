@@ -5,11 +5,16 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
+import io.noties.markwon.Markwon
 import me.ikvarxt.halo.R
+import me.ikvarxt.halo.databinding.ItemPostCommentPanelChildBinding
 import me.ikvarxt.halo.databinding.ItemPostCommentPanelListBinding
 import me.ikvarxt.halo.entites.PostComment
 
-class PostCommentPanelAdapter :
+class PostCommentPanelAdapter(
+    private val markwon: Markwon
+) :
     ListAdapter<PostComment, PostCommentPanelAdapter.ViewHolder>(CALLBACK) {
 
     /**
@@ -19,30 +24,62 @@ class PostCommentPanelAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ItemPostCommentPanelListBinding.inflate(inflater, parent, false)
-        return ViewHolder(binding)
+
+        return when (viewType) {
+            ITEM_PARENT -> {
+                val binding = ItemPostCommentPanelListBinding.inflate(inflater, parent, false)
+                ViewHolder.ParentViewHolder(binding)
+            }
+            ITEM_CHILD -> {
+                val binding = ItemPostCommentPanelChildBinding.inflate(inflater, parent, false)
+                ViewHolder.ChildViewHolder(binding)
+            }
+            else -> throw IllegalArgumentException("Not found this viewType: $viewType")
+        }
+
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
+        val item = getItem(position) ?: return
 
-        if (item != null) {
-            val binding = holder.binding
-            binding.commentContent.text = item.content
+        if (item.isHighlight) {
+            val binding = holder.b
+            highlightPosition = holder.bindingAdapterPosition
+            val context = binding.root.context
 
-            if (item.isHighlight) {
-                highlightPosition = holder.bindingAdapterPosition
-                val context = binding.root.context
+            val color =
+                context.resources.getColor(R.color.purple_500, context.theme)
+            binding.root.setBackgroundColor(color)
+        }
 
-                val color =
-                    context.resources.getColor(R.color.purple_500, context.theme)
-                binding.commentContent.setTextColor(color)
+        when (getItemViewType(position)) {
+            ITEM_PARENT -> {
+                val binding = (holder as ViewHolder.ParentViewHolder).binding
+                markwon.setMarkdown(binding.commentContent, item.content)
+            }
+            ITEM_CHILD -> {
+                val binding = (holder as ViewHolder.ChildViewHolder).binding
+                markwon.setMarkdown(binding.commentContent, item.content)
             }
         }
     }
 
-    class ViewHolder(val binding: ItemPostCommentPanelListBinding) :
-        RecyclerView.ViewHolder(binding.root)
+    sealed class ViewHolder(val b: ViewBinding) : RecyclerView.ViewHolder(b.root) {
+        class ParentViewHolder(
+            val binding: ItemPostCommentPanelListBinding
+        ) : ViewHolder(binding)
+
+        class ChildViewHolder(
+            val binding: ItemPostCommentPanelChildBinding
+        ) : ViewHolder(binding)
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        val item = getItem(position) ?: return -1
+
+        return if (item.parentId != 0) ITEM_CHILD
+        else ITEM_PARENT
+    }
 
     fun disableHighlight() = highlightPosition?.let {
         getItem(it).isHighlight = false
@@ -50,6 +87,9 @@ class PostCommentPanelAdapter :
     }
 
     companion object {
+
+        const val ITEM_PARENT = 0
+        const val ITEM_CHILD = 1
 
         private val CALLBACK = object : DiffUtil.ItemCallback<PostComment>() {
             override fun areItemsTheSame(oldItem: PostComment, newItem: PostComment): Boolean {

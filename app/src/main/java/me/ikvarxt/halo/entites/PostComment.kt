@@ -11,6 +11,9 @@ data class PostComment(
     val content: String,
     val createTime: Calendar,
     val email: String,
+    /**
+     * Be 0 means no parent for this comment, else will refer else comment id
+     */
     val parentId: Int,
     // some API return result have this field, some else doesn't
     val post: PostItem?,

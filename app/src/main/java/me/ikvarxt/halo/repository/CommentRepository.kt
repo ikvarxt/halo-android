@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.flow
 import me.ikvarxt.halo.entites.PostComment
 import me.ikvarxt.halo.entites.UserProfile
 import me.ikvarxt.halo.entites.network.CreatePostComment
+import me.ikvarxt.halo.entites.network.PagesResponse
 import me.ikvarxt.halo.network.CommentApiService
 import me.ikvarxt.halo.network.infra.NetworkResult
 import javax.inject.Inject
@@ -50,18 +51,31 @@ class CommentRepository @Inject constructor(
 
     fun getCommentsOfPostWithListView(postId: Int): Flow<List<PostComment>> {
         return flow {
-            when (val result = service.getCommentOfPostWithListView(postId)) {
-                is NetworkResult.Success -> {
-                    val pages = result.data
-                    if (pages.hasContent) {
-                        pages.content?.let { emit(it) }
+            var result = service.getCommentOfPostWithListView(postId, 0)
+            val resList = mutableListOf<PostComment>()
+            var pages: PagesResponse<PostComment>? = null
+
+            // TODO: currently workaround of pages api call
+            do {
+                when (result) {
+                    is NetworkResult.Success -> {
+                        pages = result.data
+                        if (pages.hasContent) {
+                            resList.addAll(pages.content!!)
+                            if (pages.hasNext) {
+                                result =
+                                    service.getCommentOfPostWithListView(postId, pages.page + 1)
+                            }
+                        }
+                    }
+                    is NetworkResult.Failure -> {
+                        pages = null
+                        Log.d("commentrepo", "getCommentsOfPostWithListView: error")
                     }
                 }
-                is NetworkResult.Failure -> {
-                    Log.d("commentrepo", "getCommentsOfPostWithListView: error")
-                    emit(emptyList())
-                }
-            }
+            } while (pages?.hasNext == true)
+
+            emit(resList)
         }
     }
 }

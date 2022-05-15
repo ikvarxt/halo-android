@@ -26,7 +26,7 @@ interface CommentApiService {
 
     @GET("posts/comments/{postId}/list_view")
     suspend fun getCommentOfPostWithListView(
-        @Path("postId") postId: Int
+        @Path("postId") postId: Int,
+        @Query("page") page: Int,
     ): NetworkResult<PagesResponse<PostComment>>
-
 }

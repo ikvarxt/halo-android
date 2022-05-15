@@ -122,8 +122,9 @@ class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener {
     }
 
     override fun goToPostComment(commentItem: PostComment) {
+        val postId = commentItem.post?.id ?: return
         binding.root.findNavController().navigate(R.id.postFragment, Bundle().apply {
-            putInt("postId", commentItem.post.id)
+            putInt("postId", postId)
             putInt("highlightId", commentItem.id)
         })
     }

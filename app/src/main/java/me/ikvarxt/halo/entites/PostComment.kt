@@ -12,7 +12,8 @@ data class PostComment(
     val createTime: Calendar,
     val email: String,
     val parentId: Int,
-    val post: PostItem,
+    // some API return result have this field, some else doesn't
+    val post: PostItem?,
     // TODO: need change to CommentStatus enum value
     val status: String,
 ) {

@@ -24,17 +24,21 @@ class CommentRepository @Inject constructor(
         PagePostCommentsPagingSource(service, pageSize)
     }.flow
 
-    suspend fun createComment(comment: PostComment, info: UserProfile, content: String): String? {
+    suspend fun createComment(
+        parentComment: PostComment,
+        info: UserProfile,
+        content: String
+    ): String? {
+        val postId = parentComment.post?.id ?: return "Error: Post id can NOT be null"
         val requestBody = CreatePostComment(
             author = info.nickname,
             content = content,
-            postId = comment.post.id,
-            parentId = comment.parentId,
+            postId = postId,
+            parentId = parentComment.id,
             email = info.email,
             null
         )
-        val result = service.createPostComment(requestBody)
-        return when (result) {
+        return when (val result = service.createPostComment(requestBody)) {
             is NetworkResult.Success -> "Reply Success"
             is NetworkResult.Failure -> result.msg
         }

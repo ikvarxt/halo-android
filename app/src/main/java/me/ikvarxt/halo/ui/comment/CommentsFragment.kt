@@ -82,7 +82,6 @@ class CommentsFragment : Fragment(), PostsCommentsAdapter.Listener {
         val binding = DialogReplyToCommentBinding.inflate(layoutInflater, null, false)
 
         fun positiveClick() {
-            // FIXME: variable info often be null, figure this out
             if (parentViewModel.info != null) {
                 viewModel.replyComment(
                     commentItem,

@@ -88,6 +88,7 @@ dependencies {
     def markwonVersion = '4.6.2'
     implementation "io.noties.markwon:core:$markwonVersion"
     implementation "io.noties.markwon:editor:$markwonVersion"
+    implementation "io.noties.markwon:image-glide:$markwonVersion"
     // implementation "io.noties.markwon:ext-tables:$markwonVersion"
     // rikka's libs
     implementation "dev.rikka.rikkax.insets:insets:1.2.0"

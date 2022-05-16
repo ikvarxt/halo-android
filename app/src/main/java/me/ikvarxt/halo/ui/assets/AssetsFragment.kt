@@ -85,8 +85,12 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
                         fileUri = uri
                     }
                 val positiveAction = DialogInterface.OnClickListener { _, _ ->
-                    val text = dialogViewBinding.imageNameEdit.text
-                    viewModel.publish(uri, text.toString())
+                    val editText = dialogViewBinding.imageNameEdit
+
+                    val text = editText.text?.replace("\\s".toRegex(), "_")
+                        ?: "upload_${System.currentTimeMillis()}"
+
+                    viewModel.publish(uri, text)
                 }
                 MaterialAlertDialogBuilder(context)
                     .setView(dialogViewBinding.root)

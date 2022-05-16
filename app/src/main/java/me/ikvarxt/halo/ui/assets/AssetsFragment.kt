@@ -122,6 +122,9 @@ class AssetsFragment : Fragment(), AssetsListAdapter.Listener {
             .show()
     }
 
+    override fun chooseInsert(attachment: Attachment) {
+
+    }
 }
 
 class AssetsListAdapter(
@@ -143,6 +146,7 @@ class AssetsListAdapter(
     ) : RecyclerView.ViewHolder(itemBinding.root) {
         fun bind(item: Attachment) {
             itemBinding.attachment = item
+            itemBinding.root.setOnClickListener { listener.chooseInsert(item) }
             itemBinding.root.setOnLongClickListener {
                 listener.delete(item)
                 true
@@ -153,6 +157,7 @@ class AssetsListAdapter(
 
     interface Listener {
         fun delete(attachment: Attachment)
+        fun chooseInsert(attachment: Attachment)
     }
 
     companion object {

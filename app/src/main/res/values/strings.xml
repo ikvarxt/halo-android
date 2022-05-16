@@ -24,5 +24,6 @@
     <string name="delete">Delete</string>
     <string name="comment_to">Comment to:</string>
     <string name="show_comments">Show Comments</string>
+    <string name="insert_attachment">Insert Attachment</string>
 
 </resources>

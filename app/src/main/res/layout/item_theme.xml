@@ -20,12 +20,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:contentDescription="@string/halo_theme_thumbnail"
                 android:id="@+id/themeThumbnail"
-                imageUrl="@{theme.logo}"
+                imageUrl="@{theme.screenshotsPath}"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:scaleType="centerCrop"
+                android:contentDescription="@string/halo_theme_thumbnail"
                 android:src="@mipmap/ic_launcher"
                 app:layout_constraintTop_toTopOf="parent" />
 

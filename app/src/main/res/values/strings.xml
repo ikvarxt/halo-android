@@ -25,5 +25,8 @@
     <string name="comment_to">Comment to:</string>
     <string name="show_comments">Show Comments</string>
     <string name="insert_attachment">Insert Attachment</string>
+    <string name="theme_activated">Theme activated</string>
+    <string name="halo_theme_thumbnail">Halo theme thumbnail</string>
+    <string name="theme">Theme</string>
 
 </resources>

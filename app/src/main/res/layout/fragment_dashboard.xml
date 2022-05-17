@@ -81,17 +81,26 @@
                     tools:text="I am me, beautiful me." />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <TextView
+                android:id="@+id/themeSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/big_gap"
+                android:padding="@dimen/small_gap"
+                android:text="@string/theme"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                app:layout_constraintBottom_toTopOf="@id/logoutBtn"
+                app:layout_constraintTop_toBottomOf="@id/description" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/logoutBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/large_gap"
+                android:layout_marginTop="@dimen/big_gap"
                 android:text="@string/log_out"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/description" />
-
+                app:layout_constraintTop_toBottomOf="@id/themeSetting" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </layout>

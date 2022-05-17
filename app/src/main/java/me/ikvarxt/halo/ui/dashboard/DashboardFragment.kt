@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentDashboardBinding
 import me.ikvarxt.halo.ui.MainViewModel
 import me.ikvarxt.halo.ui.login.LoginActivity
@@ -41,6 +43,9 @@ class DashboardFragment : Fragment() {
         }
 
         binding.logoutBtn.setOnClickListener { logout() }
+        binding.themeSetting.setOnClickListener {
+            findNavController().navigate(R.id.themeFragment)
+        }
     }
 
     private fun logout() {

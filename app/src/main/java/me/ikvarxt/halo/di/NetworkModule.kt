@@ -75,4 +75,8 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideUserApiService(retrofit: Retrofit): UserApiService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideThemeApiService(retrofit: Retrofit): ThemeApiService = retrofit.create()
 }

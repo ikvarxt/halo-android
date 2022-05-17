@@ -1,8 +1,10 @@
 package me.ikvarxt.halo.utils
 
 import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.ImageView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import me.ikvarxt.halo.R
@@ -24,4 +26,9 @@ fun ImageView.bindImageWithUrl(url: String?, error: Drawable?) {
     }
 
     glide.into(this)
+}
+
+@BindingAdapter("isShow")
+fun View.bindViewShowing(isShow: Boolean) {
+    isVisible = isShow
 }

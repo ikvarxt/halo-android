@@ -59,9 +59,7 @@ class MainActivity : BaseActivity() {
                 }
             }
 
-            if (isRootFragment) {
-                binding.toolbar.title = destination.label
-            }
+            binding.toolbar.title = destination.label
             supportActionBar?.setDisplayHomeAsUpEnabled(!isRootFragment)
             binding.toolbar.setNavigationOnClickListener {
                 navController.navigateUp()

@@ -1,7 +1,9 @@
 package me.ikvarxt.halo.ui.posts.post
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -12,7 +14,6 @@ import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostBinding
 import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
-import me.ikvarxt.halo.network.infra.NetworkResult
 import me.ikvarxt.halo.ui.MainActivity
 import me.ikvarxt.halo.ui.posts.post.comment.PostCommentPanel
 import javax.inject.Inject
@@ -41,8 +42,12 @@ class PostFragment : Fragment() {
 
         viewModel.setPostId(args.postId)
 
-        viewModel.postDetails.observe(viewLifecycleOwner) {
+        viewModel.postLiveData.observe(viewLifecycleOwner) {
             loadContentData(it)
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) {
+            binding.errorText.text = it
         }
 
         launchAndRepeatWithViewLifecycle {
@@ -63,29 +68,19 @@ class PostFragment : Fragment() {
         }
     }
 
-    private fun loadContentData(result: NetworkResult<PostDetails>) {
+    private fun loadContentData(data: PostDetails) {
         val activity = activity as MainActivity
 
         fun setupContent(data: PostDetails) {
             activity.supportActionBar?.title = data.title
+            binding.errorText.text = null
 
             data.originalContent?.let { content ->
                 markwon.setMarkdown(binding.mainArticleText, content)
             }
         }
 
-        when (result) {
-            is NetworkResult.Success -> {
-                val data = result.data
-                setupContent(data)
-            }
-            is NetworkResult.Failure -> {
-                binding.errorText.apply {
-                    text = result.msg
-                    visibility = View.VISIBLE
-                }
-            }
-        }
+        setupContent(data)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -96,6 +91,13 @@ class PostFragment : Fragment() {
         when (item.itemId) {
             R.id.showComment -> {
                 showCommentList()
+            }
+            R.id.openInBrowser -> {
+                // TODO: add draft post checking
+                val customTabIntent = CustomTabsIntent.Builder().build()
+                viewModel.post?.fullPath?.let { path ->
+                    customTabIntent.launchUrl(requireContext(), Uri.parse(path))
+                }
             }
         }
         return super.onOptionsItemSelected(item)

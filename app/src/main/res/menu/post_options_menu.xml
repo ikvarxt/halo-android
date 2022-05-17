@@ -8,4 +8,9 @@
         android:title="@string/show_comments"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/openInBrowser"
+        android:icon="@drawable/ic_baseline_open_in_browser_24"
+        android:title="@string/open_in_browser"
+        app:showAsAction="never" />
 </menu>

@@ -28,5 +28,6 @@
     <string name="theme_activated">Theme activated</string>
     <string name="halo_theme_thumbnail">Halo theme thumbnail</string>
     <string name="theme">Theme</string>
+    <string name="open_in_browser">Open in browser</string>
 
 </resources>

@@ -19,11 +19,18 @@ class PostViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var postId = 0
+
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
-    private val _postDetails = MutableLiveData<NetworkResult<PostDetails>>()
-    val postDetails: LiveData<NetworkResult<PostDetails>> = _postDetails
+    private val _postLiveData = MutableLiveData<PostDetails>()
+    val postLiveData: LiveData<PostDetails> = _postLiveData
+
+    val post: PostDetails?
+        get() = postLiveData.value
+
+    private val _error = MutableLiveData<String>()
+    val error: LiveData<String> = _error
 
     fun setPostId(id: Int) {
         postId = id
@@ -33,7 +40,17 @@ class PostViewModel @Inject constructor(
     private fun reloadPost() {
         viewModelScope.launch {
             _loading.emit(true)
-            _postDetails.value = repository.getPostDetailsWithPostId(postId)
+
+            when (val result = repository.getPostDetailsWithPostId(postId)) {
+                is NetworkResult.Success -> {
+                    _postLiveData.value = result.data
+                }
+                is NetworkResult.Failure -> {
+                    val msg = result.msg ?: "Some error occurred"
+                    _error.value = msg
+                }
+            }
+
             _loading.emit(false)
         }
     }

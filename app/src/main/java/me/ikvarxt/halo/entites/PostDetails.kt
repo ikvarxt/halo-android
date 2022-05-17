@@ -2,7 +2,6 @@ package me.ikvarxt.halo.entites
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "post_details")
@@ -13,4 +12,5 @@ class PostDetails(
     @ColumnInfo(name = "original_content") val originalContent: String?,
     @ColumnInfo(name = "word_count") val wordCount: Int,
     @ColumnInfo(name = "thumbnail") val thumbnail: String?,
+    val fullPath: String
 )

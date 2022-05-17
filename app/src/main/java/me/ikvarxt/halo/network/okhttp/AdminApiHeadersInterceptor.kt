@@ -13,7 +13,7 @@ class AdminApiHeadersInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         val original = chain.request()
 
-        return if (original.url().host().equals(NetworkModule.PLACEHOLDER_DOMAIN)) {
+        return if (original.url().host().equals(NetworkModule.PLACEHOLDER_HOST)) {
             val request = original.newBuilder()
 
             val host = accountManager.domain

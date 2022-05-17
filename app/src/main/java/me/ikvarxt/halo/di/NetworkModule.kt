@@ -23,8 +23,11 @@ import javax.inject.Singleton
 class NetworkModule {
 
     companion object {
-        const val PLACEHOLDER_DOMAIN = "halo.placeholder"
-        private const val ADMIN_API_END_POINT = "api/admin/"
+        const val HTTP_SCHEMA = "https://"
+        const val PLACEHOLDER_HOST = "halo.placeholder"
+        const val PLACEHOLDER_DOMAIN = HTTP_SCHEMA + PLACEHOLDER_HOST
+
+        private const val ADMIN_API_END_POINT = "/api/admin/"
     }
 
     @Provides
@@ -50,7 +53,7 @@ class NetworkModule {
         client: OkHttpClient,
     ): Retrofit =
         Retrofit.Builder()
-            .baseUrl("https://$PLACEHOLDER_DOMAIN/$ADMIN_API_END_POINT")
+            .baseUrl("$HTTP_SCHEMA$PLACEHOLDER_HOST$ADMIN_API_END_POINT")
             .client(client)
             .addCallAdapterFactory(NetworkResultCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gson))

@@ -24,10 +24,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:paddingBottom="@dimen/screen_edge_interval"
+                android:textIsSelectable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 

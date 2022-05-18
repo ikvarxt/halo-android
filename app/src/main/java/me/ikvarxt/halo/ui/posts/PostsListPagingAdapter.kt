@@ -1,13 +1,16 @@
 package me.ikvarxt.halo.ui.posts
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.ItemMainPostCardBinding
 import me.ikvarxt.halo.entites.PostItem
@@ -32,6 +35,18 @@ class PostsListPagingAdapter(
             binding.postStatusBar.visibility = View.VISIBLE
         } else {
             binding.postStatusBar.visibility = View.INVISIBLE
+        }
+
+        val shouldShow = !TextUtils.isEmpty(item.thumbnail)
+        val thumbnail = binding.thumbnail
+        thumbnail.isVisible = shouldShow
+
+        if (shouldShow) {
+            Glide.with(thumbnail)
+                .load(item.thumbnail)
+                .into(thumbnail)
+        } else {
+            Glide.with(thumbnail).clear(thumbnail)
         }
 
         binding.root.setOnClickListener {

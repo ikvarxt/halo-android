@@ -72,8 +72,6 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/thumbnail"
-            imageUrl="@{post.thumbnail}"
-            isShow="@{!TextUtils.isEmpty(post.thumbnail)}"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"

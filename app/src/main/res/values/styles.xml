@@ -10,4 +10,8 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/post_list_item_image_corner_radius</item>
     </style>
+
+    <color name="colorPublished">@color/green</color>
+    <color name="colorRecycle">@color/red</color>
+    <color name="colorDraft">@color/orange</color>
 </resources>

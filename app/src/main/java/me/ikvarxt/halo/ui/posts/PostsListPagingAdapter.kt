@@ -2,6 +2,7 @@ package me.ikvarxt.halo.ui.posts
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.paging.PagingDataAdapter
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.ItemMainPostCardBinding
 import me.ikvarxt.halo.entites.PostItem
+import me.ikvarxt.halo.entites.PostStatus
 import me.ikvarxt.halo.ui.posts.post.PostFragment
 
 class PostsListPagingAdapter(
@@ -25,6 +27,13 @@ class PostsListPagingAdapter(
         val binding = holder.binding
 
         binding.post = item
+
+        if (item.status == PostStatus.DRAFT) {
+            binding.postStatusBar.visibility = View.VISIBLE
+        } else {
+            binding.postStatusBar.visibility = View.INVISIBLE
+        }
+
         binding.root.setOnClickListener {
             it.findNavController().navigate(R.id.postFragment, Bundle().apply {
                 putInt("postId", item.id)

@@ -1,10 +1,7 @@
 package me.ikvarxt.halo.ui.posts
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.widget.ContentLoadingProgressBar
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -47,6 +44,8 @@ class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setHasOptionsMenu(true)
 
 //        adapter = PostsListAdapter()
         adapter = PostsListPagingAdapter(this)
@@ -108,6 +107,22 @@ class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
         binding.addFab.setOnClickListener {
             findNavController().navigate(R.id.addPostFragment)
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.post_list_options, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
+        R.id.checkTags -> {
+            findNavController().navigate(R.id.gotoTagsFragment)
+            true
+        }
+        R.id.checkCategories -> {
+            findNavController().navigate(R.id.gotoCategoriesFragment)
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     override fun deletePostPermanently(item: PostItem) {

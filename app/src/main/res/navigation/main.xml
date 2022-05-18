@@ -14,6 +14,14 @@
         <action
             android:id="@+id/gotoPostsDetailsAction"
             app:destination="@id/postFragment" />
+
+        <action
+            android:id="@+id/gotoTagsFragment"
+            app:destination="@id/tagsFragment" />
+
+        <action
+            android:id="@+id/gotoCategoriesFragment"
+            app:destination="@id/categoriesFragment" />
     </fragment>
 
     <fragment
@@ -25,7 +33,7 @@
     <fragment
         android:id="@+id/commentsFragment"
         android:name="me.ikvarxt.halo.ui.comment.CommentsFragment"
-        android:label="Comments"
+        android:label="@string/comments"
         tools:layout="@layout/fragment_comment">
 
         <action
@@ -47,6 +55,7 @@
     <fragment
         android:id="@+id/postFragment"
         android:name="me.ikvarxt.halo.ui.posts.post.PostFragment"
+        android:label="@null"
         tools:layout="@layout/fragment_post">
 
         <argument
@@ -67,8 +76,20 @@
     <fragment
         android:id="@+id/themeFragment"
         android:name="me.ikvarxt.halo.ui.theme.ThemeFragment"
-        android:label="Theme"
+        android:label="@string/theme"
         tools:layout="@layout/fragment_theme" />
+
+    <fragment
+        android:id="@+id/tagsFragment"
+        android:name="me.ikvarxt.halo.ui.posts.tag.TagsFragment"
+        android:label="@string/tags"
+        tools:layout="@layout/fragment_tags" />
+
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="me.ikvarxt.halo.ui.posts.category.CategoriesFragment"
+        android:label="@string/categories"
+        tools:layout="@layout/fragment_categories" />
 
     <action
         android:id="@+id/action_postsListFragment"

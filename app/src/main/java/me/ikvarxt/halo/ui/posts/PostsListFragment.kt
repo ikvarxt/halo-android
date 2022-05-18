@@ -58,7 +58,6 @@ class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
             }
 
             launch {
-
                 adapter.loadStateFlow.collectLatest { loadStates ->
                     binding.swipeRefreshLayout.isRefreshing =
                         loadStates.mediator?.refresh is LoadState.Loading

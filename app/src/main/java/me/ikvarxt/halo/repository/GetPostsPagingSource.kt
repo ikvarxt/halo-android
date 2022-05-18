@@ -30,7 +30,7 @@ class GetPostsPagingSource(
                         nextKey = if (response.hasNext) response.page + 1 else null
                     )
                 }
-                is NetworkResult.Failure -> throw Exception(result.msg)
+                is NetworkResult.Failure -> LoadResult.Error(Exception(result.msg))
             }
         } catch (e: Exception) {
             LoadResult.Error(e)

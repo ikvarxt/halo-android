@@ -31,5 +31,6 @@
     <string name="open_in_browser">Open in browser</string>
     <string name="tags">Tags</string>
     <string name="categories">Categories</string>
+    <string name="post_thumbnail">Post thumbnail</string>
 
 </resources>

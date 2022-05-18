@@ -10,6 +10,8 @@
             type="me.ikvarxt.halo.entites.PostItem" />
 
         <import type="java.util.Calendar" />
+
+        <import type="android.text.TextUtils" />
     </data>
 
     <LinearLayout
@@ -61,20 +63,22 @@
                 tools:text="2000/3/16" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/thumbnail"
+            imageUrl="@{post.thumbnail}"
+            isShow="@{!TextUtils.isEmpty(post.thumbnail)}"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_weight="3"
-            android:contentDescription="Post thumbnail picture"
-            android:maxWidth="@dimen/postListItemThumbnailMaxWidth"
+            android:contentDescription="@string/post_thumbnail"
+            android:scaleType="centerCrop"
             android:src="@mipmap/ic_launcher"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/barrier"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_goneMarginStart="8dp" />
+            app:layout_goneMarginStart="8dp"
+            app:shapeAppearanceOverlay="@style/RoundedCornerImageShape" />
     </LinearLayout>
 </layout>

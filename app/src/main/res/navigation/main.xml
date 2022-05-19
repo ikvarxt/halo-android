@@ -68,6 +68,7 @@
 
         <argument
             android:name="isWriting"
+            android:defaultValue="false"
             app:argType="boolean" />
     </fragment>
 

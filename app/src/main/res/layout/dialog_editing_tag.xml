@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="tag"
+            type="me.ikvarxt.halo.entites.PostTag" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:padding="@dimen/screen_edge_interval">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tagNameLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_gap"
+            android:hint="@string/name"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tagName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{tag.name}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tagSlugLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_gap"
+            android:hint="@string/slug"
+            app:layout_constraintTop_toBottomOf="@id/tagNameLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/tagSlug"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{tag.slug}" />
+        </com.google.android.material.textfield.TextInputLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

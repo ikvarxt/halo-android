@@ -32,5 +32,10 @@
     <string name="tags">Tags</string>
     <string name="categories">Categories</string>
     <string name="post_thumbnail">Post thumbnail</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="edit_tag">Edit tag</string>
+    <string name="slug">Slug</string>
+    <string name="name">Name</string>
 
 </resources>

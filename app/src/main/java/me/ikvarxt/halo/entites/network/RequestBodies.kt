@@ -41,3 +41,10 @@ data class CreatePostComment(
     val authorUrl: String? = null,
     val allowNotification: Boolean? = null
 )
+
+data class TagRequestBody(
+    val name: String,
+    val slug: String? = null,
+    val color: String? = null,
+    val thumbnail: String? = null,
+)

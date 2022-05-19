@@ -14,6 +14,7 @@ import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostsListBinding
 import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
+import me.ikvarxt.halo.ui.posts.post.PostFragment
 
 private const val TAG = "PostsListsFragment"
 
@@ -83,8 +84,12 @@ class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
         }
 
         binding.addFab.setOnClickListener {
-            // TODO: add redirection
-//            findNavController().navigate(R.id.addPostFragment)
+            val action = PostsListFragmentDirections.gotoPostsDetailsAction(
+                0,
+                PostFragment.NO_HIGHLIGHT_ID,
+                true
+            )
+            findNavController().navigate(action)
         }
     }
 

@@ -50,7 +50,8 @@ class PostsListPagingAdapter(
         binding.root.setOnClickListener {
             val action = PostsListFragmentDirections.gotoPostsDetailsAction(
                 item.id,
-                PostFragment.NO_HIGHLIGHT_ID
+                PostFragment.NO_HIGHLIGHT_ID,
+                false
             )
             it.findNavController().navigate(action)
         }

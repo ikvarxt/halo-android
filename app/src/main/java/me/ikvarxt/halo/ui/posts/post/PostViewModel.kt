@@ -19,7 +19,9 @@ class PostViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var postId = 0
-    private var highlightCommentId = 0
+
+    var isWritingMode = false
+        private set
 
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
@@ -36,10 +38,16 @@ class PostViewModel @Inject constructor(
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
+    private val _msg = MutableLiveData<String>()
+    val msg: LiveData<String> = _msg
+
     fun setupArgs(args: PostFragmentArgs) {
         postId = args.postId
-        highlightCommentId = args.highlightId
-        reloadPost()
+        isWritingMode = args.isWriting
+
+        if (!isWritingMode) {
+            reloadPost()
+        }
     }
 
     private fun reloadPost() {
@@ -48,7 +56,8 @@ class PostViewModel @Inject constructor(
 
             when (val result = repository.getPostDetailsWithPostId(postId)) {
                 is NetworkResult.Success -> {
-                    _postLiveData.value = result.data
+                    val post = result.data
+                    _postLiveData.value = post
                 }
                 is NetworkResult.Failure -> {
                     val msg = result.msg ?: "Some error occurred"
@@ -57,6 +66,23 @@ class PostViewModel @Inject constructor(
             }
 
             _loading.emit(false)
+        }
+    }
+
+    fun publishPost(titleText: String, content: String) {
+        viewModelScope.launch {
+            val title = titleText.trim()
+            repository.createPost(title, content).collect {
+                when (it) {
+                    is NetworkResult.Success -> {
+                        val post = it.data
+                        _msg.value = "Post: [${post.title}] successfully published"
+                    }
+                    is NetworkResult.Failure -> {
+                        _msg.value = it.msg ?: "Publish failed"
+                    }
+                }
+            }
         }
     }
 }

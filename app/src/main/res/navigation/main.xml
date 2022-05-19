@@ -65,6 +65,10 @@
         <argument
             android:name="highlightId"
             app:argType="integer" />
+
+        <argument
+            android:name="isWriting"
+            app:argType="boolean" />
     </fragment>
 
     <fragment

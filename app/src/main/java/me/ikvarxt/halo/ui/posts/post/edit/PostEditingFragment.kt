@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.editor.MarkwonEditor
 import io.noties.markwon.editor.MarkwonEditorTextWatcher
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostEditingBinding
 import me.ikvarxt.halo.extentions.asMdImage
+import me.ikvarxt.halo.extentions.showToast
 import me.ikvarxt.halo.ui.posts.post.PostViewModel
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -24,8 +26,6 @@ class PostEditingFragment : Fragment() {
     lateinit var editor: MarkwonEditor
 
     private lateinit var binding: FragmentPostEditingBinding
-
-    //    private val viewModel by viewModels<CreatePostViewModel>()
     private val viewModel: PostViewModel by viewModels({ requireParentFragment() })
 
     override fun onCreateView(
@@ -48,29 +48,19 @@ class PostEditingFragment : Fragment() {
             binding.contentEdit.setText(post.originalContent)
         }
 
-//        binding.postTitleEdit.addTextChangedListener {
-//            viewModel.title = it.toString()
-//        }
-//
-//        binding.publishFab.setOnClickListener {
-//            if (viewModel.title.isBlank()) {
-//                showToast("title can not be empty")
-//            } else {
-//                viewModel.publishPost(binding.contentEdit.text.toString())
-//            }
-//        }
-//
-//        viewModel.result.observe(viewLifecycleOwner) { result ->
-//            val msg = when (result) {
-//                is NetworkResult.Success -> {
-//                    "Post ${result.data.id} published success"
-//                }
-//                is NetworkResult.Failure -> {
-//                    "error occurred: code ${result.code}, ${result.msg}"
-//                }
-//            }
-//            showToast(msg)
-//        }
+        binding.publishFab.setOnClickListener {
+            val title = binding.titleEdit.text.toString()
+            val content = binding.contentEdit.text.toString()
+
+            if (title.isBlank()) {
+                showToast("Post title can not be empty")
+            } else {
+                viewModel.publishPost(title, content)
+                it.postDelayed({
+                    findNavController().navigateUp()
+                }, 1000)
+            }
+        }
 
         binding.bottomBar.setOnMenuItemClickListener {
             when (it.itemId) {

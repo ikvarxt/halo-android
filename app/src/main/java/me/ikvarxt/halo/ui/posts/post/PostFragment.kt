@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.Markwon
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostBinding
+import me.ikvarxt.halo.extentions.showToast
 import me.ikvarxt.halo.ui.MainActivity
 import me.ikvarxt.halo.ui.posts.post.comment.PostCommentPanel
 import me.ikvarxt.halo.ui.posts.post.edit.PostEditingFragment
@@ -35,6 +36,8 @@ class PostFragment : Fragment() {
     private val args by navArgs<PostFragmentArgs>()
     private val viewModel: PostViewModel by viewModels()
 
+    private lateinit var viewPager: ViewPager2
+
     private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             val toolbar = (activity as MainActivity).toolbar
@@ -46,40 +49,50 @@ class PostFragment : Fragment() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+
+        viewModel.setupArgs(args)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = FragmentPostBinding.inflate(inflater, container, false).also {
         binding = it
+        viewPager = it.viewPager
     }.root
 
-    override fun onStart() {
-        super.onStart()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        setHasOptionsMenu(true)
-        viewModel.setupArgs(args)
+        viewPager.apply {
+            adapter = PostFragmentStateAdapter(childFragmentManager, lifecycle)
+            setPageTransformer(MarginPageTransformer(20))
+            registerOnPageChangeCallback(onPageChangeCallback)
+        }
+
+        if (viewModel.isWritingMode) {
+            viewPager.setCurrentItem(PAGE_EDITING, false)
+        }
 
         if (args.highlightId != NO_HIGHLIGHT_ID) {
             showCommentList(args.highlightId)
         }
 
-        binding.viewPager.registerOnPageChangeCallback(onPageChangeCallback)
+        viewModel.msg.observe(viewLifecycleOwner) { showToast(it) }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.viewPager.apply {
-            adapter = PostFragmentStateAdapter(childFragmentManager, lifecycle)
-            setPageTransformer(MarginPageTransformer(20))
-            registerOnPageChangeCallback(onPageChangeCallback)
-        }
+    override fun onStart() {
+        super.onStart()
+        viewPager.registerOnPageChangeCallback(onPageChangeCallback)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        binding.viewPager.unregisterOnPageChangeCallback(onPageChangeCallback)
+    override fun onStop() {
+        super.onStop()
+        viewPager.unregisterOnPageChangeCallback(onPageChangeCallback)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

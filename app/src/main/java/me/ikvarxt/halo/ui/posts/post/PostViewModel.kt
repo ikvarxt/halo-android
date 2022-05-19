@@ -19,6 +19,7 @@ class PostViewModel @Inject constructor(
 ) : ViewModel() {
 
     private var postId = 0
+    private var highlightCommentId = 0
 
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
@@ -29,11 +30,15 @@ class PostViewModel @Inject constructor(
     val post: PostDetails?
         get() = postLiveData.value
 
+    val title: String?
+        get() = post?.title
+
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
 
-    fun setPostId(id: Int) {
-        postId = id
+    fun setupArgs(args: PostFragmentArgs) {
+        postId = args.postId
+        highlightCommentId = args.highlightId
         reloadPost()
     }
 

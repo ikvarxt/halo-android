@@ -68,12 +68,6 @@
     </fragment>
 
     <fragment
-        android:id="@+id/addPostFragment"
-        android:name="me.ikvarxt.halo.ui.posts.create.CreatePostFragment"
-        android:label="@null"
-        tools:layout="@layout/fragment_create_post" />
-
-    <fragment
         android:id="@+id/themeFragment"
         android:name="me.ikvarxt.halo.ui.theme.ThemeFragment"
         android:label="@string/theme"

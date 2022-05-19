@@ -1,4 +1,4 @@
-package me.ikvarxt.halo.ui.posts.create
+package me.ikvarxt.halo.ui.posts.post.edit
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -49,8 +49,8 @@ class AddAssetFragment : BottomSheetDialogFragment(), AssetsListAdapter.Listener
 
     override fun chooseInsert(attachment: Attachment) {
         setFragmentResult(
-            CreatePostFragment.INSERT_ASSET_REQUEST_KEY,
-            bundleOf(CreatePostFragment.ASSET_KEY to attachment.path)
+            PostEditingFragment.INSERT_ASSET_REQUEST_KEY,
+            bundleOf(PostEditingFragment.ASSET_KEY to attachment.path)
         )
         dismiss()
     }

@@ -39,5 +39,7 @@
     <string name="name">Name</string>
     <string name="no_comments">There are no comments right now.</string>
     <string name="no_comments_icon_hint">Currently no comments</string>
+    <string name="editing">Editing</string>
+    <string name="post_edit_title_hint">Name a title</string>
 
 </resources>

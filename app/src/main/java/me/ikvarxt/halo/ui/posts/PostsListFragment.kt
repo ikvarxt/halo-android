@@ -83,7 +83,8 @@ class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
         }
 
         binding.addFab.setOnClickListener {
-            findNavController().navigate(R.id.addPostFragment)
+            // TODO: add redirection
+//            findNavController().navigate(R.id.addPostFragment)
         }
     }
 

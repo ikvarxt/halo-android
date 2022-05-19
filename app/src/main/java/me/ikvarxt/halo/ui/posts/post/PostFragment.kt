@@ -5,18 +5,25 @@ import android.os.Bundle
 import android.view.*
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.navArgs
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.Markwon
-import kotlinx.coroutines.flow.collectLatest
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostBinding
-import me.ikvarxt.halo.entites.PostDetails
-import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
 import me.ikvarxt.halo.ui.MainActivity
 import me.ikvarxt.halo.ui.posts.post.comment.PostCommentPanel
+import me.ikvarxt.halo.ui.posts.post.edit.PostEditingFragment
+import me.ikvarxt.halo.ui.posts.post.preview.PostPreviewFragment
 import javax.inject.Inject
+
+private const val PAGE_VIEWING = 0
+private const val PAGE_EDITING = 1
 
 @AndroidEntryPoint
 class PostFragment : Fragment() {
@@ -26,7 +33,18 @@ class PostFragment : Fragment() {
 
     private lateinit var binding: FragmentPostBinding
     private val args by navArgs<PostFragmentArgs>()
-    private val viewModel by viewModels<PostViewModel>()
+    private val viewModel: PostViewModel by viewModels()
+
+    private val onPageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
+        override fun onPageSelected(position: Int) {
+            val toolbar = (activity as MainActivity).toolbar
+            toolbar.title = when (position) {
+                PAGE_VIEWING -> viewModel.title
+                PAGE_EDITING -> resources.getString(R.string.editing)
+                else -> viewModel.title
+            }
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,51 +54,32 @@ class PostFragment : Fragment() {
         binding = it
     }.root
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onStart() {
+        super.onStart()
+
         setHasOptionsMenu(true)
-
-        viewModel.setPostId(args.postId)
-
-        viewModel.postLiveData.observe(viewLifecycleOwner) {
-            loadContentData(it)
-        }
-
-        viewModel.error.observe(viewLifecycleOwner) {
-            binding.errorText.text = it
-        }
-
-        launchAndRepeatWithViewLifecycle {
-            viewModel.loading.collectLatest {
-                when (it) {
-                    true -> {
-                        binding.loading.show()
-                    }
-                    false -> {
-                        binding.loading.hide()
-                    }
-                }
-            }
-        }
+        viewModel.setupArgs(args)
 
         if (args.highlightId != NO_HIGHLIGHT_ID) {
             showCommentList(args.highlightId)
         }
+
+        binding.viewPager.registerOnPageChangeCallback(onPageChangeCallback)
     }
 
-    private fun loadContentData(data: PostDetails) {
-        val activity = activity as MainActivity
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        fun setupContent(data: PostDetails) {
-            activity.supportActionBar?.title = data.title
-            binding.errorText.text = null
-
-            data.originalContent?.let { content ->
-                markwon.setMarkdown(binding.mainArticleText, content)
-            }
+        binding.viewPager.apply {
+            adapter = PostFragmentStateAdapter(childFragmentManager, lifecycle)
+            setPageTransformer(MarginPageTransformer(20))
+            registerOnPageChangeCallback(onPageChangeCallback)
         }
+    }
 
-        setupContent(data)
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.viewPager.unregisterOnPageChangeCallback(onPageChangeCallback)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -111,4 +110,16 @@ class PostFragment : Fragment() {
     companion object {
         const val NO_HIGHLIGHT_ID = -1
     }
+}
+
+class PostFragmentStateAdapter(fm: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(fm, lifecycle) {
+
+    override fun createFragment(position: Int): Fragment = when (position) {
+        PAGE_VIEWING -> PostPreviewFragment()
+        PAGE_EDITING -> PostEditingFragment()
+        else -> PostPreviewFragment()
+    }
+
+    override fun getItemCount(): Int = 2
 }

@@ -1,5 +1,7 @@
 package me.ikvarxt.halo.ui.posts
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,13 +31,15 @@ class PostsListViewModel @Inject constructor(
     private val _refreshAdapter = MutableStateFlow(Any())
     val refreshAdapter: StateFlow<Any> = _refreshAdapter
 
+    private val _msg = MutableLiveData<String>()
+    val msg: LiveData<String> = _msg
+
     fun deletePostPermanently(postId: Int) {
         viewModelScope.launch {
             _operationInProgress.emit(true)
-            // TODO: need deal with the operation's status of success and failure
-            val response = postsRepository.deletePostPermanently(postId)
+            val isSuccess = postsRepository.deletePostPermanently(postId)
+            if (!isSuccess) _msg.value = "Error occurred, delete failed"
             _operationInProgress.emit(false)
-            _refreshAdapter.emit(Any())
         }
     }
 }

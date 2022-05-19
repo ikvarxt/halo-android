@@ -14,6 +14,7 @@ import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostsListBinding
 import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
+import me.ikvarxt.halo.extentions.showToast
 import me.ikvarxt.halo.ui.posts.post.PostFragment
 
 private const val TAG = "PostsListsFragment"
@@ -67,10 +68,8 @@ class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
 
             launch {
                 viewModel.operationInProgress.collectLatest {
-                    when (it) {
-                        true -> operationInProgressLoading.show()
-                        false -> operationInProgressLoading.dismiss()
-                    }
+                    if (it) operationInProgressLoading.show()
+                    else operationInProgressLoading.dismiss()
                 }
             }
 
@@ -78,6 +77,8 @@ class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
                 viewModel.refreshAdapter.collectLatest { adapter.refresh() }
             }
         }
+
+        viewModel.msg.observe(viewLifecycleOwner) { showToast(it) }
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             adapter.refresh()

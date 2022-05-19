@@ -21,4 +21,7 @@ interface PostItemDao {
 
     @Query("SELECT * FROM post_item ORDER BY create_time DESC")
     fun pagingSource(): PagingSource<Int, PostItem>
+
+    @Query("DELETE FROM post_item WHERE id LIKE :postId")
+    suspend fun deleteById(postId: Int)
 }

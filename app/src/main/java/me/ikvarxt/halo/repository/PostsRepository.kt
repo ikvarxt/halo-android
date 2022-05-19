@@ -3,6 +3,7 @@ package me.ikvarxt.halo.repository
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
+import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import me.ikvarxt.halo.database.HaloDatabase
@@ -18,6 +19,8 @@ class PostsRepository @Inject constructor(
     private val service: PostApiService,
     private val database: HaloDatabase,
 ) {
+    val dao = database.postItemDao()
+
     @OptIn(ExperimentalPagingApi::class)
     fun listPosts(pageSize: Int = 10) = Pager(
         config = PagingConfig(pageSize),
@@ -39,7 +42,15 @@ class PostsRepository @Inject constructor(
         emit(result)
     }
 
-    suspend fun deletePostPermanently(postId: Int) = service.deletePostPermanently(postId)
+    suspend fun deletePostPermanently(postId: Int): Boolean {
+        val result = service.deletePostPermanently(postId)
+        return if (result is NetworkResult.Success) {
+            database.withTransaction {
+                dao.deleteById(postId)
+            }
+            true
+        } else false
+    }
 
     suspend fun getPostDetailsWithPostId(postId: Int) = service.getPostDetailsWithId(postId)
 }

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/comments_panel_default_height">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -18,7 +19,8 @@
         android:id="@+id/emptyIcon"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:contentDescription="Currently no comments"
+        android:layout_marginTop="50dp"
+        android:contentDescription="@string/no_comments_icon_hint"
         android:src="@drawable/ic_baseline_error_24"
         app:layout_constraintBottom_toTopOf="@id/emptyText"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,9 +33,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="There are no comments right now."
+        android:text="@string/no_comments"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/emptyIcon"
         app:layout_constraintVertical_chainStyle="packed" />
 

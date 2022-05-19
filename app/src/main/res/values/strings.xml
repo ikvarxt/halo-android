@@ -37,5 +37,7 @@
     <string name="edit_tag">Edit tag</string>
     <string name="slug">Slug</string>
     <string name="name">Name</string>
+    <string name="no_comments">There are no comments right now.</string>
+    <string name="no_comments_icon_hint">Currently no comments</string>
 
 </resources>

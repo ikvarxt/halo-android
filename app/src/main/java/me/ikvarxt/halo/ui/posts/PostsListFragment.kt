@@ -91,16 +91,19 @@ class PostsListFragment : Fragment(), PostsListPagingAdapter.Listener {
         inflater.inflate(R.menu.post_list_options, menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
-        R.id.checkTags -> {
-            findNavController().navigate(R.id.gotoTagsFragment)
-            true
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.checkTags -> {
+                findNavController().navigate(R.id.gotoTagsFragment)
+            }
+            R.id.checkCategories -> {
+                findNavController().navigate(R.id.gotoCategoriesFragment)
+            }
+            R.id.checkRecyclePost -> {
+                // TODO: complate this
+            }
         }
-        R.id.checkCategories -> {
-            findNavController().navigate(R.id.gotoCategoriesFragment)
-            true
-        }
-        else -> super.onOptionsItemSelected(item)
+        return true
     }
 
     override fun deletePostPermanently(item: PostItem) {

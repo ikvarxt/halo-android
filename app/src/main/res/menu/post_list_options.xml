@@ -13,4 +13,10 @@
         android:icon="@drawable/ic_baseline_style_24"
         android:title="@string/tags"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/checkRecyclePost"
+        android:checkable="true"
+        android:title="Recycle Post"
+        app:showAsAction="never" />
 </menu>

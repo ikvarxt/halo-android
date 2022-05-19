@@ -10,9 +10,8 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:itemCount="20"
+        tools:itemCount="10"
         tools:listitem="@layout/item_post_comment_panel_list" />
 
     <ImageView

@@ -1,6 +1,5 @@
 package me.ikvarxt.halo.ui.posts
 
-import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +10,6 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.ItemMainPostCardBinding
 import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.entites.PostStatus
@@ -50,11 +48,13 @@ class PostsListPagingAdapter(
         }
 
         binding.root.setOnClickListener {
-            it.findNavController().navigate(R.id.postFragment, Bundle().apply {
-                putInt("postId", item.id)
-                putInt("highlightId", PostFragment.NO_HIGHLIGHT_ID)
-            })
+            val action = PostsListFragmentDirections.gotoPostsDetailsAction(
+                item.id,
+                PostFragment.NO_HIGHLIGHT_ID
+            )
+            it.findNavController().navigate(action)
         }
+
         binding.root.setOnLongClickListener {
             listener.deletePostPermanently(item)
             true

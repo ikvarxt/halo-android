@@ -7,14 +7,11 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import io.noties.markwon.editor.MarkwonEditor
 import io.noties.markwon.editor.MarkwonEditorTextWatcher
-import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentPostEditingBinding
 import me.ikvarxt.halo.extentions.asMdImage
-import me.ikvarxt.halo.extentions.showToast
 import me.ikvarxt.halo.ui.posts.post.PostViewModel
 import java.util.concurrent.Executors
 import javax.inject.Inject
@@ -46,30 +43,6 @@ class PostEditingFragment : Fragment() {
         viewModel.postLiveData.observe(viewLifecycleOwner) { post ->
             binding.titleEdit.setText(post.title)
             binding.contentEdit.setText(post.originalContent)
-        }
-
-        binding.publishFab.setOnClickListener {
-            val title = binding.titleEdit.text.toString()
-            val content = binding.contentEdit.text.toString()
-
-            if (title.isBlank()) {
-                showToast("Post title can not be empty")
-            } else {
-                viewModel.publishPost(title, content)
-                it.postDelayed({
-                    findNavController().navigateUp()
-                }, 1000)
-            }
-        }
-
-        binding.bottomBar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.insertAsset -> {
-                    AddAssetFragment().show(childFragmentManager, AddAssetFragment.TAG)
-                }
-                else -> {}
-            }
-            true
         }
 
         setFragmentResultListener(INSERT_ASSET_REQUEST_KEY) { _, bundle ->

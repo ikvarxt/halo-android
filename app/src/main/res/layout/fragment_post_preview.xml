@@ -15,13 +15,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clipToPadding="false"
-            android:padding="@dimen/screen_edge_interval">
+            android:paddingHorizontal="@dimen/screen_edge_interval"
+            android:paddingTop="@dimen/screen_edge_interval"
+            android:paddingBottom="@dimen/scroll_bottom_padding_with_bottom_nav_and_fab">
 
             <TextView
                 android:id="@+id/mainArticleText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="@dimen/screen_edge_interval"
                 android:textIsSelectable="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

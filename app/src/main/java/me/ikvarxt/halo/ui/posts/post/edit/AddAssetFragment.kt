@@ -50,7 +50,10 @@ class AddAssetFragment : BottomSheetDialogFragment(), AssetsListAdapter.Listener
     override fun chooseInsert(attachment: Attachment) {
         setFragmentResult(
             PostEditingFragment.INSERT_ASSET_REQUEST_KEY,
-            bundleOf(PostEditingFragment.ASSET_KEY to attachment.path)
+            bundleOf(
+                PostEditingFragment.ASSET_KEY to attachment.path,
+                PostEditingFragment.ASSET_NAME_KEY to attachment.name
+            )
         )
         dismiss()
     }

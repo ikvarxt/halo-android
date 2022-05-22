@@ -45,10 +45,12 @@ class PostEditingFragment : Fragment() {
             binding.contentEdit.setText(post.originalContent)
         }
 
+        // fragment result for add assets
         setFragmentResultListener(INSERT_ASSET_REQUEST_KEY) { _, bundle ->
             val assetSchema = bundle.getString(ASSET_KEY) ?: return@setFragmentResultListener
+            val assetName = bundle.getString(ASSET_NAME_KEY)
 
-            val text = assetSchema.asMdImage()
+            val text = assetSchema.asMdImage(assetName)
             binding.contentEdit.text?.insert(binding.contentEdit.selectionStart, text)
         }
     }
@@ -56,5 +58,6 @@ class PostEditingFragment : Fragment() {
     companion object {
         const val INSERT_ASSET_REQUEST_KEY = "insert_asset"
         const val ASSET_KEY = "asset_key"
+        const val ASSET_NAME_KEY = "asset_name_key"
     }
 }

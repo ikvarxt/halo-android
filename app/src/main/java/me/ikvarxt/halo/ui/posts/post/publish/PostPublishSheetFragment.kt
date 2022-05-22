@@ -86,6 +86,7 @@ class PostPublishSheetFragment : BottomSheetDialogFragment() {
         }
 
         binding.apply {
+            // FIXME: this cause published post is draft
             publish.setOnClickListener { publishPost() }
             saveDraft.setOnClickListener { publishPost(true) }
         }

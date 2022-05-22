@@ -65,12 +65,12 @@ class PostFragment : Fragment() {
 
             toolbar.title = when (position) {
                 PAGE_VIEWING -> {
-                    viewModel.title
+                    viewModel.uiStateTitle
                 }
                 PAGE_EDITING -> {
                     resources.getString(R.string.editing)
                 }
-                else -> viewModel.title
+                else -> viewModel.uiStateTitle
             }
             setupBottomBarAndFab(position)
         }

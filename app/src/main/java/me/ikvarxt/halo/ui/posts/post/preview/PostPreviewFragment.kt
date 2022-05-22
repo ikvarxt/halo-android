@@ -35,8 +35,8 @@ class PostPreviewFragment : Fragment() {
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.postLiveData.observe(viewLifecycleOwner) {
-            loadContentData(it)
+        viewModel.uiState.observe(viewLifecycleOwner) {
+            load(it.title, it.content)
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
@@ -60,5 +60,12 @@ class PostPreviewFragment : Fragment() {
         data.originalContent?.let { content ->
             markwon.setMarkdown(binding.mainArticleText, content)
         }
+    }
+
+    private fun load(title: String, content: String) {
+        (activity as MainActivity).toolbar.title = title
+        binding.errorText.text = null
+
+        markwon.setMarkdown(binding.mainArticleText, content)
     }
 }

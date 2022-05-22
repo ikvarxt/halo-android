@@ -23,17 +23,14 @@ class PostViewModel @Inject constructor(
     var isWritingMode = false
         private set
 
+    var post: PostDetails? = null
+        private set
+
     private val _loading = MutableStateFlow(false)
     val loading = _loading.asStateFlow()
 
-    private val _postLiveData = MutableLiveData<PostDetails>()
-    val postLiveData: LiveData<PostDetails> = _postLiveData
-
-    val post: PostDetails?
-        get() = postLiveData.value
-
-    val title: String?
-        get() = post?.title
+    private val _uiState = MutableLiveData<UiState>()
+    val uiState: LiveData<UiState> = _uiState
 
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
@@ -50,14 +47,27 @@ class PostViewModel @Inject constructor(
         }
     }
 
+    fun editing(uiState: UiState.EditingUiState) {
+        _uiState.value = uiState
+    }
+
+    val uiStateTitle: String get() = _uiState.value?.title ?: ""
+    val uiStateContent: String get() = _uiState.value?.content ?: ""
+
     private fun reloadPost() {
         viewModelScope.launch {
             _loading.emit(true)
 
             when (val result = repository.getPostDetailsWithPostId(postId)) {
                 is NetworkResult.Success -> {
-                    val post = result.data
-                    _postLiveData.value = post
+                    val postDetails = result.data.also {
+                        post = it
+                    }
+
+                    _uiState.value = UiState.LoadPostUiState(
+                        postDetails.title,
+                        postDetails.originalContent ?: ""
+                    )
                 }
                 is NetworkResult.Failure -> {
                     val msg = result.msg ?: "Some error occurred"
@@ -68,21 +78,11 @@ class PostViewModel @Inject constructor(
             _loading.emit(false)
         }
     }
+}
 
-    fun publishPost(titleText: String, content: String) {
-        viewModelScope.launch {
-            val title = titleText.trim()
-            repository.createPost(title, content).collect {
-                when (it) {
-                    is NetworkResult.Success -> {
-                        val post = it.data
-                        _msg.value = "Post: [${post.title}] successfully published"
-                    }
-                    is NetworkResult.Failure -> {
-                        _msg.value = it.msg ?: "Publish failed"
-                    }
-                }
-            }
-        }
-    }
+sealed class UiState(val title: String, val content: String) {
+
+    class LoadPostUiState(title: String, content: String) : UiState(title, content)
+
+    class EditingUiState(title: String, content: String) : UiState(title, content)
 }

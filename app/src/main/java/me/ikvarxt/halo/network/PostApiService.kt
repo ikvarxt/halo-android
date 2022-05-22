@@ -5,6 +5,7 @@ import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.entites.PostStatus
 import me.ikvarxt.halo.entites.network.CreatePostBody
 import me.ikvarxt.halo.entites.network.PagesResponse
+import me.ikvarxt.halo.entites.network.UpdatePostBody
 import me.ikvarxt.halo.network.infra.NetworkResult
 import retrofit2.http.*
 
@@ -46,6 +47,13 @@ interface PostApiService {
         @Path("postId") postId: Int,
         @Path("status") status: PostStatus
     ): PostItem
+
+    @PUT("posts/{postId}")
+    suspend fun updatePost(
+        @Path("postId") postId: Int,
+        @Body body: UpdatePostBody,
+        @Query("autoSave") autoSave: Boolean = false,
+    ): NetworkResult<PostItem>
 
     // delete a post permanently
     @DELETE("posts/{postId}")

@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.flow
 import me.ikvarxt.halo.database.HaloDatabase
 import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.entites.network.CreatePostBody
+import me.ikvarxt.halo.entites.network.UpdatePostBody
 import me.ikvarxt.halo.network.PostApiService
 import me.ikvarxt.halo.network.infra.NetworkResult
 import javax.inject.Inject
@@ -30,16 +31,19 @@ class PostsRepository @Inject constructor(
             size = pageSize
         )
     ) {
-        database.postItemDao().pagingSource()
+        dao.pagingSource()
     }.flow
 
     fun createPost(
-        title: String,
-        content: String,
+        createPost: CreatePostBody
     ): Flow<NetworkResult<PostItem>> = flow {
-        val body = CreatePostBody(title, content)
-        val result = service.createPost(body)
+        val result = service.createPost(createPost)
         emit(result)
+    }
+
+    suspend fun updatePost(postId: Int, updatePostBody: UpdatePostBody): PostItem? {
+        val result = service.updatePost(postId, updatePostBody)
+        return (result as? NetworkResult.Success)?.data
     }
 
     suspend fun deletePostPermanently(postId: Int): Boolean {

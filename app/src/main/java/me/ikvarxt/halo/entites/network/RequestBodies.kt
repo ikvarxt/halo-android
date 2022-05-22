@@ -27,8 +27,8 @@ data class CreatePostBody(
     val slug: String? = null,
     val editorType: PostEditorType = PostEditorType.MARKDOWN,
     val disallowComment: Boolean = false,
-    val categoryIds: IntArray? = null,
-    val tagIds: IntArray? = null,
+    val categoryIds: List<Int>? = null,
+    val tagIds: List<Int>? = null,
     val password: String? = null,
 )
 
@@ -47,4 +47,17 @@ data class TagRequestBody(
     val slug: String? = null,
     val color: String? = null,
     val thumbnail: String? = null,
+)
+
+data class UpdatePostBody(
+    val title: String,
+    @SerializedName("originalContent")
+    val content: String?,
+    val slug: String,
+    val summary: String? = null,
+//    val status: PostStatus,
+//    val tagIds: List<Int>,
+    val thumbnail: String? = null,
+    val disallowComment: Boolean = false,
+    val password: String? = null,
 )

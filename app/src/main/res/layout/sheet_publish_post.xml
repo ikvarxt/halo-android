@@ -1,13 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:padding="@dimen/screen_edge_interval">
 
-    <TextView
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/titleEditLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="publish"
-        android:textSize="90sp"
-        android:gravity="center" />
+        android:layout_height="wrap_content"
+        android:hint="post title">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/titleEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="this is title" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/slugEditLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="post slug">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/slugEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="this is slug" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/categoriesTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Select Categories"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/selectCategoriesList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/categoriesTitle"
+            tools:itemCount="5"
+            tools:listitem="@android:layout/simple_selectable_list_item" />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="new Category"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selectCategoriesList" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
+        android:id="@+id/editTags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:completionThreshold="0"
+        android:hint="@string/tags" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/summaryEditLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="post title"
+        app:expandedHintEnabled="false"
+        app:placeholderText="Summary will be generate from post content if you don't fill this.">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/summmaryEdit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:minLines="4" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/publish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Publish" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/saveDraft"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Save Draft" />
+
+    <!-- placeholder -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="500dp" />
+</LinearLayout>

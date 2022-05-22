@@ -15,6 +15,9 @@ interface PostTagsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTags(list: List<PostTag>)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTag(tag: PostTag)
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun updateTag(tag: PostTag)
 

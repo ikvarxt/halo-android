@@ -16,7 +16,7 @@ class TagsRepository @Inject constructor(
     private val service: PostTagsAndCategoriesApiService,
     private val db: HaloDatabase
 ) {
-    val dao = db.postTagsDao()
+    private val dao = db.postTagsDao()
 
     fun getAllTags(): Flow<List<PostTag>> = flow {
 //        if (refresh) {
@@ -51,6 +51,29 @@ class TagsRepository @Inject constructor(
             else -> {}
         }
         return dao.getTag(tag.id)
+    }
+
+    suspend fun createTag(
+        name: String,
+        slug: String? = null,
+        color: String? = null,
+        thumbnail: String? = null
+    ): PostTag? {
+        val body = TagRequestBody(name, slug, color, thumbnail)
+
+        var tag: PostTag? = null
+
+        when (val result = service.createTag(body)) {
+            is NetworkResult.Success -> {
+                val networkTag = result.data
+                db.withTransaction {
+                    dao.insertTag(networkTag)
+                    tag = dao.getTag(networkTag.id)
+                }
+            }
+            is NetworkResult.Failure -> {}
+        }
+        return tag
     }
 
     private fun generateBody(

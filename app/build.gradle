@@ -97,6 +97,4 @@ dependencies {
     // rikka's libs
     implementation "dev.rikka.rikkax.insets:insets:1.2.0"
     implementation "dev.rikka.rikkax.layoutinflater:layoutinflater:1.2.0"
-    // pinyin conversion of zh-hans
-    implementation 'io.github.biezhi:TinyPinyin:2.0.3.RELEASE'
 }

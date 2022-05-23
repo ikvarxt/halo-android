@@ -22,7 +22,7 @@
 
             <ImageView
                 android:id="@+id/attachmentThumbnail"
-                imageUrl="@{attachment.path}"
+                imageUrl="@{attachment.thumbnailPath}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="@{attachment.name}"

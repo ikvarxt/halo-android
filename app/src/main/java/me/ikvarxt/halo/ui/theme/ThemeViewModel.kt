@@ -9,6 +9,9 @@ import kotlinx.coroutines.launch
 import me.ikvarxt.halo.entites.HaloTheme
 import me.ikvarxt.halo.network.infra.NetworkResult
 import me.ikvarxt.halo.repository.ThemeRepository
+import me.ikvarxt.halo.ui.theme.setting.Item
+import me.ikvarxt.halo.ui.theme.setting.OptionItem
+import me.ikvarxt.halo.ui.theme.setting.TitleItem
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,9 +22,31 @@ class ThemeViewModel @Inject constructor(
     private val _themes = MutableLiveData<NetworkResult<List<HaloTheme>>>()
     val themes: LiveData<NetworkResult<List<HaloTheme>>> = _themes
 
+    private val _themeConfigs = MutableLiveData<List<Item>>()
+    val themeConfigs: LiveData<List<Item>> = _themeConfigs
+
+//    val themeConfigurations = repository.fetchActivatedThemeConfig().map { it ->
+//
+//
+//    }
+
     init {
         viewModelScope.launch {
             _themes.value = repository.getAllThemes()
+
+            repository.fetchActivatedThemeConfig().collect { list ->
+                if (list == null) {
+                    return@collect
+                }
+
+                val resList = mutableListOf<Item>()
+                list.forEach { group ->
+                    resList.add(TitleItem(group.label))
+                    val options = group.items.map { OptionItem(item = it) }
+                    resList.addAll(options)
+                }
+                _themeConfigs.value = resList
+            }
         }
     }
 

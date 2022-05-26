@@ -3,6 +3,8 @@ package me.ikvarxt.halo.entites
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.gson.annotations.SerializedName
+import me.ikvarxt.halo.di.NetworkModule
 import java.util.*
 
 @Entity(tableName = "post_item")
@@ -27,7 +29,8 @@ data class PostItem(
 
     val summary: String?,
     // return could be empty string
-    val thumbnail: String,
+    @SerializedName("thumbnail")
+    val thumbnailPath: String,
     @ColumnInfo(name = "in_progress")
     val inProgress: Boolean,
     // return could be empty string
@@ -43,4 +46,13 @@ data class PostItem(
     val likes: Int = 0,
     @ColumnInfo(name = "disallow_comment")
     val disallowComment: Boolean
-)
+) {
+    val thumbnail: String
+        get() = if (isEndPointPath(thumbnailPath)) {
+            "${NetworkModule.PLACEHOLDER_DOMAIN}$thumbnailPath"
+        } else thumbnailPath
+
+    private fun isEndPointPath(path: String): Boolean {
+        return path.startsWith("/")
+    }
+}

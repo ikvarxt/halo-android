@@ -32,6 +32,19 @@ data class CreatePostBody(
     val password: String? = null,
 )
 
+data class UpdatePostBody(
+    val title: String,
+    @SerializedName("originalContent")
+    val content: String?,
+    val slug: String,
+    val summary: String? = null,
+//    val status: PostStatus,
+//    val tagIds: List<Int>,
+    val thumbnail: String? = null,
+    val disallowComment: Boolean = false,
+    val password: String? = null,
+)
+
 data class CreatePostComment(
     val author: String,
     val content: String,
@@ -49,15 +62,12 @@ data class TagRequestBody(
     val thumbnail: String? = null,
 )
 
-data class UpdatePostBody(
-    val title: String,
-    @SerializedName("originalContent")
-    val content: String?,
+data class CategoryRequestBody(
+    val id: Int? = null,
+    val name: String,
     val slug: String,
-    val summary: String? = null,
-//    val status: PostStatus,
-//    val tagIds: List<Int>,
-    val thumbnail: String? = null,
-    val disallowComment: Boolean = false,
+    val parentId: Int?,
     val password: String? = null,
+    val priority: String? = null,
+    val thumbnail: String? = null,
 )

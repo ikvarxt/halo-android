@@ -4,26 +4,33 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.MultiAutoCompleteTextView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import me.ikvarxt.halo.R
+import me.ikvarxt.halo.databinding.DialogCreateTagBinding
 import me.ikvarxt.halo.databinding.SheetPublishPostBinding
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
 import me.ikvarxt.halo.extentions.showToast
+import me.ikvarxt.halo.extentions.toSlug
 import me.ikvarxt.halo.ui.posts.post.PostViewModel
 
 @AndroidEntryPoint
-class PostPublishSheetFragment : BottomSheetDialogFragment() {
+class PostPublishSheetFragment : BottomSheetDialogFragment(), MultiSelectedChipAdapter.Listener {
 
     private lateinit var binding: SheetPublishPostBinding
     private val viewModel: PostViewModel by viewModels({ requireParentFragment() })
     private val publishViewModel: PostPublishSheetViewModel by viewModels()
 
-    private lateinit var tagsAdapter: ArrayAdapter<String>
+    private val tagsAdapter by lazy {
+        MultiSelectedChipAdapter(MultiSelectedChipAdapter.MultiAddType.ADD_TAG, this)
+    }
+    private val categoriesAdapter by lazy {
+        MultiSelectedChipAdapter(MultiSelectedChipAdapter.MultiAddType.ADD_CATEGORY, this)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,10 +46,10 @@ class PostPublishSheetFragment : BottomSheetDialogFragment() {
                 titleEdit.setText(state.title)
                 val slug = if (viewModel.isWritingMode) {
                     // new post, direct generate slug
-                    publishViewModel.generateSlug(state.title)
+                    state.title.toSlug()
                 } else if (!viewModel.post?.title.equals(state.title)) {
-                    // editing existing post, if title change, genrate slug
-                    publishViewModel.generateSlug(state.title)
+                    // editing existing post, if title change, generate slug
+                    state.title.toSlug()
                 } else {
                     // else using old slug
                     viewModel.post?.slug
@@ -54,28 +61,16 @@ class PostPublishSheetFragment : BottomSheetDialogFragment() {
         launchAndRepeatWithViewLifecycle {
             launch {
                 publishViewModel.tags.collect { tags ->
-                    val adapterList = tags.map { it.name }
-                    tagsAdapter = ArrayAdapter(
-                        requireContext(),
-                        android.R.layout.simple_dropdown_item_1line,
-                        adapterList
-                    )
-                    // TODO: may not work
-                    binding.editTags.setAdapter(tagsAdapter)
+                    tagsAdapter.submitList(tags, binding.selectTags)
                 }
             }
-        }
-
-        binding.editTags.setOnFocusChangeListener { v, hasFocus ->
-            val multiAutoCompleteTextView =
-                v as? MultiAutoCompleteTextView ?: return@setOnFocusChangeListener
-            if (hasFocus) {
-                multiAutoCompleteTextView.showDropDown()
-            } else {
-                multiAutoCompleteTextView.dismissDropDown()
+            launch {
+                publishViewModel.categories.collect { categories ->
+                    categoriesAdapter.submitList(categories, binding.selectCategories)
+                }
             }
+
         }
-        binding.editTags.setTokenizer(MultiAutoCompleteTextView.CommaTokenizer())
 
         binding.titleEdit.doAfterTextChanged {
             if (it?.isEmpty() == true) {
@@ -113,6 +108,42 @@ class PostPublishSheetFragment : BottomSheetDialogFragment() {
 
     companion object {
         const val TAG = "PostPublishSheetFragment"
+    }
+
+    override fun addNewItem(type: MultiSelectedChipAdapter.MultiAddType) {
+        when (type) {
+            MultiSelectedChipAdapter.MultiAddType.ADD_TAG -> addTag()
+            MultiSelectedChipAdapter.MultiAddType.ADD_CATEGORY -> addCategory()
+        }
+    }
+
+    private fun createTagOrCategoryDialog(
+        title: String,
+        positiveListener: (binding: DialogCreateTagBinding) -> Unit
+    ) {
+        val context = requireContext()
+        val binding = DialogCreateTagBinding.inflate(LayoutInflater.from(context), null, false)
+        binding.titleEdit.doAfterTextChanged {
+            binding.slugEdit.setText(it.toString().toSlug())
+        }
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(title)
+            .setView(binding.root)
+            .setPositiveButton("Create") { _, _ -> positiveListener(binding) }
+            .setNegativeButton(R.string.cancel, null)
+            .show()
+    }
+
+    private fun addTag() = createTagOrCategoryDialog("Create Tag") { binding ->
+        val name = binding.titleEdit.text.toString().trim()
+        val slug = binding.slugEdit.text.toString().trim()
+        publishViewModel.createTag(name, slug)
+    }
+
+    private fun addCategory() = createTagOrCategoryDialog("Create Category") { binding ->
+        val name = binding.titleEdit.text.toString().trim()
+        val slug = binding.slugEdit.text.toString().trim()
+        publishViewModel.createCategory(name, slug)
     }
 
 }

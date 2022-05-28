@@ -36,47 +36,36 @@
             tools:text="this is slug" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/categoriesTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Select Categories"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/selectCategoriesList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/categoriesTitle"
-            tools:itemCount="5"
-            tools:listitem="@android:layout/simple_selectable_list_item" />
-
-        <com.google.android.material.button.MaterialButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="new Category"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/selectCategoriesList" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView
-        android:id="@+id/editTags"
+    <TextView
+        android:id="@+id/categoriesTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:completionThreshold="0"
-        android:hint="@string/tags" />
+        android:text="Select Categories"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/selectCategories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:singleSelection="false" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tags"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/selectTags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/summaryEditLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="post title"
+        android:hint="post summary"
         app:expandedHintEnabled="false"
         app:placeholderText="Summary will be generate from post content if you don't fill this.">
 

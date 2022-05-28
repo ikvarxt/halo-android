@@ -1,15 +1,18 @@
 package me.ikvarxt.halo.ui.posts.post.publish
 
+import android.graphics.Color
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.entites.PostStatus
 import me.ikvarxt.halo.entites.network.CreatePostBody
 import me.ikvarxt.halo.entites.network.UpdatePostBody
-import me.ikvarxt.halo.extentions.HanziToPinyin
+import me.ikvarxt.halo.extentions.toSlug
 import me.ikvarxt.halo.network.infra.NetworkResult
+import me.ikvarxt.halo.repository.CategoriesRepository
 import me.ikvarxt.halo.repository.PostsRepository
 import me.ikvarxt.halo.repository.TagsRepository
 import javax.inject.Inject
@@ -18,14 +21,29 @@ import javax.inject.Inject
 class PostPublishSheetViewModel @Inject constructor(
     private val postsRepository: PostsRepository,
     private val tagsRepository: TagsRepository,
-    // private val categoriesRepository:
-) : ViewModel(
+    private val categoriesRepository: CategoriesRepository
+) : ViewModel() {
 
-) {
-    val tags = tagsRepository.getAllTags()
+    val tags = tagsRepository.getAllTags().map { flow ->
+        flow.map {
+            val color = Color.parseColor(it.color)
+            SelectedItem(it.id, it.name, color)
+        }
+    }
 
-    fun createCategory() {
+    val categories = categoriesRepository.listAllCategories().map { flow ->
+        flow.map { category ->
+            SelectedItem(category.id, category.name)
+        }
+    }
 
+    fun createCategory(
+        name: String,
+        slug: String = name.toSlug(),
+    ) {
+        viewModelScope.launch {
+            val category = categoriesRepository.createCategory(name = name, slug = slug)
+        }
     }
 
     fun createTag(
@@ -38,12 +56,6 @@ class PostPublishSheetViewModel @Inject constructor(
             val tag = tagsRepository.createTag(name, slug, color, thumbnail)
 
         }
-    }
-
-    fun generateSlug(title: String, separator: String = "-"): String {
-        val hanziToPinyin = HanziToPinyin.getInstance()
-        val tokens = hanziToPinyin.get(title)
-        return tokens.joinToString("-") { it.target.lowercase() }
     }
 
     fun publishPost(

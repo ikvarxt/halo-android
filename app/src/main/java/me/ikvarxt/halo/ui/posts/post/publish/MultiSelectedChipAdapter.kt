@@ -44,7 +44,9 @@ class MultiSelectedChipAdapter(
                 id = item.id
                 isCheckable = true
                 isChecked = item.isSelected
-                chipBackgroundColor = item.color?.let { it -> ColorStateList.valueOf(it) }
+                item.color?.let { color ->
+                    chipBackgroundColor = ColorStateList.valueOf(color)
+                }
                 checkedIcon = ResourcesCompat.getDrawable(
                     resources,
                     R.drawable.ic_baseline_check_circle_24,

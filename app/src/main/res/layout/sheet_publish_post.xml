@@ -27,6 +27,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_gap"
         android:hint="@string/slug">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -40,31 +41,51 @@
         android:id="@+id/categoriesTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_gap"
         android:text="@string/categories"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+    <!--    <com.google.android.material.card.MaterialCardView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:padding="@dimen/small_gap"-->
+    <!--        app:cardElevation="0dp"-->
+    <!--        app:strokeColor="?attr/color"-->
+    <!--        app:strokeWidth="1dp">-->
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/selectCategories"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:singleSelection="false" />
+    <!--    </com.google.android.material.card.MaterialCardView>-->
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/tags"
-        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+    <!--    <com.google.android.material.card.MaterialCardView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:padding="@dimen/small_gap"-->
+    <!--        app:cardElevation="0dp"-->
+    <!--        app:strokeColor="@color/colorDraft"-->
+    <!--        app:strokeWidth="1dp">-->
 
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/selectTags"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <!--    </com.google.android.material.card.MaterialCardView>-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/summaryEditLayout"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/medium_gap"
         android:hint="@string/summary"
         app:expandedHintEnabled="false"
         app:placeholderText="Summary will be generate from post content if you don't fill this.">
@@ -79,12 +100,15 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/publish"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/big_gap"
         android:text="@string/publish" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/saveDraft"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/save_draft" />

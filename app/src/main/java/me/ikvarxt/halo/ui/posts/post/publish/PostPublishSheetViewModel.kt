@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.entites.PostStatus
 import me.ikvarxt.halo.entites.network.CreatePostBody
+import me.ikvarxt.halo.entites.network.PostDetailsBody
 import me.ikvarxt.halo.entites.network.UpdatePostBody
 import me.ikvarxt.halo.extentions.toSlug
 import me.ikvarxt.halo.network.infra.NetworkResult
@@ -64,7 +64,9 @@ class PostPublishSheetViewModel @Inject constructor(
         content: String,
         summary: String? = null,
         createTime: String? = null,
-        isDraft: Boolean
+        isDraft: Boolean,
+        categories: List<Int>? = null,
+        tags: List<Int>? = null,
     ) {
         viewModelScope.launch {
             val status = if (isDraft) {
@@ -79,7 +81,9 @@ class PostPublishSheetViewModel @Inject constructor(
                 slug = slug,
                 status = status,
                 summary = summary,
-                createTime = createTime
+                createTime = createTime,
+                categoryIds = categories,
+                tagIds = tags,
             )
 
             postsRepository.createPost(body).collect {
@@ -97,19 +101,29 @@ class PostPublishSheetViewModel @Inject constructor(
     }
 
     fun updatePost(
-        post: PostDetails,
+        post: PostDetailsBody,
         title: String = post.title,
         content: String? = post.originalContent,
         slug: String = post.slug,
-//        tagsIds:List<Int> = post.
+        isDraft: Boolean,
+        tagsIds: List<Int> = post.tags.map { it.id },
+        categories: List<Int> = post.categories.map { it.id }
     ) {
         viewModelScope.launch {
+            val status = if (isDraft) {
+                PostStatus.DRAFT
+            } else PostStatus.PUBLISHED
+
             val body = UpdatePostBody(
                 title = title,
                 content = content,
-                slug = slug
+                slug = slug,
+                status = status,
+                tagIds = tagsIds,
+                categoryIds = categories,
             )
-            postsRepository.updatePost(post.id, body)
+
+            val item = postsRepository.updatePost(post.id, body)
         }
     }
 }

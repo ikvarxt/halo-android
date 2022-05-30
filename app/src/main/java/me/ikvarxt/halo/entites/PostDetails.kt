@@ -11,7 +11,12 @@ class PostDetails(
     @ColumnInfo(name = "format_content") val formatContent: String?,
     @ColumnInfo(name = "original_content") val originalContent: String?,
     @ColumnInfo(name = "word_count") val wordCount: Int,
-    @ColumnInfo(name = "thumbnail") val thumbnail: String?,
+    val thumbnail: String?,
     val fullPath: String,
     val slug: String,
+    val status: PostStatus,
+//    @Ignore
+//    val tags: List<PostTag>,
+//    @Ignore
+//    val categories: List<PostCategory> ,
 )

@@ -37,9 +37,10 @@ data class UpdatePostBody(
     @SerializedName("originalContent")
     val content: String?,
     val slug: String,
+    val status: PostStatus,
     val summary: String? = null,
-//    val status: PostStatus,
-//    val tagIds: List<Int>,
+    val tagIds: List<Int>,
+    val categoryIds: List<Int>?,
     val thumbnail: String? = null,
     val disallowComment: Boolean = false,
     val password: String? = null,

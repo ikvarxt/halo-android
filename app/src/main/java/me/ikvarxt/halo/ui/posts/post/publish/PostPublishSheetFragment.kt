@@ -17,6 +17,7 @@ import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
 import me.ikvarxt.halo.extentions.showToast
 import me.ikvarxt.halo.extentions.toSlug
 import me.ikvarxt.halo.ui.posts.post.PostViewModel
+import me.ikvarxt.halo.ui.posts.post.UiState
 
 @AndroidEntryPoint
 class PostPublishSheetFragment : BottomSheetDialogFragment(), MultiSelectedChipAdapter.Listener {
@@ -56,17 +57,20 @@ class PostPublishSheetFragment : BottomSheetDialogFragment(), MultiSelectedChipA
                 }
                 slugEdit.setText(slug)
             }
+            (state as? UiState.LoadPostUiState)?.post?.let { }
         }
 
         launchAndRepeatWithViewLifecycle {
             launch {
                 publishViewModel.tags.collect { tags ->
-                    tagsAdapter.submitList(tags, binding.selectTags)
+                    val selectedItem = viewModel.post?.tags?.map { it.id } ?: emptyList()
+                    tagsAdapter.submitList(tags, selectedItem, binding.selectTags)
                 }
             }
             launch {
                 publishViewModel.categories.collect { categories ->
-                    categoriesAdapter.submitList(categories, binding.selectCategories)
+                    val selectedItem = viewModel.post?.categories?.map { it.id } ?: emptyList()
+                    categoriesAdapter.submitList(categories, selectedItem, binding.selectCategories)
                 }
             }
 
@@ -100,9 +104,26 @@ class PostPublishSheetFragment : BottomSheetDialogFragment(), MultiSelectedChipA
         val content = viewModel.uiStateContent.trim()
 
         if (isNewPost) {
-            publishViewModel.publishPost(title, slug, content = content, isDraft = isSaveDraft)
+            publishViewModel.publishPost(
+                title = title,
+                slug = slug,
+                content = content,
+                isDraft = isSaveDraft,
+                categories = categoriesAdapter.selectedItem,
+                tags = tagsAdapter.selectedItem
+            )
         } else {
-            viewModel.post?.let { publishViewModel.updatePost(it, title, content, slug) }
+            viewModel.post?.let { currentPost ->
+                publishViewModel.updatePost(
+                    currentPost,
+                    title,
+                    content,
+                    slug,
+                    isDraft = isSaveDraft,
+                    tagsIds = tagsAdapter.selectedItem,
+                    categories = categoriesAdapter.selectedItem
+                )
+            }
         }
     }
 

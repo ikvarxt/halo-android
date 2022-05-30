@@ -24,23 +24,26 @@ class MultiSelectedChipAdapter(
     val selectedItem: List<Int>
         get() = list.filter { it.isSelected }.map { it.id }
 
-    fun submitList(data: List<SelectedItem>, chipGroup: ChipGroup) {
+    fun submitList(data: List<SelectedItem>, preSelectedList: List<Int>, chipGroup: ChipGroup) {
         if (data != list) {
             list.clear()
             list.addAll(data)
 
-            refreshChips(chipGroup)
+            refreshChips(preSelectedList, chipGroup)
         }
     }
 
-    private fun refreshChips(group: ChipGroup) {
+    private fun refreshChips(preSelectedList: List<Int>, group: ChipGroup) {
         group.removeAllViews()
 
         list.map { item ->
+            item.isSelected = preSelectedList.contains(item.id)
+
             Chip(group.context).apply {
                 text = item.name
                 id = item.id
                 isCheckable = true
+                isChecked = item.isSelected
                 chipBackgroundColor = item.color?.let { it -> ColorStateList.valueOf(it) }
                 checkedIcon = ResourcesCompat.getDrawable(
                     resources,

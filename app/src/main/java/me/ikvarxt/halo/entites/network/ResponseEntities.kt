@@ -1,6 +1,9 @@
 package me.ikvarxt.halo.entites.network
 
 import com.google.gson.annotations.SerializedName
+import me.ikvarxt.halo.entites.PostCategory
+import me.ikvarxt.halo.entites.PostStatus
+import me.ikvarxt.halo.entites.PostTag
 
 data class LoginToken(
     @field:SerializedName("access_token") val accessToken: String,
@@ -20,4 +23,18 @@ data class PagesResponse<T>(
     val pages: Int,
     val rpp: Int,
     val total: Int,
+)
+
+data class PostDetailsBody(
+    val id: Int,
+    val title: String,
+    val formatContent: String?,
+    val originalContent: String?,
+    val wordCount: Int,
+    val thumbnail: String?,
+    val fullPath: String,
+    val slug: String,
+    val status: PostStatus,
+    val tags: List<PostTag>,
+    val categories: List<PostCategory>
 )

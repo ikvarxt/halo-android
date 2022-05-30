@@ -7,8 +7,10 @@ import androidx.room.withTransaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import me.ikvarxt.halo.database.HaloDatabase
+import me.ikvarxt.halo.entites.PostDetails
 import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.entites.network.CreatePostBody
+import me.ikvarxt.halo.entites.network.PostDetailsBody
 import me.ikvarxt.halo.entites.network.UpdatePostBody
 import me.ikvarxt.halo.network.PostApiService
 import me.ikvarxt.halo.network.infra.NetworkResult
@@ -20,7 +22,8 @@ class PostsRepository @Inject constructor(
     private val service: PostApiService,
     private val database: HaloDatabase,
 ) {
-    val dao = database.postItemDao()
+    private val dao = database.postItemDao()
+    private val postDetailsDao = database.postDetailsDao()
 
     @OptIn(ExperimentalPagingApi::class)
     fun listPosts(pageSize: Int = 10) = Pager(
@@ -56,5 +59,29 @@ class PostsRepository @Inject constructor(
         } else false
     }
 
-    suspend fun getPostDetailsWithPostId(postId: Int) = service.getPostDetailsWithId(postId)
+    suspend fun getPostDetailsWithPostId(postId: Int): PostDetailsBody? {
+        val result = service.getPostDetailsWithId(postId)
+        when (result) {
+            is NetworkResult.Success -> {
+                val postDetails = with(result.data) {
+                    PostDetails(
+                        id,
+                        title,
+                        formatContent,
+                        originalContent,
+                        wordCount,
+                        thumbnail,
+                        fullPath,
+                        slug,
+                        status
+                    )
+                }
+                postDetailsDao.insertPostDetails(postDetails)
+                return result.data
+            }
+            is NetworkResult.Failure -> {
+                return null
+            }
+        }
+    }
 }

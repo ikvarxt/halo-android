@@ -5,6 +5,7 @@ import me.ikvarxt.halo.entites.PostItem
 import me.ikvarxt.halo.entites.PostStatus
 import me.ikvarxt.halo.entites.network.CreatePostBody
 import me.ikvarxt.halo.entites.network.PagesResponse
+import me.ikvarxt.halo.entites.network.PostDetailsBody
 import me.ikvarxt.halo.entites.network.UpdatePostBody
 import me.ikvarxt.halo.network.infra.NetworkResult
 import retrofit2.http.*
@@ -35,7 +36,7 @@ interface PostApiService {
     @GET("posts/{postId}")
     suspend fun getPostDetailsWithId(
         @Path("postId") postId: Int,
-    ): NetworkResult<PostDetails>
+    ): NetworkResult<PostDetailsBody>
 
     // create a post
     @POST("posts")

@@ -13,7 +13,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="post title">
+        android:hint="@string/title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/titleEdit"
@@ -27,7 +27,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="post slug">
+        android:hint="@string/slug">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/slugEdit"
@@ -40,7 +40,7 @@
         android:id="@+id/categoriesTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select Categories"
+        android:text="@string/categories"
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
     <com.google.android.material.chip.ChipGroup
@@ -65,12 +65,12 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="post summary"
+        android:hint="@string/summary"
         app:expandedHintEnabled="false"
         app:placeholderText="Summary will be generate from post content if you don't fill this.">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/summmaryEdit"
+            android:id="@+id/summaryEdit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="top"
@@ -81,13 +81,13 @@
         android:id="@+id/publish"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Publish" />
+        android:text="@string/publish" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/saveDraft"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save Draft" />
+        android:text="@string/save_draft" />
 
     <!-- placeholder -->
     <View

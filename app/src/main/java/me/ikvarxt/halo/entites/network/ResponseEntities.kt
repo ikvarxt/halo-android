@@ -32,6 +32,7 @@ data class PostDetailsBody(
     val originalContent: String?,
     val wordCount: Int,
     val thumbnail: String?,
+    val summary: String?,
     val fullPath: String,
     val slug: String,
     val status: PostStatus,

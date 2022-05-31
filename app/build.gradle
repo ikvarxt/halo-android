@@ -78,6 +78,8 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0'
     // browser
     implementation 'androidx.browser:browser:1.4.0'
+    // preference lib
+    implementation 'androidx.preference:preference-ktx:1.2.0'
 
     //--- third party lib
     // retrofit

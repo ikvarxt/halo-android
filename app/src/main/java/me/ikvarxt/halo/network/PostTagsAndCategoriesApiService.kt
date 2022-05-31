@@ -39,7 +39,7 @@ interface PostTagsAndCategoriesApiService {
 
     @GET("categories/{id}")
     suspend fun getCategory(
-        @Path("categoryId") id: Int
+        @Path("id") id: Int
     ): NetworkResult<PostCategory>
 
     @POST("categories")
@@ -49,12 +49,12 @@ interface PostTagsAndCategoriesApiService {
 
     @PUT("categories/{id}")
     suspend fun updateCategory(
-        @Path("categoryId") id: Int,
+        @Path("id") id: Int,
         @Body body: CategoryRequestBody
     ): NetworkResult<PostCategory>
 
     @DELETE("categories/{id}")
     suspend fun deleteCategory(
-        @Path("categoryId") id: Int
+        @Path("id") id: Int
     ): NetworkResult<PostCategory>
 }

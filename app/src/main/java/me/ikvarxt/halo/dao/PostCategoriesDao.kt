@@ -19,7 +19,7 @@ interface PostCategoriesDao {
     suspend fun insertCategory(category: PostCategory)
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateCategory(tag: PostCategory)
+    suspend fun updateCategory(category: PostCategory)
 
     @Query("DELETE FROM post_categories")
     suspend fun clearCategories()

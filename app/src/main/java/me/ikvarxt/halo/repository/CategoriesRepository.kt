@@ -39,8 +39,7 @@ class CategoriesRepository @Inject constructor(
         id: Int? = null,
     ): PostCategory? {
         val body = CategoryRequestBody(id, name, slug, parentId)
-        val result = service.createCategory(body)
-        when (result) {
+        when (val result = service.createCategory(body)) {
             is NetworkResult.Success -> {
                 val data = result.data
                 db.withTransaction {
@@ -51,5 +50,32 @@ class CategoriesRepository @Inject constructor(
             is NetworkResult.Failure -> {}
         }
         return null
+    }
+
+    suspend fun updateCategory(
+        id: Int,
+        name: String,
+        slug: String
+    ): PostCategory? {
+        val body = CategoryRequestBody(
+            name = name,
+            slug = slug,
+        )
+        val result = service.updateCategory(id, body)
+        when (result) {
+            is NetworkResult.Success -> {
+                db.withTransaction {
+                    dao.updateCategory(result.data)
+                }
+                return dao.getCategory(id)
+            }
+            is NetworkResult.Failure -> {
+                return null
+            }
+        }
+    }
+
+    suspend fun deleteCategory(category: PostCategory) {
+        service.deleteCategory(category.id)
     }
 }

@@ -67,7 +67,7 @@ data class CategoryRequestBody(
     val id: Int? = null,
     val name: String,
     val slug: String,
-    val parentId: Int?,
+    val parentId: Int? = null,
     val password: String? = null,
     val priority: String? = null,
     val thumbnail: String? = null,

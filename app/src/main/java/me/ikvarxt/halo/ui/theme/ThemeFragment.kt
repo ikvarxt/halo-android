@@ -41,6 +41,7 @@ class ThemeFragment : Fragment(), ThemeListAdapter.Listener {
         adapter = ThemeFragmentStateAdapter(childFragmentManager, lifecycle)
 
         binding.viewPager.adapter = adapter
+        binding.viewPager.offscreenPageLimit = 1
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {

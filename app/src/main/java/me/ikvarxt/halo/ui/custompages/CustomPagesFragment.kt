@@ -46,6 +46,7 @@ class CustomPagesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewPager = binding.viewPager
         viewPager.adapter = CustomPagesFragmentAdapter(childFragmentManager, lifecycle)
+        viewPager.offscreenPageLimit = 1
 
         setupTabLayout()
 

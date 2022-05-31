@@ -21,8 +21,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"
-            android:padding="@dimen/screen_edge_interval">
+            android:paddingTop="@dimen/screen_edge_interval">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/avatarImage"
@@ -30,6 +29,7 @@
                 imageUrl="@{profile.avatarUrl}"
                 android:layout_width="@dimen/dashboard_avatar_size"
                 android:layout_height="@dimen/dashboard_avatar_size"
+                android:layout_marginStart="@dimen/screen_edge_interval"
                 android:src="@mipmap/ic_launcher"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -39,7 +39,7 @@
                 android:id="@+id/nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/big_gap"
+                android:layout_marginHorizontal="@dimen/big_gap"
                 android:text="@{profile.nickname}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
                 app:layout_constraintBottom_toTopOf="@id/email"
@@ -53,12 +53,14 @@
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/screen_edge_interval"
+
                 android:lines="1"
                 android:text="@{profile.email}"
                 app:layout_constraintBottom_toBottomOf="@id/avatarImage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
-                app:layout_constraintStart_toStartOf="@id/nickname"
+                app:layout_constraintStart_toEndOf="@id/avatarImage"
                 app:layout_constraintTop_toBottomOf="@id/nickname"
                 tools:text="test_contect_us@halo.run" />
 
@@ -67,6 +69,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/screen_edge_interval"
                 android:layout_marginTop="@dimen/large_gap"
                 android:hint="@string/description"
                 app:layout_constraintTop_toBottomOf="@id/email">
@@ -81,35 +84,51 @@
                     tools:text="I am me, beautiful me." />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/themeSetting"
+            <LinearLayout
+                android:id="@+id/shortcutsLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/big_gap"
-                android:padding="@dimen/small_gap"
-                android:text="@string/theme"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                app:layout_constraintTop_toBottomOf="@id/description" />
+                android:layout_marginTop="@dimen/medium_gap"
+                android:orientation="vertical"
+                app:layout_constraintTop_toBottomOf="@id/description">
 
-            <TextView
-                android:id="@+id/haloSetting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/big_gap"
-                android:padding="@dimen/small_gap"
-                android:text="@string/blog_settings"
-                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                app:layout_constraintTop_toBottomOf="@id/themeSetting" />
+                <TextView
+                    android:id="@+id/themeSetting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:selectableItemBackground"
+                    android:padding="@dimen/big_gap"
+                    android:text="@string/theme"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                <TextView
+                    android:id="@+id/assetsManagement"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:selectableItemBackground"
+                    android:padding="@dimen/big_gap"
+                    android:text="@string/assets"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+
+                <TextView
+                    android:id="@+id/haloSetting"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:foreground="?android:selectableItemBackground"
+                    android:padding="@dimen/big_gap"
+                    android:text="@string/blog_settings"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+            </LinearLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/logoutBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/big_gap"
+                android:layout_margin="@dimen/screen_edge_interval"
                 android:text="@string/log_out"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/haloSetting" />
+                app:layout_constraintTop_toBottomOf="@id/shortcutsLayout" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

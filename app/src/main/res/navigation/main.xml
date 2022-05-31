@@ -54,6 +54,10 @@
         <action
             android:id="@+id/gotoHaloSetting"
             app:destination="@id/haloSettingFragment" />
+
+        <action
+            android:id="@+id/gotoAssetsFragment"
+            app:destination="@id/assetsFragment" />
     </fragment>
 
     <fragment
@@ -115,10 +119,10 @@
         app:destination="@id/dashboardFragment"
         app:popUpTo="@id/postsListFragment" />
 
-    <action
-        android:id="@+id/action_assetsFragment"
-        app:destination="@id/assetsFragment"
-        app:popUpTo="@id/postsListFragment" />
+    <!--    <action-->
+    <!--        android:id="@+id/action_assetsFragment"-->
+    <!--        app:destination="@id/assetsFragment"-->
+    <!--        app:popUpTo="@id/postsListFragment" />-->
 
     <action
         android:id="@+id/action_commentsFragment"

@@ -18,8 +18,10 @@ data class ThemeConfiguration(
     val defaultValue: String,
     val placeholder: String,
     val description: String,
-    val options: List<ThemeConfigOption>?
-)
+    val options: List<ThemeConfigOption>?,
+) {
+    var value: String? = null
+}
 
 enum class ThemeConfigType {
     COLOR,

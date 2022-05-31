@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/screen_edge_interval">
+    android:layout_marginHorizontal="@dimen/screen_edge_interval"
+    android:layout_marginVertical="@dimen/medium_gap">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/inputLayout"

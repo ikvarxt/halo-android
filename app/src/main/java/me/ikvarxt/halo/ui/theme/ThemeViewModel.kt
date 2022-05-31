@@ -25,6 +25,10 @@ class ThemeViewModel @Inject constructor(
     private val _themeConfigs = MutableLiveData<List<Item>>()
     val themeConfigs: LiveData<List<Item>> = _themeConfigs
 
+    // theme setting real value, with key and value
+    private val _themeSettings = MutableLiveData<Map<String, String>>()
+    val themeSettings: LiveData<Map<String, String>> = _themeSettings
+
 //    val themeConfigurations = repository.fetchActivatedThemeConfig().map { it ->
 //
 //
@@ -47,6 +51,13 @@ class ThemeViewModel @Inject constructor(
                 }
                 _themeConfigs.value = resList
             }
+
+            val settings = repository.listsActivatedThemeSettings()
+            val hashMap = mutableMapOf<String, String>()
+            settings.map {
+                hashMap[it.key] = it.value
+            }
+            _themeSettings.value = hashMap
         }
     }
 

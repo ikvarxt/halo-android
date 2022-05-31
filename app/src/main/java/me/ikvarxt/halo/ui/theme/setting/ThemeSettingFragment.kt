@@ -34,5 +34,9 @@ class ThemeSettingFragment : Fragment() {
         viewModel.themeConfigs.observe(viewLifecycleOwner) { list ->
             adapter.submitList(list)
         }
+
+        viewModel.themeSettings.observe(viewLifecycleOwner) { settings ->
+            adapter.setupValues(settings)
+        }
     }
 }

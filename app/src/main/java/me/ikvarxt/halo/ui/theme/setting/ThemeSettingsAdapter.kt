@@ -72,7 +72,10 @@ class ThemeSettingsAdapter : RecyclerView.Adapter<ThemeSettingsAdapter.ViewHolde
                     ThemeConfigDataType.BOOL -> {
                         val binding = (holder as OptionSwitchViewHolder).binding
                         binding.switchOption.text = item.label
-                        binding.switchOption.isChecked = realItem.defaultValue.toBoolean()
+                        binding.switchOption.isChecked =
+//                            realItem.value?.toBooleanStrictOrNull() == true
+                                // FIXME: replace with real value
+                            realItem.defaultValue.toBooleanStrictOrNull() == true
                     }
                     ThemeConfigDataType.STRING -> {
                         val binding = holder.binding as ViewThemeOptionStringBinding
@@ -93,6 +96,21 @@ class ThemeSettingsAdapter : RecyclerView.Adapter<ThemeSettingsAdapter.ViewHolde
             list.addAll(data)
             notifyDataSetChanged()
         }
+    }
+
+    fun setupValues(data: Map<String, String>) {
+        if (list.isEmpty()) {
+            return
+        }
+
+        list.filterIsInstance<OptionItem>().map { item ->
+            val realItem = item.item
+            if (data.containsKey(realItem.id)) {
+                realItem.value = data[realItem.id]
+            }
+        }
+
+        notifyDataSetChanged()
     }
 
     open class ViewHolder(

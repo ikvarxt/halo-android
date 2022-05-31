@@ -13,3 +13,8 @@ data class HaloTheme(
     val screenshotsPath: String
         get() = "${NetworkModule.PLACEHOLDER_DOMAIN}$screenshots"
 }
+
+data class HaloThemeSettings(
+    val key: String,
+    val value: String
+)

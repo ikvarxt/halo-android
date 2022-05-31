@@ -1,6 +1,8 @@
 package me.ikvarxt.halo.ui.posts.post.publish
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -133,6 +135,10 @@ class PostPublishSheetFragment : BottomSheetDialogFragment(), MultiSelectedChipA
                 )
             }
         }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            dismiss()
+        }, 500)
     }
 
     companion object {

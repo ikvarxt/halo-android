@@ -24,16 +24,23 @@ class PostPublishSheetViewModel @Inject constructor(
     private val categoriesRepository: CategoriesRepository
 ) : ViewModel() {
 
-    val tags = tagsRepository.getAllTags().map { flow ->
+    val tags = tagsRepository.tags.map { flow ->
         flow.map {
             val color = Color.parseColor(it.color)
             SelectedItem(it.id, it.name, color)
         }
     }
 
-    val categories = categoriesRepository.listAllCategories().map { flow ->
+    val categories = categoriesRepository.categories.map { flow ->
         flow.map { category ->
             SelectedItem(category.id, category.name)
+        }
+    }
+
+    init {
+        viewModelScope.launch {
+            tagsRepository.getAllTags()
+            categoriesRepository.listAllCategories()
         }
     }
 
@@ -42,7 +49,7 @@ class PostPublishSheetViewModel @Inject constructor(
         slug: String = name.toSlug(),
     ) {
         viewModelScope.launch {
-            val category = categoriesRepository.createCategory(name = name, slug = slug)
+            categoriesRepository.createCategory(name = name, slug = slug)
         }
     }
 
@@ -53,8 +60,7 @@ class PostPublishSheetViewModel @Inject constructor(
         thumbnail: String? = null
     ) {
         viewModelScope.launch {
-            val tag = tagsRepository.createTag(name, slug, color, thumbnail)
-
+            tagsRepository.createTag(name, slug, color, thumbnail)
         }
     }
 

@@ -14,7 +14,13 @@ class TagsViewModel @Inject constructor(
     private val repository: TagsRepository
 ) : ViewModel() {
 
-    val tags: Flow<List<PostTag>> = repository.getAllTags()
+    val tags: Flow<List<PostTag>> = repository.tags
+
+    init {
+        viewModelScope.launch {
+            repository.getAllTags()
+        }
+    }
 
     fun updateTagName(tag: PostTag, name: String) {
         viewModelScope.launch {

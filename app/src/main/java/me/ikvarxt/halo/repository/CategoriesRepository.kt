@@ -1,11 +1,10 @@
 package me.ikvarxt.halo.repository
 
 import androidx.room.withTransaction
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import me.ikvarxt.halo.database.HaloDatabase
 import me.ikvarxt.halo.entites.PostCategory
 import me.ikvarxt.halo.entites.network.CategoryRequestBody
+import me.ikvarxt.halo.extentions.showNetworkErrorToast
 import me.ikvarxt.halo.network.PostTagsAndCategoriesApiService
 import me.ikvarxt.halo.network.infra.NetworkResult
 import javax.inject.Inject
@@ -18,7 +17,9 @@ class CategoriesRepository @Inject constructor(
 ) {
     private val dao = db.postCategoriesDao()
 
-    fun listAllCategories(): Flow<List<PostCategory>> = flow {
+    val categories = dao.getAllCategoriesFlow()
+
+    suspend fun listAllCategories() {
         when (val result = service.getAllCategories(true)) {
             is NetworkResult.Success -> {
                 db.withTransaction {
@@ -26,10 +27,8 @@ class CategoriesRepository @Inject constructor(
                     dao.insertCategories(result.data)
                 }
             }
-            is NetworkResult.Failure -> {}
+            is NetworkResult.Failure -> showNetworkErrorToast(result.msg)
         }
-        val categories = dao.getAllCategories()
-        emit(categories)
     }
 
     suspend fun createCategory(
@@ -47,7 +46,7 @@ class CategoriesRepository @Inject constructor(
                 }
                 return dao.getCategory(data.id)
             }
-            is NetworkResult.Failure -> {}
+            is NetworkResult.Failure -> showNetworkErrorToast(result.msg)
         }
         return null
     }
@@ -70,12 +69,22 @@ class CategoriesRepository @Inject constructor(
                 return dao.getCategory(id)
             }
             is NetworkResult.Failure -> {
+                showNetworkErrorToast(result.msg)
                 return null
             }
         }
     }
 
     suspend fun deleteCategory(category: PostCategory) {
-        service.deleteCategory(category.id)
+        val result = service.deleteCategory(category.id)
+        when (result) {
+            is NetworkResult.Success -> {
+                db.withTransaction {
+                    dao.deleteCategory(category)
+                }
+            }
+            is NetworkResult.Failure -> showNetworkErrorToast(result.msg)
+        }
+
     }
 }

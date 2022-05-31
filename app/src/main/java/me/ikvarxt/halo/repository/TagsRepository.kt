@@ -1,11 +1,10 @@
 package me.ikvarxt.halo.repository
 
 import androidx.room.withTransaction
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import me.ikvarxt.halo.database.HaloDatabase
 import me.ikvarxt.halo.entites.PostTag
 import me.ikvarxt.halo.entites.network.TagRequestBody
+import me.ikvarxt.halo.extentions.showNetworkErrorToast
 import me.ikvarxt.halo.network.PostTagsAndCategoriesApiService
 import me.ikvarxt.halo.network.infra.NetworkResult
 import javax.inject.Inject
@@ -18,7 +17,9 @@ class TagsRepository @Inject constructor(
 ) {
     private val dao = db.postTagsDao()
 
-    fun getAllTags(): Flow<List<PostTag>> = flow {
+    val tags = dao.getAllTagsFlow()
+
+    suspend fun getAllTags() {
 //        if (refresh) {
 //            dao.clearTags()
 //        }
@@ -28,10 +29,8 @@ class TagsRepository @Inject constructor(
                     dao.insertTags(result.data)
                 }
             }
-            else -> {}
+            is NetworkResult.Failure -> showNetworkErrorToast(result.msg)
         }
-        val tags = dao.getAllTags()
-        emit(tags)
     }
 
     suspend fun updateTag(tag: PostTag): PostTag? {
@@ -48,7 +47,7 @@ class TagsRepository @Inject constructor(
                     dao.updateTag(result.data)
                 }
             }
-            else -> {}
+            is NetworkResult.Failure -> showNetworkErrorToast(result.msg)
         }
         return dao.getTag(tag.id)
     }

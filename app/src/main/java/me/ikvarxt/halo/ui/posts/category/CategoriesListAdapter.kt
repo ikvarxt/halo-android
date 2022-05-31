@@ -24,9 +24,8 @@ class CategoriesListAdapter(
         val binding = holder.binding
 
         binding.name.text = item.name
-        binding.root.setOnLongClickListener {
+        binding.root.setOnClickListener {
             listener.editCategory(item)
-            true
         }
     }
 

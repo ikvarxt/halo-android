@@ -13,7 +13,13 @@ class CategoriesViewModel @Inject constructor(
     private val repository: CategoriesRepository
 ) : ViewModel() {
 
-    val categories = repository.listAllCategories()
+    val categories = repository.categories
+
+    init {
+        viewModelScope.launch {
+            repository.listAllCategories()
+        }
+    }
 
     fun updateCategory(
         category: PostCategory,

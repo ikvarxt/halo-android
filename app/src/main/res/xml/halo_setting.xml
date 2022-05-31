@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="general"
+        android:title="General Settings" />
+
+    <Preference
+        android:key="seo"
+        android:title="SEO Settings" />
+
+    <Preference
+        android:key="posts"
+        android:title="Posts Settings" />
+
+    <Preference
+        android:key="comments"
+        android:title="Comments Settings" />
+
+    <Preference
+        android:key="attachments"
+        android:title="Attachments" />
+
+    <Preference
+        android:key="smtp"
+        android:title="SMTP Service" />
+
+    <Preference
+        android:key="else"
+        android:title="Else Settings" />
+</PreferenceScreen>

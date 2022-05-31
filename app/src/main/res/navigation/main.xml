@@ -50,6 +50,10 @@
         <action
             android:id="@+id/gotoThemeSetting"
             app:destination="@id/themeFragment" />
+
+        <action
+            android:id="@+id/gotoHaloSetting"
+            app:destination="@id/haloSettingFragment" />
     </fragment>
 
     <fragment
@@ -77,6 +81,16 @@
         android:name="me.ikvarxt.halo.ui.theme.ThemeFragment"
         android:label="@string/theme"
         tools:layout="@layout/fragment_theme" />
+
+    <fragment
+        android:id="@+id/haloSettingFragment"
+        android:name="me.ikvarxt.halo.ui.halosettings.HaloSettingsFragment"
+        android:label="Blog Setting">
+
+        <action
+            android:id="@+id/gotoGeneralSetting"
+            app:destination="@id/haloSettingGeneralFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/tagsFragment"
@@ -111,4 +125,8 @@
         app:destination="@id/commentsFragment"
         app:popUpTo="@id/postsListFragment" />
 
+    <fragment
+        android:id="@+id/haloSettingGeneralFragment"
+        android:name="me.ikvarxt.halo.ui.halosettings.HaloSettingGeneralFragment"
+        android:label="General Setting" />
 </navigation>

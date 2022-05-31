@@ -44,5 +44,8 @@
     <string name="summary">Summary</string>
     <string name="publish">Publish</string>
     <string name="save_draft">Save Draft</string>
+    <string name="network_error">Network Error</string>
+    <string name="some_error">Some ERROR occurred</string>
+    <string name="blog_settings">Blog Settings</string>
 
 </resources>

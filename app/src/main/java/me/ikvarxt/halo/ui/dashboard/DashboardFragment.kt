@@ -46,6 +46,9 @@ class DashboardFragment : Fragment() {
         binding.themeSetting.setOnClickListener {
             findNavController().navigate(R.id.themeFragment)
         }
+        binding.haloSetting.setOnClickListener {
+            findNavController().navigate(R.id.gotoHaloSetting)
+        }
     }
 
     private fun logout() {

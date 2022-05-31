@@ -89,8 +89,17 @@
                 android:padding="@dimen/small_gap"
                 android:text="@string/theme"
                 android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-                app:layout_constraintBottom_toTopOf="@id/logoutBtn"
                 app:layout_constraintTop_toBottomOf="@id/description" />
+
+            <TextView
+                android:id="@+id/haloSetting"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/big_gap"
+                android:padding="@dimen/small_gap"
+                android:text="@string/blog_settings"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                app:layout_constraintTop_toBottomOf="@id/themeSetting" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/logoutBtn"
@@ -100,7 +109,7 @@
                 android:text="@string/log_out"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/themeSetting" />
+                app:layout_constraintTop_toBottomOf="@id/haloSetting" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 </layout>

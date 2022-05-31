@@ -87,4 +87,8 @@ class NetworkModule {
     @Singleton
     fun provideTagAndCategoriesApiService(retrofit: Retrofit): PostTagsAndCategoriesApiService =
         retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideOptionApiService(retrofit: Retrofit): OptionApiService = retrofit.create()
 }

@@ -1,6 +1,7 @@
 package me.ikvarxt.halo.entites.network
 
 import com.google.gson.annotations.SerializedName
+import me.ikvarxt.halo.entites.HaloOptionType
 import me.ikvarxt.halo.entites.PostEditorType
 import me.ikvarxt.halo.entites.PostStatus
 
@@ -71,4 +72,10 @@ data class CategoryRequestBody(
     val password: String? = null,
     val priority: String? = null,
     val thumbnail: String? = null,
+)
+
+data class SaveOptionBody(
+    val key: String,
+    val value: String,
+    val type: HaloOptionType = HaloOptionType.INTERNAL
 )

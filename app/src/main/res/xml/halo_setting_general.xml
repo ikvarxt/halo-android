@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="blog_title"
+        android:title="Blog title" />
+
+    <EditTextPreference
+        android:key="blog_url"
+        android:title="Blog URL" />
+
+    <EditTextPreference
+        android:key="blog_logo"
+        android:title="Logo" />
+
+    <EditTextPreference
+        android:key="blog_favicon"
+        android:title="Favicon" />
+
+    <EditTextPreference
+        android:key="blog_footer"
+        android:title="Footer" />
+
+</PreferenceScreen>

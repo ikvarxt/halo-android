@@ -21,13 +21,32 @@ class MainViewModel @Inject constructor(
     private val _infoLiveData = MutableLiveData<UserProfile>()
     val infoLiveData: LiveData<UserProfile> = _infoLiveData
 
+    val profile = infoRepository.userProfile
+
     val info: UserProfile?
         get() = _infoLiveData.value
 
     init {
         viewModelScope.launch {
-            infoRepository.getUserProfile()?.let { _infoLiveData.value = it }
+            infoRepository.getUserProfile()?.let {
+                _infoLiveData.value = it
+            }
             Log.i(TAG, "profile get: $info")
         }
+    }
+
+    fun updateDescription(new: String) {
+        val profile = info ?: return
+
+        viewModelScope.launch {
+            infoRepository.updateProfile(
+                username = profile.username,
+                nickname = profile.nickname,
+                email = profile.email,
+                avatar = profile.avatarUrl,
+                description = new,
+            )
+        }
+
     }
 }

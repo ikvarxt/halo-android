@@ -5,13 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentDashboardBinding
+import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
 import me.ikvarxt.halo.ui.MainViewModel
 import me.ikvarxt.halo.ui.login.LoginActivity
 import me.ikvarxt.halo.ui.login.LoginViewModel
@@ -37,9 +41,22 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        parentViewModel.infoLiveData.observe(viewLifecycleOwner) { profile ->
-            binding.profile = profile
-            binding.executePendingBindings()
+        launchAndRepeatWithViewLifecycle {
+            launch {
+                parentViewModel.profile.collectLatest {
+                    binding.profile = it.firstOrNull()
+                }
+            }
+        }
+
+        binding.descriptionText.setOnEditorActionListener { v, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                parentViewModel.updateDescription(v.text.toString().trim())
+                true
+            } else {
+                false
+            }
+
         }
 
         binding.logoutBtn.setOnClickListener { logout() }

@@ -85,3 +85,12 @@ data class JournalRequestBody(
     val sourceContent: String,
     val type: HaloJournalType = HaloJournalType.PUBLIC
 )
+
+data class UserProfileRequestBody(
+    val username: String,
+    val nickname: String = username,
+    val email: String,
+    val avatar: String? = null,
+    val description: String? = null,
+    val password: String? = null,
+)

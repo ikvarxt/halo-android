@@ -13,7 +13,8 @@ import me.ikvarxt.halo.entites.*
         PostTag::class,
         PostCategory::class,
         HaloOption::class,
-        HaloJournal::class
+        HaloJournal::class,
+        UserProfile::class
     ],
     version = 1,
     exportSchema = false
@@ -29,4 +30,6 @@ abstract class HaloDatabase : RoomDatabase() {
     abstract fun optionsDao(): OptionsDao
 
     abstract fun journalsDao(): JournalsDao
+
+    abstract fun userProfileDao(): UserProfileDao
 }

@@ -1,6 +1,7 @@
 package me.ikvarxt.halo.entites.network
 
 import com.google.gson.annotations.SerializedName
+import me.ikvarxt.halo.entites.HaloJournalType
 import me.ikvarxt.halo.entites.HaloOptionType
 import me.ikvarxt.halo.entites.PostEditorType
 import me.ikvarxt.halo.entites.PostStatus
@@ -78,4 +79,9 @@ data class SaveOptionBody(
     val key: String,
     val value: String,
     val type: HaloOptionType = HaloOptionType.INTERNAL
+)
+
+data class JournalRequestBody(
+    val sourceContent: String,
+    val type: HaloJournalType = HaloJournalType.PUBLIC
 )

@@ -91,4 +91,8 @@ class NetworkModule {
     @Provides
     @Singleton
     fun provideOptionApiService(retrofit: Retrofit): OptionApiService = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun provideJournalApiService(retrofit: Retrofit): JournalApiService = retrofit.create()
 }

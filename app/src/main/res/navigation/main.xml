@@ -42,6 +42,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/customPagesFragment"
+        android:name="me.ikvarxt.halo.ui.custompages.CustomPagesFragment"
+        android:label="@string/custom_pages"
+        tools:layout="@layout/fragment_custom_pages" />
+
+    <fragment
         android:id="@+id/dashboardFragment"
         android:name="me.ikvarxt.halo.ui.dashboard.DashboardFragment"
         android:label="@string/dashboard"
@@ -97,6 +103,11 @@
     </fragment>
 
     <fragment
+        android:id="@+id/haloSettingGeneralFragment"
+        android:name="me.ikvarxt.halo.ui.halosettings.HaloSettingGeneralFragment"
+        android:label="@string/settings_general" />
+
+    <fragment
         android:id="@+id/tagsFragment"
         android:name="me.ikvarxt.halo.ui.posts.tag.TagsFragment"
         android:label="@string/tags"
@@ -119,18 +130,13 @@
         app:destination="@id/dashboardFragment"
         app:popUpTo="@id/postsListFragment" />
 
-    <!--    <action-->
-    <!--        android:id="@+id/action_assetsFragment"-->
-    <!--        app:destination="@id/assetsFragment"-->
-    <!--        app:popUpTo="@id/postsListFragment" />-->
+    <action
+        android:id="@+id/action_customPagesFragment"
+        app:destination="@id/customPagesFragment"
+        app:popUpTo="@id/postsListFragment" />
 
     <action
         android:id="@+id/action_commentsFragment"
         app:destination="@id/commentsFragment"
         app:popUpTo="@id/postsListFragment" />
-
-    <fragment
-        android:id="@+id/haloSettingGeneralFragment"
-        android:name="me.ikvarxt.halo.ui.halosettings.HaloSettingGeneralFragment"
-        android:label="General Setting" />
 </navigation>

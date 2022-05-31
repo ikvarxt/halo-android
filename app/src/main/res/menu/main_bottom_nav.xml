@@ -11,10 +11,10 @@
         android:icon="@drawable/ic_baseline_comment_24"
         android:title="@string/comments" />
 
-    <!--    <item-->
-    <!--        android:id="@id/assetsFragment"-->
-    <!--        android:icon="@drawable/ic_baseline_photo_library_24"-->
-    <!--        android:title="@string/assets" />-->
+    <item
+        android:id="@id/customPagesFragment"
+        android:icon="@drawable/ic_baseline_newspaper_24"
+        android:title="@string/custom_pages" />
 
     <item
         android:id="@id/dashboardFragment"

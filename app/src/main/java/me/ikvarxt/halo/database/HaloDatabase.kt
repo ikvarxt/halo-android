@@ -7,7 +7,14 @@ import me.ikvarxt.halo.dao.*
 import me.ikvarxt.halo.entites.*
 
 @Database(
-    entities = [PostItem::class, PostDetails::class, PostTag::class, PostCategory::class, HaloOption::class],
+    entities = [
+        PostItem::class,
+        PostDetails::class,
+        PostTag::class,
+        PostCategory::class,
+        HaloOption::class,
+        HaloJournal::class
+    ],
     version = 1,
     exportSchema = false
 )
@@ -20,4 +27,6 @@ abstract class HaloDatabase : RoomDatabase() {
     abstract fun postCategoriesDao(): PostCategoriesDao
 
     abstract fun optionsDao(): OptionsDao
+
+    abstract fun journalsDao(): JournalsDao
 }

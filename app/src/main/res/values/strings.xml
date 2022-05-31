@@ -47,5 +47,9 @@
     <string name="network_error">Network Error</string>
     <string name="some_error">Some ERROR occurred</string>
     <string name="blog_settings">Blog Settings</string>
+    <string name="custom_pages">Custom Pages</string>
+    <string name="settings_general">General</string>
+    <string name="journal_content">Journal content</string>
+    <string name="private_">Private</string>
 
 </resources>

@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
+import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import me.ikvarxt.halo.MainDirections
 import me.ikvarxt.halo.R
@@ -24,6 +25,9 @@ class MainActivity : BaseActivity() {
 
     val toolbar: Toolbar
         get() = binding.toolbar
+
+    val appbar: AppBarLayout
+        get() = binding.appBar
 
     private var isRootFragment = false
 
@@ -46,6 +50,7 @@ class MainActivity : BaseActivity() {
             isRootFragment = when (destination.id) {
                 R.id.postsListFragment,
                 R.id.commentsFragment,
+                R.id.customPagesFragment,
                 R.id.dashboardFragment -> true
                 else -> false
             }
@@ -77,7 +82,7 @@ class MainActivity : BaseActivity() {
     private fun getPage(destinationId: Int): NavDirections? = when (destinationId) {
         R.id.postsListFragment -> MainDirections.actionPostsListFragment()
         R.id.commentsFragment -> MainDirections.actionCommentsFragment()
-//        R.id.assetsFragment -> MainDirections.actionAssetsFragment()
+        R.id.customPagesFragment -> MainDirections.actionCustomPagesFragment()
         R.id.dashboardFragment -> MainDirections.actionDashboardFragment()
         else -> null
     }

@@ -3,6 +3,7 @@ package me.ikvarxt.halo.ui.theme.setting
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import me.ikvarxt.halo.databinding.ViewThemeOptionStringBinding
@@ -15,7 +16,9 @@ private const val TYPE_TITLE = 0
 private const val TYPE_OPTION_STRING = 1
 private const val TYPE_OPTION_SWITCH = 2
 
-class ThemeSettingsAdapter : RecyclerView.Adapter<ThemeSettingsAdapter.ViewHolder>() {
+class ThemeSettingsAdapter(
+    private val listener: Listener
+) : RecyclerView.Adapter<ThemeSettingsAdapter.ViewHolder>() {
 
     private val list = mutableListOf<Item>()
 
@@ -72,15 +75,28 @@ class ThemeSettingsAdapter : RecyclerView.Adapter<ThemeSettingsAdapter.ViewHolde
                     ThemeConfigDataType.BOOL -> {
                         val binding = (holder as OptionSwitchViewHolder).binding
                         binding.switchOption.text = item.label
-                        binding.switchOption.isChecked =
-//                            realItem.value?.toBooleanStrictOrNull() == true
-                                // FIXME: replace with real value
+                        binding.switchOption.isChecked = if (realItem.value != null) {
+                            realItem.value?.toBooleanStrictOrNull() == true
+                        } else {
                             realItem.defaultValue.toBooleanStrictOrNull() == true
+                        }
+                        binding.switchOption.setOnCheckedChangeListener { _, isChecked ->
+                            listener.updateSetting(item, isChecked.toString())
+                        }
                     }
                     ThemeConfigDataType.STRING -> {
                         val binding = holder.binding as ViewThemeOptionStringBinding
                         binding.inputLayout.hint = item.label
                         binding.inputEdit.setText(realItem.defaultValue)
+                        if (realItem.value != null) {
+                            binding.inputEdit.setText(realItem.value)
+                        } else {
+                            binding.inputEdit.setText(realItem.defaultValue)
+                        }
+                        binding.inputEdit.doAfterTextChanged {
+                            val value = binding.inputEdit.text.toString().trim()
+                            listener.updateSetting(item, value)
+                        }
                     }
                 }
             }
@@ -98,6 +114,7 @@ class ThemeSettingsAdapter : RecyclerView.Adapter<ThemeSettingsAdapter.ViewHolde
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setupValues(data: Map<String, String>) {
         if (list.isEmpty()) {
             return
@@ -132,6 +149,10 @@ class ThemeSettingsAdapter : RecyclerView.Adapter<ThemeSettingsAdapter.ViewHolde
     class TitleViewHolder(
         override val binding: ViewThemeSettingTitleBinding
     ) : ViewHolder(binding)
+
+    interface Listener {
+        fun updateSetting(optionItem: OptionItem, value: String)
+    }
 }
 
 open class Item(open val label: String)

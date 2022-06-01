@@ -1,9 +1,9 @@
 package me.ikvarxt.halo.network
 
 import me.ikvarxt.halo.entites.HaloTheme
-import me.ikvarxt.halo.entites.ThemeConfiguration
 import me.ikvarxt.halo.entites.ThemeConfigurationGroup
 import me.ikvarxt.halo.network.infra.NetworkResult
+import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -25,7 +25,7 @@ interface ThemeApiService {
 
     @POST("themes/activation/settings")
     suspend fun savesThemeSettings(
-        @Body settings: List<ThemeConfiguration>
+        @Body body: RequestBody
     ): NetworkResult<Unit>
 
     @GET("themes/{id}/settings")

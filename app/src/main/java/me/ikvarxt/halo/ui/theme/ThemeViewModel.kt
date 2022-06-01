@@ -29,10 +29,7 @@ class ThemeViewModel @Inject constructor(
     private val _themeSettings = MutableLiveData<Map<String, String>>()
     val themeSettings: LiveData<Map<String, String>> = _themeSettings
 
-//    val themeConfigurations = repository.fetchActivatedThemeConfig().map { it ->
-//
-//
-//    }
+    val tempThemeSettings = mutableMapOf<String, String>()
 
     init {
         viewModelScope.launch {
@@ -66,6 +63,14 @@ class ThemeViewModel @Inject constructor(
             repository.activateTheme(theme.id)
             // FIXME: simple refresh view data
             _themes.value = repository.getAllThemes()
+        }
+    }
+
+    fun saveOptions() {
+        viewModelScope.launch {
+            if (tempThemeSettings.isNotEmpty()) {
+                repository.saveThemeSettings(tempThemeSettings)
+            }
         }
     }
 }

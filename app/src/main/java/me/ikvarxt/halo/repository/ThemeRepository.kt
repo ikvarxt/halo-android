@@ -1,13 +1,17 @@
 package me.ikvarxt.halo.repository
 
 import com.google.gson.Gson
+import com.google.gson.internal.LinkedTreeMap
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import me.ikvarxt.halo.entites.HaloTheme
 import me.ikvarxt.halo.entites.HaloThemeSettings
 import me.ikvarxt.halo.entites.ThemeConfigurationGroup
+import me.ikvarxt.halo.extentions.showNetworkErrorToast
 import me.ikvarxt.halo.network.ThemeApiService
 import me.ikvarxt.halo.network.infra.NetworkResult
+import okhttp3.MediaType
+import okhttp3.RequestBody
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -28,8 +32,16 @@ class ThemeRepository @Inject constructor(
         emit(data)
     }
 
-    suspend fun saveThemeSettings(key: String, value: String) {
+    suspend fun saveThemeSettings(optionsMap: Map<String, String>) {
+        val jsonData = gson.toJson(optionsMap)
+        val body = RequestBody.create(MediaType.parse("application/json"), jsonData)
+        when (val result = service.savesThemeSettings(body)) {
+            is NetworkResult.Success -> {
 
+            }
+            is NetworkResult.Failure -> showNetworkErrorToast(result.msg)
+
+        }
     }
 
     suspend fun listsThemeSettings(id: String): List<HaloThemeSettings> {
@@ -53,40 +65,13 @@ class ThemeRepository @Inject constructor(
         val list = mutableListOf<HaloThemeSettings>()
 
         if (response.isSuccessful) {
-            val body = response.body().toString()
+            val body = response.body() as? LinkedTreeMap<String, *> ?: return emptyList()
 
-            // FIXME: cant work
-//            val jsonObject = JSONObject(body)
+            body.forEach { (k, v) ->
+                list.add(HaloThemeSettings(k, v.toString()))
+            }
 
-//           for (key in jsonObject.keys()){
-//               list.add(HaloThemeSettings(key,jsonObject.getString(key)))
-//           }
-
-//            val data = gson.newJsonReader(StringReader(body)).apply {
-//                isLenient = true
-//            }
-//            data.beginObject()
-//            while (data.hasNext()) {
-//                val key = data.nextName()
-//
-//                val token = data.peek()
-//
-//                val value = when (token) {
-//                    JsonToken.STRING -> data.nextString()
-//                    JsonToken.BOOLEAN -> data.nextBoolean().toString()
-//                    JsonToken.NUMBER -> data.nextInt().toString()
-//                    else -> ""
-//                }
-//
-//                Log.d("TAG", "listsActivatedThemeSettings: next string:: $key $value")
-//            }
-//            data.endObject()
-
-//            for (set in data.asJsonArray) {
-//                   list.add(HaloThemeSettings(set.key,set.value.asString))
-//            }
-//            Log.d("TAG", "listsActivatedThemeSettings: $data")
-            return emptyList()
+            return list
         } else {
             return emptyList()
         }

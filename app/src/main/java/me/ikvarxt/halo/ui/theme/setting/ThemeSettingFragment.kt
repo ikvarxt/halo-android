@@ -11,7 +11,7 @@ import me.ikvarxt.halo.databinding.FragmentThemeSettingBinding
 import me.ikvarxt.halo.ui.theme.ThemeViewModel
 
 @AndroidEntryPoint
-class ThemeSettingFragment : Fragment() {
+class ThemeSettingFragment : Fragment(), ThemeSettingsAdapter.Listener {
 
     private lateinit var binding: FragmentThemeSettingBinding
     private lateinit var adapter: ThemeSettingsAdapter
@@ -27,7 +27,7 @@ class ThemeSettingFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        adapter = ThemeSettingsAdapter()
+        adapter = ThemeSettingsAdapter(this)
 
         binding.recyclerView.adapter = adapter
 
@@ -38,5 +38,14 @@ class ThemeSettingFragment : Fragment() {
         viewModel.themeSettings.observe(viewLifecycleOwner) { settings ->
             adapter.setupValues(settings)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.saveOptions()
+    }
+
+    override fun updateSetting(optionItem: OptionItem, value: String) {
+        viewModel.tempThemeSettings[optionItem.item.id] = value
     }
 }

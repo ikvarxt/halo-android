@@ -37,7 +37,7 @@ class ThemeRepository @Inject constructor(
         val body = RequestBody.create(MediaType.parse("application/json"), jsonData)
         when (val result = service.savesThemeSettings(body)) {
             is NetworkResult.Success -> {
-
+                // TODO: add some operation
             }
             is NetworkResult.Failure -> showNetworkErrorToast(result.msg)
 
@@ -61,7 +61,6 @@ class ThemeRepository @Inject constructor(
     suspend fun listsActivatedThemeSettings(): List<HaloThemeSettings> {
         val response = service.listActivatedThemeSettings()
 
-
         val list = mutableListOf<HaloThemeSettings>()
 
         if (response.isSuccessful) {
@@ -76,5 +75,4 @@ class ThemeRepository @Inject constructor(
             return emptyList()
         }
     }
-
 }

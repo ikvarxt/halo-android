@@ -4,15 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import me.ikvarxt.halo.databinding.FragmentThemeBinding
 import me.ikvarxt.halo.entites.HaloTheme
+import me.ikvarxt.halo.ui.MainActivity
 import me.ikvarxt.halo.ui.theme.list.ThemesListFragment
 import me.ikvarxt.halo.ui.theme.setting.ThemeSettingFragment
 
@@ -27,6 +31,8 @@ class ThemeFragment : Fragment(), ThemeListAdapter.Listener {
     private lateinit var adapter: ThemeFragmentStateAdapter
     private val viewModel by viewModels<ThemeViewModel>()
 
+    private lateinit var tabLayout: TabLayout
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,20 +42,50 @@ class ThemeFragment : Fragment(), ThemeListAdapter.Listener {
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
         adapter = ThemeFragmentStateAdapter(childFragmentManager, lifecycle)
 
         binding.viewPager.adapter = adapter
         binding.viewPager.offscreenPageLimit = 1
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+        setupTabLayout()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        tabLayout.isVisible = true
+    }
+
+    private fun setupTabLayout() {
+        val appbar = (activity as? MainActivity)?.appbar ?: return
+        tabLayout = TabLayout(requireContext()).apply {
+            tabGravity = TabLayout.GRAVITY_FILL
+        }
+        val layoutParams = AppBarLayout.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        appbar.addView(tabLayout, layoutParams)
+
+        TabLayoutMediator(tabLayout, binding.viewPager) { tab, position ->
             tab.text = when (position) {
                 PAGE_THEMES_LIST -> "Themes"
                 PAGE_THEME_SETTING -> "Theme Setting"
                 else -> "Themes"
             }
         }.attach()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        tabLayout.isVisible = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        val appbar = (activity as? MainActivity)?.appbar ?: return
+        appbar.removeView(tabLayout)
     }
 
     override fun selectActivate(theme: HaloTheme) {

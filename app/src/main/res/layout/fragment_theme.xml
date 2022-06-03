@@ -9,14 +9,16 @@
     app:fitsSystemWindowsInsets="top|bottom"
     tools:context=".ui.theme.ThemeFragment">
 
+    <!-- invisible, just a placeholder -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
-        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 </LinearLayout>

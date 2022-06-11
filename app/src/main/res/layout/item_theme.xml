@@ -25,9 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/halo_theme_thumbnail"
-                android:scaleType="center"
-                android:src="@mipmap/ic_launcher"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:scaleType="fitCenter"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@mipmap/ic_launcher" />
 
             <TextView
                 android:id="@+id/themeName"

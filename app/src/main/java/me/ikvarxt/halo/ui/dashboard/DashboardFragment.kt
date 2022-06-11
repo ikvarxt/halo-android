@@ -1,11 +1,12 @@
 package me.ikvarxt.halo.ui.dashboard
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.inputmethod.EditorInfo
+import android.webkit.URLUtil
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.FragmentDashboardBinding
 import me.ikvarxt.halo.extentions.launchAndRepeatWithViewLifecycle
+import me.ikvarxt.halo.extentions.showErrorToast
 import me.ikvarxt.halo.ui.MainViewModel
 import me.ikvarxt.halo.ui.login.LoginActivity
 import me.ikvarxt.halo.ui.login.LoginViewModel
@@ -27,6 +29,14 @@ class DashboardFragment : Fragment() {
 
     private val loginViewModel by viewModels<LoginViewModel>()
     private val parentViewModel by activityViewModels<MainViewModel>()
+
+    private var blogUrl: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +55,13 @@ class DashboardFragment : Fragment() {
             launch {
                 parentViewModel.profile.collectLatest {
                     binding.profile = it.firstOrNull()
+                }
+            }
+            launch {
+                parentViewModel.blogUrl.collectLatest { url ->
+                    url?.let {
+                        blogUrl = url.value
+                    }
                 }
             }
         }
@@ -79,4 +96,27 @@ class DashboardFragment : Fragment() {
             activity.finish()
         }, 500)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.dashboard_options, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.openInBrowser -> openBlogInBrowser()
+            else -> {}
+        }
+        return true
+    }
+
+    private fun openBlogInBrowser() {
+        if (URLUtil.isValidUrl(blogUrl)) {
+            val uri = Uri.parse(blogUrl)
+            val tab = CustomTabsIntent.Builder().build()
+            tab.launchUrl(requireContext(), uri)
+        } else {
+            showErrorToast()
+        }
+    }
+
 }

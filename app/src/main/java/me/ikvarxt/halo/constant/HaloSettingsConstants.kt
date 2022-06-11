@@ -17,3 +17,7 @@ object HaloSettingsConstants {
         const val FOOTER = "blog_footer"
     }
 }
+
+object HaloOptions {
+    const val BLOG_URL = "blog_url"
+}

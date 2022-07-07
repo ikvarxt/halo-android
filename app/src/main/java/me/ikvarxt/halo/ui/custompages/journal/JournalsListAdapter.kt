@@ -1,6 +1,7 @@
 package me.ikvarxt.halo.ui.custompages.journal
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -24,15 +25,15 @@ class JournalsListAdapter(
         val item = getItem(position) ?: return
 
         val binding = holder.binding
+        binding.journal = item
         markwon.setMarkdown(binding.content, item.sourceContent)
-        binding.content.setOnLongClickListener {
+
+        val longClickListener = View.OnLongClickListener {
             listener.editJournal(item)
             true
         }
-        binding.root.setOnLongClickListener {
-            listener.editJournal(item)
-            true
-        }
+        binding.content.setOnLongClickListener(longClickListener)
+        binding.root.setOnLongClickListener(longClickListener)
     }
 
     companion object {

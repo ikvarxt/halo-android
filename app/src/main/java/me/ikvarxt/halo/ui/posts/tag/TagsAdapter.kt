@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.RecyclerView
+import me.ikvarxt.halo.R
 import me.ikvarxt.halo.databinding.ItemPostTagBinding
 import me.ikvarxt.halo.entites.PostTag
 
@@ -27,8 +29,16 @@ class TagsAdapter(
         val binding = holder.binding
         binding.tag = item
 
-        val color = Color.parseColor(item.color)
-        binding.tagColor.setBackgroundColor(color)
+        try {
+            val color = Color.parseColor(item.color)
+            binding.tagColor.setBackgroundColor(color)
+        } catch (e: Exception) {
+            val context = binding.root.context
+            val defaultColor =
+                ResourcesCompat.getColor(context.resources, R.color.halo_blue, context.theme)
+            binding.tagColor.setBackgroundColor(defaultColor)
+            e.printStackTrace()
+        }
 
         binding.root.setOnClickListener { listener.showTag(item) }
     }

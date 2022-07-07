@@ -10,4 +10,6 @@
     <color name="orange">#FFC107</color>
     <color name="red">#FF5722</color>
     <color name="green">#8BC34A</color>
+
+    <color name="halo_blue">#2C9FFA</color>
 </resources>
